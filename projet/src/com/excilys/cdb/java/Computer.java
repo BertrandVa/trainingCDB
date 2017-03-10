@@ -4,10 +4,22 @@ import java.sql.Date;
 
 public class Computer {
 	
+	
 	private String name;
 	private String manufacturer;
 	private Date introduceDate;
 	private Date discontinuedDate;
+	private int id;
+	
+	public Computer(int id, String name, String manufacturer,
+			Date introduceDate, Date discontinuedDate) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.manufacturer = manufacturer;
+		this.introduceDate = introduceDate;
+		this.discontinuedDate = discontinuedDate;
+	}
 	
 	public String getName() {
 		return name;
@@ -32,6 +44,12 @@ public class Computer {
 	}
 	public void setDiscontinuedDate(Date discontinuedDate) {
 		this.discontinuedDate = discontinuedDate;
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
 	}
 	
 	
