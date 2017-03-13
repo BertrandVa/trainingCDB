@@ -22,7 +22,7 @@ public class CompanyDAO {
 		try {
 			ResultSet result = this.connection.createStatement().executeQuery(
 					"SELECT * FROM company");
-			
+
 			while (result.next()) {
 				Company company = new Company(result.getString("company.name"));
 				company.setId(result.getInt("company.id"));
