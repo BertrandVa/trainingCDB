@@ -1,6 +1,6 @@
 package main.java.com.excilys.cdb.java;
 
-import java.sql.Date;
+import java.util.Date;
 
 public class Computer {
 	

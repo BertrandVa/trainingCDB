@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class ConnectionFactory {
 	String driverClassName = "com.mysql.jdbc.Driver";
-	String connectionUrl = "jdbc:mysql://localhost/computer-database-db";
+	String connectionUrl = "jdbc:mysql://localhost/computer-database-db?zeroDateTimeBehavior=convertToNull";
 	String dbUser = "admincdb";
 	String dbPwd = "qwerty1234";
 
