@@ -6,15 +6,14 @@ public class Computer {
 	
 	
 	private String name;
-	private String manufacturer;
+	private int manufacturer;
 	private Date introduceDate;
 	private Date discontinuedDate;
 	private int id;
 	
-	public Computer(int id, String name, String manufacturer,
+	public Computer(String name, int manufacturer,
 			Date introduceDate, Date discontinuedDate) {
 		super();
-		this.id = id;
 		this.name = name;
 		this.manufacturer = manufacturer;
 		this.introduceDate = introduceDate;
@@ -27,10 +26,10 @@ public class Computer {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getManufacturer() {
+	public int getManufacturer() {
 		return manufacturer;
 	}
-	public void setManufacturer(String manufacturer) {
+	public void setManufacturer(int manufacturer) {
 		this.manufacturer = manufacturer;
 	}
 	public Date getIntroduceDate() {
@@ -48,10 +47,8 @@ public class Computer {
 	public int getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(int id) { //méthode délicate, laisser au maximum la BDD choisir l'ID
 		this.id = id;
-	}
-	
-	
+	}	
 	
 }

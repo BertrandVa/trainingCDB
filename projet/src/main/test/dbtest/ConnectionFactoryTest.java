@@ -5,7 +5,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import org.junit.Test;
-import main.java.com.excilys.cdb.dao.ConnectionFactory;;
+import main.java.com.excilys.cdb.dao.ConnectionFactory;
 
 public class ConnectionFactoryTest {
 	
