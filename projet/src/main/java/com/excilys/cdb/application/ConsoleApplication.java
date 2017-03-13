@@ -28,10 +28,10 @@ public class ConsoleApplication {
 					erreur = false;
 					try {
 						choice = sc.nextInt();
-						String buffer = sc.nextLine();
+						sc.nextLine();
 					} catch (InputMismatchException e) {
 						erreur = true;
-						String buffer = sc.nextLine();
+						sc.nextLine();
 					}
 				} while (erreur);
 			}
@@ -50,10 +50,10 @@ public class ConsoleApplication {
 							erreur = false;
 							try {
 								choix = myScan.nextInt();
-								String buffer = sc.nextLine();
+								sc.nextLine();
 							} catch (InputMismatchException e) {
 								erreur = true;
-								String buffer = sc.nextLine();
+								sc.nextLine();
 							}
 						} while (erreur);
 					}
@@ -67,10 +67,10 @@ public class ConsoleApplication {
 							  erreur = false;
 								try {
 									id = sc.nextInt();
-									String buffer = sc.nextLine();
+									sc.nextLine();
 								} catch (InputMismatchException e) {
 									erreur = true;
-									String buffer = sc.nextLine();
+									sc.nextLine();
 								}
 							} while (erreur);						  
 						  System.out.println("Parfait ! entrez le nouveau nom de cet ordinateur");
@@ -80,10 +80,10 @@ public class ConsoleApplication {
 								erreur = false;
 								try {
 									computer.setName(sc.next());
-									String buffer = sc.nextLine();
+									sc.nextLine();
 								} catch (InputMismatchException e) {
 									erreur = true;
-									String buffer = sc.nextLine();
+									sc.nextLine();
 								}
 							} while (erreur);
 							System.out.println("Parfait ! entrez sa date d'acquisition yyyy MM dd ou 0 pour ignorer");
@@ -94,13 +94,13 @@ public class ConsoleApplication {
 									 DateFormat formatter = new SimpleDateFormat("yyyy MM dd");
 									 Date date = formatter.parse(dateString);
 									computer.setDiscontinuedDate(date);
-									String buffer = sc.nextLine();
+									sc.nextLine();
 								} catch (InputMismatchException e) {
 									erreur = true;
-									String buffer = sc.nextLine();
+									sc.nextLine();
 								} catch (ParseException e) {
 									erreur = true;
-									String buffer = sc.nextLine();
+									sc.nextLine();
 								}
 							} while (erreur);
 							System.out.println("Parfait ! entrez sa date de départ ou 0 pour ignorer");
@@ -111,13 +111,13 @@ public class ConsoleApplication {
 									 DateFormat formatter = new SimpleDateFormat("yyyy MM dd");
 									 Date date = formatter.parse(dateString);
 									computer.setIntroduceDate(date);
-									String buffer = sc.nextLine();
+									sc.nextLine();
 								} catch (InputMismatchException e) {
 									erreur = true;
-									String buffer = sc.nextLine();
+									sc.nextLine();
 								} catch (ParseException e) {
 									erreur = true;
-									String buffer = sc.nextLine();
+									sc.nextLine();
 								}
 							} while (erreur);
 							System.out.println("Parfait ! entrez l'id de son fournisseur");
@@ -125,10 +125,10 @@ public class ConsoleApplication {
 								erreur = false;
 								try {
 									computer.setManufacturer(sc.nextInt());
-									String buffer = sc.nextLine();
+									sc.nextLine();
 								} catch (InputMismatchException e) {
 									erreur = true;
-									String buffer = sc.nextLine();
+									sc.nextLine();
 								}
 							} while (erreur);
 							create = ClientActions.updateComputer(computer);
@@ -143,12 +143,12 @@ public class ConsoleApplication {
 							  erreur = false;
 								try {
 									id = sc.nextInt();
-									String buffer = sc.nextLine();
+									sc.nextLine();
 									ClientActions.deleteComputer(id);
 									System.out.println("Action effectuée");
 								} catch (InputMismatchException e) {
 									erreur = true;
-									String buffer = sc.nextLine();
+									sc.nextLine();
 								}
 							} while (erreur);
 						  
@@ -158,18 +158,19 @@ public class ConsoleApplication {
 							  erreur = false;
 								try {
 									id = sc.nextInt();
-									String buffer = sc.nextLine();
+									sc.nextLine();
 									ClientActions.showComputerDetails(id);
 								} catch (InputMismatchException e) {
 									erreur = true;
-									String buffer = sc.nextLine();
+									sc.nextLine();
 								}
 							} while (erreur);
 						    
 					    break;        
 					  default:
 					    continu2=false;             
-					}					
+					}	
+					myScan.close();
 				}
 				break;
 			case 2:
@@ -184,10 +185,10 @@ public class ConsoleApplication {
 					erreur = false;
 					try {
 						computer.setName(sc.next());
-						String buffer = sc.nextLine();
+						sc.nextLine();
 					} catch (InputMismatchException e) {
 						erreur = true;
-						String buffer = sc.nextLine();
+						sc.nextLine();
 					}
 				} while (erreur);
 				System.out.println("Parfait ! entrez sa date d'acquisition yyyy MM dd ou 0 pour ignorer");
@@ -198,13 +199,13 @@ public class ConsoleApplication {
 						 DateFormat formatter = new SimpleDateFormat("yyyy MM dd");
 						 Date date = formatter.parse(dateString);
 						computer.setDiscontinuedDate(date);
-						String buffer = sc.nextLine();
+						sc.nextLine();
 					} catch (InputMismatchException e) {
 						erreur = true;
-						String buffer = sc.nextLine();
+						sc.nextLine();
 					} catch (ParseException e) {
 						erreur = true;
-						String buffer = sc.nextLine();
+						sc.nextLine();
 					}
 				} while (erreur);
 				System.out.println("Parfait ! entrez sa date de départ ou 0 pour ignorer");
@@ -215,13 +216,13 @@ public class ConsoleApplication {
 						 DateFormat formatter = new SimpleDateFormat("yyyy MM dd");
 						 Date date = formatter.parse(dateString);
 						computer.setIntroduceDate(date);
-						String buffer = sc.nextLine();
+						sc.nextLine();
 					} catch (InputMismatchException e) {
 						erreur = true;
-						String buffer = sc.nextLine();
+						sc.nextLine();
 					} catch (ParseException e) {
 						erreur = true;
-						String buffer = sc.nextLine();
+						sc.nextLine();
 					}
 				} while (erreur);
 				System.out.println("Parfait ! entrez l'id de son fournisseur");
@@ -229,10 +230,10 @@ public class ConsoleApplication {
 					erreur = false;
 					try {
 						computer.setManufacturer(sc.nextInt());
-						String buffer = sc.nextLine();
+						sc.nextLine();
 					} catch (InputMismatchException e) {
 						erreur = true;
-						String buffer = sc.nextLine();
+						sc.nextLine();
 					}
 				} while (erreur);
 				create = ClientActions.createComputer(computer);
@@ -245,6 +246,7 @@ public class ConsoleApplication {
 			default:
 				continu = false;
 			}
+			sc.close();
 		}
 
 	}
