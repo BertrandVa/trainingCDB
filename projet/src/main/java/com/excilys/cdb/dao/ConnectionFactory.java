@@ -4,7 +4,15 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class ConnectionFactory { //c'est en fait un singleton car une seule connexion à la BDD doit être active
+/**
+ * Singleton créant la connexion à la BDD
+ * Une seule instance de connexion disponible
+ * 
+ * @author bertrand
+ * 
+ */
+
+public class ConnectionFactory { 
 	String driverClassName = "com.mysql.jdbc.Driver";
 	String connectionUrl = "jdbc:mysql://localhost/computer-database-db?zeroDateTimeBehavior=convertToNull";
 	String dbUser = "admincdb";

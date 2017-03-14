@@ -5,8 +5,18 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 import main.java.com.excilys.cdb.java.Company;
+
+/**
+ *Cette classe de DAO implémente les méthodes nécessaires à l'accès 
+ *aux données de la table company.
+ *
+ *Le client ne demandant qu'un accès aux données, il n'y a pas de suppression,
+ *de création ou d'update.
+ * 
+ * @author bertrand
+ * 
+ */
 
 public class CompanyDAO {
 	private Connection connection = null;

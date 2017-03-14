@@ -7,6 +7,12 @@ import java.sql.SQLException;
 import org.junit.Test;
 import main.java.com.excilys.cdb.dao.ConnectionFactory;
 
+/**
+ *On teste ici toutes les méthodes de ConnectionFactory
+ * 
+ * @author bertrand
+ * 
+ */
 public class ConnectionFactoryTest {
 	
 	@Test

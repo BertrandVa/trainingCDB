@@ -6,13 +6,23 @@ import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
-
 import main.java.com.excilys.cdb.dao.CompanyDAO;
 import main.java.com.excilys.cdb.dao.ComputerDAO;
-
 import main.java.com.excilys.cdb.dao.ConnectionFactory;
 import main.java.com.excilys.cdb.java.Company;
 import main.java.com.excilys.cdb.java.Computer;
+
+/**
+ * Cette classe définit les 6 actions possibles pour le client :
+ * "List computers, list companies, show computer details, create a computer, 
+ *  update a computer et delete a computer"
+ *  
+ *  Cette classe gère également les deux menus (menu principal et menu de 
+ *  gestion des utilisateurs) de l'interface utilisateur.
+ * 
+ * @author bertrand
+ * 
+ */
 
 public class ClientActions {
 
@@ -108,8 +118,8 @@ public class ClientActions {
 		}
 	};
 
-	public static void showComputerDetails(int id) { // implémenter les cas
-														// d'erreurs
+	public static void showComputerDetails(int id) {
+
 		Computer computer = new Computer(null, -1, null, null);
 		try {
 			connect = connection.getConnection();
@@ -130,8 +140,7 @@ public class ClientActions {
 				+ computer.getDiscontinuedDate());
 	};
 
-	public static boolean createComputer(Computer computer) {// OK
-		// ne peut être créé sans nom
+	public static boolean createComputer(Computer computer) {
 		boolean fait = false;
 		try {
 			connect = connection.getConnection();
@@ -146,7 +155,7 @@ public class ClientActions {
 		return fait;
 	};
 
-	public static boolean updateComputer(Computer computer) { // OK
+	public static boolean updateComputer(Computer computer) {
 		boolean fait = false;
 		try {
 			connect = connection.getConnection();
@@ -161,7 +170,7 @@ public class ClientActions {
 		return fait;
 	};
 
-	public static boolean deleteComputer(int id) { // OK
+	public static boolean deleteComputer(int id) {
 		boolean fait = false;
 		try {
 			connect = connection.getConnection();

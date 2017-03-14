@@ -7,11 +7,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 import main.java.com.excilys.cdb.dao.ComputerDAO;
 import main.java.com.excilys.cdb.java.Computer;
-
 import org.junit.Test;
+
+/**
+ *On teste ici toutes les méthodes de ComputerDAO
+ * @author bertrand
+ * 
+ */
 
 public class ComputerDAOTest {
 

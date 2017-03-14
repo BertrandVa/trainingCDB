@@ -1,12 +1,18 @@
 package main.java.com.excilys.cdb.application;
 
-
 import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.Scanner;
-
 import main.java.com.excilys.cdb.java.Computer;
 import main.java.com.excilys.cdb.services.ClientActions;
+
+/**
+ *Cette classe est notre application à proprement parler, 
+ *qui gère l'interface en ligne de commande (entrées/sorties)
+ * 
+ * @author bertrand
+ * 
+ */
 
 public class ConsoleApplication {
 

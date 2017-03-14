@@ -8,6 +8,17 @@ import java.util.ArrayList;
 import java.util.List;
 import main.java.com.excilys.cdb.java.Computer;
 
+/**
+ *Cette classe de DAO implémente les méthodes nécessaires à l'accès 
+ *aux données de la table computer.
+ *
+ *Le client demande ici un accès total, toutes les méthodes du CRUD sont
+ *donc implémentées
+ * 
+ * @author bertrand
+ * 
+ */
+
 public class ComputerDAO {
 
 	private Connection connection = null;
