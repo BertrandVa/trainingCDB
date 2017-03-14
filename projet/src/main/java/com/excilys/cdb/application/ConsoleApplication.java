@@ -150,6 +150,9 @@ public class ConsoleApplication {
 							sc.nextLine();
 							System.out.println(date);
 						}
+						else if(year==0){
+							computer.setIntroduceDate(null);
+						}
 					} catch (InputMismatchException e) {
 						erreur = true;
 						sc.nextLine();
@@ -177,6 +180,9 @@ public class ConsoleApplication {
 							computer.setDiscontinuedDate(date);
 							sc.nextLine();
 							System.out.println(date);
+						}
+						else if(year==0){
+							computer.setIntroduceDate(null);
 						}
 					} catch (InputMismatchException e) {
 						erreur = true;
@@ -292,6 +298,9 @@ public class ConsoleApplication {
 							sc.nextLine();
 							System.out.println(date);
 						}
+						else if(year==0){
+							computer.setIntroduceDate(null);
+						}
 					} catch (InputMismatchException e) {
 						erreur = true;
 						sc.nextLine();
@@ -319,6 +328,9 @@ public class ConsoleApplication {
 							computer.setDiscontinuedDate(date);
 							sc.nextLine();
 							System.out.println(date);
+						}
+						else if(year==0){
+							computer.setIntroduceDate(null);
 						}
 					} catch (InputMismatchException e) {
 						erreur = true;
