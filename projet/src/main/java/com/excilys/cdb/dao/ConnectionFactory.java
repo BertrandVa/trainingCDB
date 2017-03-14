@@ -24,7 +24,7 @@ public class ConnectionFactory {
      * la BDD
      * @see ConnectionFactory#getConnection()
      */
-	String connectionUrl = "jdbc:mysql://localhost/computer-database-db?zeroDateTimeBehavior=convertToNull";
+	String connectionUrl = "jdbc:mysql://localhost/computer-database-db-test?zeroDateTimeBehavior=convertToNull";
 	/**
      * L'utilisateur de la BDD
      * @see ConnectionFactory#getConnection()

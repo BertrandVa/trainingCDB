@@ -5,7 +5,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import main.java.com.excilys.cdb.java.Company;
+import main.java.com.excilys.cdb.java.Computer;
 
 /**
  * Cette classe de DAO implémente les méthodes nécessaires à l'accès aux données
@@ -27,7 +32,13 @@ public class CompanyDAO {
 	 * @see CompanyDAO#CompanyDAO(Connection)
 	 */
 	private Connection connection = null;
-
+	
+	/**
+	 * logger
+	 */
+	final Logger logger = LoggerFactory.getLogger(Computer.class);
+	
+	
 	/**
 	 * Constructeur CompanyDAO La connexion est indépendante de notre DAO
 	 * 
@@ -50,12 +61,13 @@ public class CompanyDAO {
 		try {
 			ResultSet result = this.connection.createStatement().executeQuery(
 					"SELECT * FROM company");
-
+		
 			while (result.next()) {
 				Company company = new Company(result.getString("company.name"));
 				company.setId(result.getInt("company.id"));
 				list.add(company);
 			}
+			logger.debug("liste de fabriquants terminée");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

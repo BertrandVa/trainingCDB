@@ -97,6 +97,7 @@ public class ConsoleApplication {
 						System.out
 								.println("Veuillez entrer l'id du champ à modifier");
 						boolean erreur;
+						Computer computer = new Computer(null, -1, null, null);
 						do {
 							/*
 							 * On sécurise ici l'entrée de l'utilisateur 
@@ -105,6 +106,7 @@ public class ConsoleApplication {
 							try {
 								id = sc.nextInt();
 								sc.nextLine();
+								computer.setId(id);
 							} catch (InputMismatchException e) {
 								erreur = true;
 								sc.nextLine();
@@ -113,7 +115,6 @@ public class ConsoleApplication {
 						System.out
 								.println("Parfait ! entrez le nouveau nom de cet ordinateur");
 						boolean create;
-						Computer computer = new Computer(null, -1, null, null);
 						do {
 							/*
 							 * On sécurise ici l'entrée de l'utilisateur 
@@ -190,7 +191,7 @@ public class ConsoleApplication {
 					}
 				} while (erreur);
 						System.out
-								.println("Parfait ! entrez l'id de son fournisseur");
+								.println("Parfait ! entrez l'id de son fabriquant ou 0 pour ignorer");
 						do {
 							/*
 							 * On sécurise ici l'entrée de l'utilisateur 
@@ -337,7 +338,7 @@ public class ConsoleApplication {
 						sc.nextLine();
 					}
 				} while (erreur);
-				System.out.println("Parfait ! entrez l'id de son fournisseur");
+				System.out.println("Parfait ! entrez l'id de son fabriquant ou 0 pour ignorer");
 				do {
 					/*
 					 * On sécurise ici l'entrée de l'utilisateur

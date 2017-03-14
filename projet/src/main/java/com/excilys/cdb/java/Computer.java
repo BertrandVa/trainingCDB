@@ -115,7 +115,7 @@ public class Computer {
      * @param manufacturer
      *            Le nouvel ID du fabriquant
      */
-	public void setManufacturer(int manufacturer) {
+	public void setManufacturer(int manufacturer){
 		this.manufacturer = manufacturer;
 	}
 
