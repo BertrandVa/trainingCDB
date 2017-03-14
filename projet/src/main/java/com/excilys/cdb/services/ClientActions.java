@@ -178,6 +178,7 @@ public class ClientActions {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		if(computer.getName() != null){
 		System.out
 				.println("Vous avez demandé des informations sur l'ordinateur");
 		System.out.println("");
@@ -188,6 +189,10 @@ public class ClientActions {
 				+ computer.getIntroduceDate());
 		System.out.println("Il a quitté la compagnie le "
 				+ computer.getDiscontinuedDate());
+		}
+		else{
+			System.out.println("cet ID n'existe pas");
+		}
 	};
 
 	/**
