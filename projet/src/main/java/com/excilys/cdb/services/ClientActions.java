@@ -3,6 +3,7 @@ package main.java.com.excilys.cdb.services;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
@@ -25,11 +26,27 @@ import main.java.com.excilys.cdb.java.Computer;
  */
 
 public class ClientActions {
-
+	
+	/**
+     * Récupération de l'instance de connexion à la BDD
+     * 
+     * @see ConnectionFactory#getInstance()
+     */
 	private static ConnectionFactory connection = ConnectionFactory
 			.getInstance();
+	
+	/**
+     * La connexion à proprement parler
+     * @see ConnectionFactory#getConnection()
+     */
 	private static Connection connect;
 
+	/**
+     * Menu principal de notre application
+     * Affiche uniquement les possibilités
+     * 
+     * @see ConsoleApplication
+     */
 	public static void menuPrincipal() {
 		System.out
 				.println("Bonjour, bienvenue dans ce système de gestion des ordinateurs");
@@ -39,6 +56,14 @@ public class ClientActions {
 		System.out.println("Pour quitter, tapez 4");
 	}
 
+	/**
+     * Menu contextuel de notre application
+     * apparaît quand on liste les ordinateurs
+     * permet d'effectuer les tâches spécifiques aux ordinateurs
+     * 
+     * @see ClientActions#menuPrincipal()
+     * @see ConsoleApplication
+     */
 	public static void menuOrdinateur() {
 		System.out
 				.println("Bonjour, bienvenue dans ce système de gestion des ordinateurs");
@@ -49,6 +74,15 @@ public class ClientActions {
 		System.out.println("Pour revenir au menu principal, tapez 4");
 	}
 
+	/**
+     * Liste les ordinateurs en affichant leur nom et leur ID
+     * Par souci de lisibilité, affichage par pages de 10
+     * 
+     * @see ClientActions#menuPrincipal()
+     * @see ComputerDAO#readAll()
+     * @param sc
+     * 			le scanner permettant de récupérer l'entrée utilisateur
+     */
 	public static void listComputers(Scanner sc) {
 		List<Computer> liste = new ArrayList<Computer>();
 		int page = 0;
@@ -84,6 +118,15 @@ public class ClientActions {
 		}
 	};
 
+	/**
+     * Liste les fabriquants en affichant leur nom et leur ID
+     * Par souci de lisibilité, affichage par pages de 10
+     * 
+     * @see ClientActions#menuPrincipal()
+     * @see CompanyDAO#readAll()
+     * @param sc
+     * 			le scanner permettant de récupérer l'entrée utilisateur
+     */
 	public static void listCompanies(Scanner sc) {
 		List<Company> liste = new ArrayList<Company>();
 		int page = 0;
@@ -118,6 +161,14 @@ public class ClientActions {
 		}
 	};
 
+	/**
+     * Affiche les informations détaillées d'un ordinateur
+     * 
+     * @see ClientActions#menuOrdinateur()
+     * @see ComputerDAO#read(int)
+     * @param id
+     * 			l'id de l'ordinateur à détailler
+     */
 	public static void showComputerDetails(int id) {
 
 		Computer computer = new Computer(null, -1, null, null);
@@ -140,6 +191,14 @@ public class ClientActions {
 				+ computer.getDiscontinuedDate());
 	};
 
+	/**
+     * Permet la création d'un nouvel ordinateur dans la BDD
+     * 
+     * @see ClientActions#menuOrdinateur()
+     * @see ComputerDAO#create(Computer)
+     * @param computer
+     * 			l'ordinateur à ajouter
+     */
 	public static boolean createComputer(Computer computer) {
 		boolean fait = false;
 		try {
@@ -155,6 +214,14 @@ public class ClientActions {
 		return fait;
 	};
 
+	/**
+     * Permet la mise à jour d'un ordinateur dans la BDD
+     * 
+     * @see ClientActions#menuOrdinateur()
+     * @see ComputerDAO#update(Computer)
+     * @param computer
+     * 			l'ordinateur à mettre à jour
+     */
 	public static boolean updateComputer(Computer computer) {
 		boolean fait = false;
 		try {
@@ -170,6 +237,14 @@ public class ClientActions {
 		return fait;
 	};
 
+	/**
+     * Permet la suppression d'un ordinateur dans la BDD
+     * 
+     * @see ClientActions#menuOrdinateur()
+     * @see ComputerDAO#delete(int)
+     * @param id
+     * 			l'id de l'ordinateur à supprimer
+     */
 	public static boolean deleteComputer(int id) {
 		boolean fait = false;
 		try {
