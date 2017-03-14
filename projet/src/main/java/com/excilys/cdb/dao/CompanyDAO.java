@@ -8,25 +8,43 @@ import java.util.List;
 import main.java.com.excilys.cdb.java.Company;
 
 /**
- *Cette classe de DAO implémente les méthodes nécessaires à l'accès 
- *aux données de la table company.
- *
- *Le client ne demandant qu'un accès aux données, il n'y a pas de suppression,
- *de création ou d'update.
+ * Cette classe de DAO implémente les méthodes nécessaires à l'accès aux données
+ * de la table company.
+ * 
+ * Le client ne demandant qu'un accès aux données, il n'y a pas de suppression,
+ * de création ou d'update.
  * 
  * @author bertrand
  * 
  */
 
 public class CompanyDAO {
+	/**
+	 * sert à récupérer notre instance de connexion
+	 * 
+	 * @see ConnectionFactory#getConnection()
+	 * @see ConnectionFactory#getInstance()
+	 * @see CompanyDAO#CompanyDAO(Connection)
+	 */
 	private Connection connection = null;
 
-	public CompanyDAO(Connection conn) { // la Connexion est indépendante de
-											// notre DAO
-
+	/**
+	 * Constructeur CompanyDAO La connexion est indépendante de notre DAO
+	 * 
+	 * @param conn
+	 *            récupérer la connexion en cours
+	 */
+	public CompanyDAO(Connection conn) {
 		this.connection = conn;
 	}
 
+
+	/**
+     * Méthode d'affichage de tous les fabriquants
+     * 
+     * @return List
+     *         une arraylist contenant l'ensemble de nos fabriquants
+     */
 	public List<Company> readAll() {
 		List<Company> list = new ArrayList<Company>();
 		try {

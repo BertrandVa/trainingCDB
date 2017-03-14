@@ -21,15 +21,23 @@ public class ConsoleApplication {
 	 */
 	@SuppressWarnings("deprecation")
 	public static void main(String[] args) {
-		boolean continu = true; // pour continuer
+		boolean continu = true; // permet la sortie de l'application
 		Scanner sc = new Scanner(System.in);
 		while (continu) {
 			ClientActions.menuPrincipal();
 			int choice = 0;
-			while (choice != 1 && choice != 2 && choice != 3 && choice != 4) {
+			while (choice != 1 && choice != 2 && choice != 3 && choice != 4) { 
+				/*
+				 * On vérifie ici l'entrée de l'utilisateur
+				 * Elle doit correspondre à un choix proposé
+				 */
 				System.out.println("Veuillez choisir une option");
 				boolean erreur;
 				do {
+					/*
+					 * On sécurise ici l'entrée de l'utilisateur 
+					 * sur un choix du menu principal
+					 */
 					erreur = false;
 					try {
 						choice = sc.nextInt();
@@ -41,16 +49,31 @@ public class ConsoleApplication {
 				} while (erreur);
 			}
 			switch (choice) {
+			/*
+			 * On propose ici les actions correspondant au choix de l'utilisateur
+			 * 1: liste les ordinateurs par pages
+			 * 2: liste les fabriquants par pages
+			 * 3: crée un ordinateur dans la BDD
+			 * 4: quitte l'application
+			 */
 			case 1:
 				ClientActions.listComputers(sc);
-				boolean continu2 = true;
+				boolean continu2 = true; //permet le retour au menu principal
 				while (continu2) {
 					ClientActions.menuOrdinateur();
 					int choix = 0;
 					while (choix != 1 && choix != 2 && choix != 3 && choix != 4) {
+						/*
+						 * On vérifie ici l'entrée de l'utilisateur
+						 * Elle doit correspondre à un choix proposé
+						 */
 						System.out.println("Veuillez choisir une option");
 						boolean erreur;
 						do {
+							/*
+							 * On sécurise ici l'entrée de l'utilisateur 
+							 * sur un choix du menu contextuel
+							 */
 							erreur = false;
 							try {
 								choix = sc.nextInt();
@@ -62,12 +85,22 @@ public class ConsoleApplication {
 						} while (erreur);
 					}
 					switch (choix) {
+					/*
+					 * On propose ici les actions correspondant au choix de l'utilisateur
+					 * 1: mise à jour d'un ordinateur
+					 * 2: suppression d'un ordinateur
+					 * 3: affichage des détails d'un ordinateur
+					 * 4: retour au menu principal
+					 */
 					case 1:
 						int id;
 						System.out
 								.println("Veuillez entrer l'id du champ à modifier");
 						boolean erreur;
 						do {
+							/*
+							 * On sécurise ici l'entrée de l'utilisateur 
+							 */
 							erreur = false;
 							try {
 								id = sc.nextInt();
@@ -82,6 +115,9 @@ public class ConsoleApplication {
 						boolean create;
 						Computer computer = new Computer(null, -1, null, null);
 						do {
+							/*
+							 * On sécurise ici l'entrée de l'utilisateur 
+							 */
 							erreur = false;
 							try {
 								computer.setName(sc.next());
@@ -94,6 +130,9 @@ public class ConsoleApplication {
 						System.out
 						.println("Parfait ! entrez sa date d'acquisition yyyy (entrée) MM (entrée) dd (entrée) ou 0 pour ignorer");
 				do {
+					/*
+					 * On sécurise ici l'entrée de l'utilisateur 
+					 */
 					erreur = false;
 					try {
 						int year = sc.nextInt();
@@ -119,6 +158,9 @@ public class ConsoleApplication {
 						System.out
 						.println("Parfait ! entrez sa date de départ yyyy (entrée) MM (entrée) dd (entrée) ou 0 pour ignorer");
 				do {
+					/*
+					 * On sécurise ici l'entrée de l'utilisateur 
+					 */
 					erreur = false;
 					try {
 						int year = sc.nextInt();
@@ -144,6 +186,9 @@ public class ConsoleApplication {
 						System.out
 								.println("Parfait ! entrez l'id de son fournisseur");
 						do {
+							/*
+							 * On sécurise ici l'entrée de l'utilisateur 
+							 */
 							erreur = false;
 							try {
 								computer.setManufacturer(sc.nextInt());
@@ -163,6 +208,9 @@ public class ConsoleApplication {
 						System.out
 								.println("Veuillez entrer l'id du champ à supprimer");
 						do {
+							/*
+							 * On sécurise ici l'entrée de l'utilisateur
+							 */
 							erreur = false;
 							try {
 								id = sc.nextInt();
@@ -179,6 +227,9 @@ public class ConsoleApplication {
 						System.out
 								.println("Veuillez entrer l'id du champ à afficher");
 						do {
+							/*
+							 * On sécurise ici l'entrée de l'utilisateur
+							 */
 							erreur = false;
 							try {
 								id = sc.nextInt();
@@ -206,6 +257,9 @@ public class ConsoleApplication {
 				boolean create;
 				Computer computer = new Computer(null, -1, null, null);
 				do {
+					/*
+					 * On sécurise ici l'entrée de l'utilisateur
+					 */
 					erreur = false;
 					try {
 						computer.setName(sc.next());
@@ -218,6 +272,9 @@ public class ConsoleApplication {
 				System.out
 						.println("Parfait ! entrez sa date d'acquisition yyyy (entrée) MM (entrée) dd (entrée) ou 0 pour ignorer");
 				do {
+					/*
+					 * On sécurise ici l'entrée de l'utilisateur
+					 */
 					erreur = false;
 					try {
 						int year = sc.nextInt();
@@ -243,6 +300,9 @@ public class ConsoleApplication {
 				System.out
 						.println("Parfait ! entrez sa date de départ yyyy (entrée) MM (entrée) dd (entrée) ou 0 pour ignorer");
 				do {
+					/*
+					 * On sécurise ici l'entrée de l'utilisateur
+					 */
 					erreur = false;
 					try {
 						int year = sc.nextInt();
@@ -267,6 +327,9 @@ public class ConsoleApplication {
 				} while (erreur);
 				System.out.println("Parfait ! entrez l'id de son fournisseur");
 				do {
+					/*
+					 * On sécurise ici l'entrée de l'utilisateur
+					 */
 					erreur = false;
 					try {
 						computer.setManufacturer(sc.nextInt());

@@ -9,11 +9,11 @@ import java.util.List;
 import main.java.com.excilys.cdb.java.Computer;
 
 /**
- *Cette classe de DAO implémente les méthodes nécessaires à l'accès 
- *aux données de la table computer.
- *
- *Le client demande ici un accès total, toutes les méthodes du CRUD sont
- *donc implémentées
+ * Cette classe de DAO implémente les méthodes nécessaires à l'accès aux données
+ * de la table computer.
+ * 
+ * Le client demande ici un accès total, toutes les méthodes du CRUD sont donc
+ * implémentées
  * 
  * @author bertrand
  * 
@@ -21,20 +21,49 @@ import main.java.com.excilys.cdb.java.Computer;
 
 public class ComputerDAO {
 
+	/**
+	 * sert à récupérer notre instance de connexion
+	 * 
+	 * @see ConnectionFactory#getConnection()
+	 * @see ConnectionFactory#getInstance()
+	 * @see ComputerDAO#ComputerDAO(Connection)
+	 */
 	private Connection connection = null;
 
-	public Timestamp getTimestamp(java.util.Date date) { // fonction de
-															// conversion de la
-															// Date en timestamp
-															// pour la BDD
+
+	/**
+     * Convertit notre Date en Timestamp lisible par la base de données
+     * l'expression ternaire renvoie null si besoin
+     * 
+     * @param date
+     * 			date au format java.util.Date
+     * @return Timestamp
+     * 			date au format de la BDD
+     */
+	public Timestamp getTimestamp(java.util.Date date) { 
 		return date == null ? null : new java.sql.Timestamp(date.getTime());
 	}
 
-	public ComputerDAO(Connection conn) { // la Connexion est indépendante de
-											// notre DAO
+	/**
+	 * Constructeur ComputerDAO La connexion est indépendante de notre DAO
+	 * 
+	 * @param conn
+	 *            récupérer la connexion en cours
+	 */
+	public ComputerDAO(Connection conn) {
 		this.connection = conn;
 	}
 
+
+	/**
+     * Méthode create d'un ordinateur
+     * 
+     * @param computer
+     * 			l'ordinateur à créer
+     * 
+     * @return boolean create
+     *         true si tout s'est bien passé, false autrement
+     */
 	public boolean create(Computer computer) {
 		boolean create = false;
 		try {
@@ -55,6 +84,15 @@ public class ComputerDAO {
 		return create;
 	}
 
+	/**
+     * Méthode d'affichage d'un ordinateur
+     * 
+     * @param id
+     * 			l'ordinateur à afficher
+     * 
+     * @return computer
+     *        l'ordinateur sélectionné
+     */
 	public Computer read(int id) {
 		Computer computer = new Computer(null, -1, null, null);
 		try {
@@ -72,6 +110,12 @@ public class ComputerDAO {
 		return computer;
 	}
 
+	/**
+     * Méthode d'affichage de tous les ordinateurs
+     * 
+     * @return List
+     *         une arraylist contenant l'ensemble de nos ordinateurs
+     */
 	public List<Computer> readAll() {
 		List<Computer> list = new ArrayList<Computer>();
 		try {
@@ -93,6 +137,15 @@ public class ComputerDAO {
 		return list;
 	}
 
+	/**
+     * Méthode de mise à jour d'un ordinateur
+     * 
+     * @param computer
+     * 			l'ordinateur à mettre à jour
+     * 
+     * @return boolean update
+     *         true si tout s'est bien passé, false autrement
+     */
 	public boolean update(Computer computer) {
 		boolean update = false;
 		try {
@@ -114,6 +167,15 @@ public class ComputerDAO {
 		return update;
 	}
 
+	/**
+     * Méthode delete d'un ordinateur
+     * 
+     * @param id
+     * 			l'id de l'ordinateur à supprimer
+     * 
+     * @return boolean delete
+     *         true si tout s'est bien passé, false autrement
+     */
 	public boolean delete(int id) {
 		boolean delete = false;
 		try {
