@@ -1,19 +1,13 @@
 package main.java.com.excilys.cdb.services;
 
-import java.sql.Connection;
 import java.util.ArrayList;
-import java.util.InputMismatchException;
 import java.util.List;
-import java.util.Scanner;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import main.java.com.excilys.cdb.model.Company;
 import main.java.com.excilys.cdb.model.Computer;
 import main.java.com.excilys.cdb.persistence.CompanyDAO;
 import main.java.com.excilys.cdb.persistence.ComputerDAO;
-import main.java.com.excilys.cdb.persistence.ConnectionFactory;
 
 /**
  * Cette classe définit les 6 actions possibles pour le client : "List
@@ -29,21 +23,10 @@ import main.java.com.excilys.cdb.persistence.ConnectionFactory;
 
 public class ClientActions {
 
-	/**
-	 * Récupération de l'instance de connexion à la BDD
-	 * 
-	 * 
-	 * /** logger
+	 /**
+	  *  logger
 	 */
 	final static Logger logger = LoggerFactory.getLogger(ClientActions.class);
-
-	/**
-	 * La connexion à proprement parler
-	 * 
-	 * @see ConnectionFactory#getConnection()
-	 */
-	private static Connection connect = ConnectionFactory
-			.getConnection();
 
 	/**
 	 * Liste les ordinateurs en affichant leur nom et leur ID Par souci de
@@ -54,34 +37,11 @@ public class ClientActions {
 	 * @param sc
 	 *            le scanner permettant de récupérer l'entrée utilisateur
 	 */
-	public static void listComputers(Scanner sc) {
+	public static List<Computer> listComputers(long debut, int nbItems) {
 		List<Computer> liste = new ArrayList<Computer>();
-		int page = 0;
-		int pageMax;
-		ComputerDAO compDAO = new ComputerDAO(connect);
-		liste = compDAO.readAll();
-		pageMax = liste.size() / 10 + 1;
-		while (page > pageMax || page <= 0) {
-			System.out.println("Veuillez choisir une page à afficher");
-			boolean erreur;
-			do {
-				erreur = false;
-				try {
-					page = sc.nextInt();
-					sc.nextLine();
-				} catch (InputMismatchException e) {
-					logger.error(e.getMessage());
-					erreur = true;
-					sc.nextLine();
-				}
-			} while (erreur);
-		}
-		for (int i = page * 10 - 10; i < page * 10; ++i) {
-			if (i < liste.size()) {
-				System.out.println("id: " + liste.get(i).getId() + " nom: "
-						+ liste.get(i).getName());
-			}
-		}
+		ComputerDAO compDAO = ComputerDAO.INSTANCE;
+		liste = compDAO.readAll(debut, nbItems);
+		return liste;
 	}
 
 	/**
@@ -93,34 +53,11 @@ public class ClientActions {
 	 * @param sc
 	 *            le scanner permettant de récupérer l'entrée utilisateur
 	 */
-	public static void listCompanies(Scanner sc) {
+	public static List<Company> listCompanies(long debut, int nbItems) {
 		List<Company> liste = new ArrayList<Company>();
-		int page = 0;
-		int pageMax;
-		CompanyDAO compDAO = new CompanyDAO(connect);
-		liste = compDAO.readAll();
-		pageMax = liste.size() / 10 + 1;
-		while (page > pageMax || page <= 0) {
-			System.out.println("Veuillez choisir une page à afficher");
-			boolean erreur;
-			do {
-				erreur = false;
-				try {
-					page = sc.nextInt();
-					sc.nextLine();
-				} catch (InputMismatchException e) {
-					logger.error(e.getMessage());
-					erreur = true;
-					sc.nextLine();
-				}
-			} while (erreur);
-		}
-		for (int i = page * 10 - 10; i < page * 10; ++i) {
-			if (i < liste.size()) {
-				System.out.println("id: " + liste.get(i).getId() + " nom: "
-						+ liste.get(i).getName());
-			}
-		}
+		CompanyDAO compDAO = CompanyDAO.INSTANCE;
+		liste = compDAO.readAll(debut, nbItems);
+		return liste;
 	};
 
 	/**
@@ -134,7 +71,7 @@ public class ClientActions {
 	public static void showComputerDetails(int id) {
 
 		Computer computer = new Computer(null, null, null, null);
-		ComputerDAO compDAO = new ComputerDAO(connect);
+		ComputerDAO compDAO = ComputerDAO.INSTANCE;
 		computer = compDAO.read(id);
 		if (computer.getName() != null) {
 			System.out
@@ -162,7 +99,7 @@ public class ClientActions {
 	 */
 	public static boolean createComputer(Computer computer) {
 		boolean fait = false;
-		ComputerDAO compDAO = new ComputerDAO(connect);
+		ComputerDAO compDAO = ComputerDAO.INSTANCE;
 		if (computer.getName() != null && computer.getName() != "") {
 			compDAO.create(computer);
 			fait = true;
@@ -180,7 +117,7 @@ public class ClientActions {
 	 */
 	public static boolean updateComputer(Computer computer) {
 		boolean fait = false;
-		ComputerDAO compDAO = new ComputerDAO(connect);
+		ComputerDAO compDAO = ComputerDAO.INSTANCE;
 		if (computer.getId() >= 0) {
 			compDAO.update(computer);
 			fait = true;
@@ -198,7 +135,7 @@ public class ClientActions {
 	 */
 	public static boolean deleteComputer(int id) {
 		boolean fait = false;
-		ComputerDAO compDAO = new ComputerDAO(connect);
+		ComputerDAO compDAO = ComputerDAO.INSTANCE;
 		if (id >= 0) {
 			compDAO.delete(id);
 			fait = true;

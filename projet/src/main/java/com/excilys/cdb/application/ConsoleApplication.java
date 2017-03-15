@@ -2,6 +2,7 @@ package main.java.com.excilys.cdb.application;
 
 import java.util.Date;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 import org.slf4j.Logger;
@@ -52,7 +53,17 @@ public class ConsoleApplication {
 			 * l'application
 			 */
 			case 1:
-				ClientActions.listComputers(sc);
+				System.out
+				.println("Sélectionnez le premier id que vous désirez voir");
+				int idComputer = SecureInput.secureInt(sc);
+				System.out
+				.println("Parfait ! entrez le nombre d'éléments à afficher");
+				int nbElements = SecureInput.secureInt(sc);
+				List<Computer> list = ClientActions.listComputers(idComputer,nbElements);
+				for (int i =0; i<list.size(); i++){
+					System.out
+					.println(list.get(i).getId() + " " + list.get(i).getName());
+				}
 				boolean continu2 = true; // permet le retour au menu principal
 				while (continu2) {
 					Menus.menuOrdinateur();
@@ -180,8 +191,17 @@ public class ConsoleApplication {
 				break;
 				
 			case 2:
-				
-				ClientActions.listCompanies(sc);
+				System.out
+				.println("Sélectionnez le premier id que vous désirez voir");
+				int id = SecureInput.secureInt(sc);
+				System.out
+				.println("Parfait ! entrez le nombre d'éléments à afficher");
+				int nbElementsVoulus = SecureInput.secureInt(sc);
+				List<Company> listeComp = ClientActions.listCompanies(id,nbElementsVoulus);
+				for (int i =0; i<listeComp.size(); i++){
+					System.out
+					.println(listeComp.get(i).getId() + " " + listeComp.get(i).getName());
+				}
 				break;
 				
 			case 3:

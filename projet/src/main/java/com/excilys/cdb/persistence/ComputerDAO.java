@@ -25,16 +25,13 @@ import main.java.com.excilys.cdb.model.Computer;
  * 
  */
 
-public class ComputerDAO {
+public enum ComputerDAO {
+	INSTANCE;
 
 	/**
-	 * sert à récupérer notre instance de connexion
-	 * 
-	 * @see ConnectionFactory#getConnection()
-	 * @see ConnectionFactory#getInstance()
-	 * @see ComputerDAO#ComputerDAO(Connection)
+	 * récupère la connexion en cours
 	 */
-	private Connection connection = null;
+	private static Connection connection = ConnectionFactory.getConnection();
 
 	/**
 	 * logger
@@ -51,16 +48,6 @@ public class ComputerDAO {
 	 */
 	public Timestamp getTimestamp(java.util.Date date) {
 		return date == null ? null : new java.sql.Timestamp(date.getTime());
-	}
-
-	/**
-	 * Constructeur ComputerDAO La connexion est indépendante de notre DAO
-	 * 
-	 * @param conn
-	 *            récupérer la connexion en cours
-	 */
-	public ComputerDAO(Connection conn) {
-		this.connection = conn;
 	}
 
 	/**
@@ -102,7 +89,7 @@ public class ComputerDAO {
 			create = true;
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
-		}finally{
+		} finally {
 			try {
 				connection.close();
 			} catch (SQLException e) {
@@ -132,18 +119,17 @@ public class ComputerDAO {
 			ResultSet result = statement.executeQuery();
 			if (result.first())
 				company.setId(result.getLong("computer.company_id"));
-				company.setName(result.getString("company.name"));
-				computer = new Computer(result.getString("computer.name"),
-						company,
-						result.getDate("computer.introduced"),
-						result.getDate("computer.discontinued"));
+			company.setName(result.getString("company.name"));
+			computer = new Computer(result.getString("computer.name"), company,
+					result.getDate("computer.introduced"),
+					result.getDate("computer.discontinued"));
 			computer.setId(id);
 			statement.close();
-			result.close();	
+			result.close();
 			logger.debug("récupération de l'ordinateur réussie");
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
-		}finally{
+		} finally {
 			try {
 				connection.close();
 			} catch (SQLException e) {
@@ -159,31 +145,39 @@ public class ComputerDAO {
 	 * 
 	 * @return List une arraylist contenant l'ensemble de nos ordinateurs
 	 */
-	public List<Computer> readAll() {
+	public List<Computer> readAll(long debut, int nbItems) {
 		List<Computer> list = new ArrayList<Computer>();
+		Computer computer = new Computer(null, null, null, null);
+		Company company = new Company(null);
 		try {
-			ResultSet result = this.connection.createStatement().executeQuery(
-					"SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id ORDER BY computer.id");
-			while (result.next()) {
-				Company company = new Company(null);
-				Computer computer = new Computer(
-						result.getString("computer.name"),
-						null,
-						result.getDate("computer.introduced"),
-						result.getDate("computer.discontinued"));
-				computer.setId(result.getInt("computer.id"));
-				company.setId(result.getLong("computer.company_id"));
-				company.setName(result.getString("company.name"));
-				computer.setManufacturer(company);
-				list.add(computer);
-				
-			}
-			result.close();	
-			logger.debug("liste d'ordinateurs terminée");
+			for (int i = 0; i < nbItems; i++) {
+				long id = debut + i;
+				ResultSet result = connection.createStatement().executeQuery(
+						"SELECT MAX(id) FROM computer");
+				result.next();
+				long maxId = result.getInt("MAX(id)");
+				result.close();
+				if (id <= maxId) {
+					String SQL = "SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id  AND computer.id = ?";
+					java.sql.PreparedStatement statement = null;
+					statement = connection.prepareStatement(SQL);
+					statement.setLong(1, id);
+					result = statement.executeQuery();
+					if (result.first())
+						company.setId(result.getLong("computer.company_id"));
+					company.setName(result.getString("company.name"));
+					computer = new Computer(result.getString("computer.name"), company,
+							result.getDate("computer.introduced"),
+							result.getDate("computer.discontinued"));
+					computer.setId(id);
+					list.add(computer);
+					}
+					result.close();
+				}
+			logger.debug("liste de fabriquants terminée");
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
-			e.printStackTrace();
-		}finally{
+		} finally {
 			try {
 				connection.close();
 			} catch (SQLException e) {
@@ -234,7 +228,7 @@ public class ComputerDAO {
 			logger.debug("mise à jour réussie");
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
-		}finally{
+		} finally {
 			try {
 				connection.close();
 			} catch (SQLException e) {
@@ -256,13 +250,13 @@ public class ComputerDAO {
 	public boolean delete(long id) {
 		boolean delete = false;
 		try {
-			this.connection.createStatement().executeUpdate(
+			connection.createStatement().executeUpdate(
 					"DELETE FROM computer WHERE id =" + id);
 			logger.debug("suppression réussie");
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
 			e.printStackTrace();
-		}finally{
+		} finally {
 			try {
 				connection.close();
 			} catch (SQLException e) {

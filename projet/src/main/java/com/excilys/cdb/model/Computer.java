@@ -1,6 +1,7 @@
 package main.java.com.excilys.cdb.model;
 
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * On définit ici un simple ordinateur
@@ -176,6 +177,34 @@ public class Computer {
      */
 	public void setId(long id) { 
 		this.id = id;
+	}
+	
+	 @Override
+	    public boolean equals(Object o) {
+
+	        if (o == this) return true;
+	        if (!(o instanceof Computer)) {
+	            return false;
+	        }
+	        Computer computer = (Computer) o;
+	        return id == computer.id &&
+	                Objects.equals(name, computer.name) &&
+	                Objects.equals(introduceDate, computer.introduceDate)&&
+	                Objects.equals(discontinuedDate, computer.discontinuedDate)&&
+	                Objects.equals(manufacturer, computer.manufacturer);
+	    }
+	
+	@Override
+	public int hashCode(){
+		return Objects.hash(name, manufacturer, introduceDate, discontinuedDate, id);
+		
+	}
+	
+	@Override
+	public String toString() {
+		return "Computer [name=" + name + ", manufacturer=" + manufacturer
+				+ ", introduceDate=" + introduceDate + ", discontinuedDate="
+				+ discontinuedDate + ", id=" + id + "]";
 	}
 
 }
