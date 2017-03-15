@@ -1,4 +1,4 @@
-package main.java.com.excilys.cdb.dao;
+package main.java.com.excilys.cdb.persistence;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -9,8 +9,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import main.java.com.excilys.cdb.java.Company;
-import main.java.com.excilys.cdb.java.Computer;
+import main.java.com.excilys.cdb.model.Company;
 
 /**
  * Cette classe de DAO implémente les méthodes nécessaires à l'accès aux données
@@ -36,7 +35,7 @@ public class CompanyDAO {
 	/**
 	 * logger
 	 */
-	final Logger logger = LoggerFactory.getLogger(Computer.class);
+	final Logger logger = LoggerFactory.getLogger(CompanyDAO.class);
 	
 	
 	/**
@@ -69,7 +68,7 @@ public class CompanyDAO {
 			}
 			logger.debug("liste de fabriquants terminée");
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		return list;
 	}

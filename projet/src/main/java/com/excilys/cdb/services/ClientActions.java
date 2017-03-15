@@ -6,11 +6,15 @@ import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
-import main.java.com.excilys.cdb.dao.CompanyDAO;
-import main.java.com.excilys.cdb.dao.ComputerDAO;
-import main.java.com.excilys.cdb.dao.ConnectionFactory;
-import main.java.com.excilys.cdb.java.Company;
-import main.java.com.excilys.cdb.java.Computer;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import main.java.com.excilys.cdb.model.Company;
+import main.java.com.excilys.cdb.model.Computer;
+import main.java.com.excilys.cdb.persistence.CompanyDAO;
+import main.java.com.excilys.cdb.persistence.ComputerDAO;
+import main.java.com.excilys.cdb.persistence.ConnectionFactory;
 
 /**
  * Cette classe définit les 6 actions possibles pour le client :
@@ -35,44 +39,17 @@ public class ClientActions {
 			.getInstance();
 	
 	/**
+	 * logger
+	 */
+	final static Logger logger = LoggerFactory.getLogger(ClientActions.class);
+
+	/**
      * La connexion à proprement parler
      * @see ConnectionFactory#getConnection()
      */
 	private static Connection connect;
 
-	/**
-     * Menu principal de notre application
-     * Affiche uniquement les possibilités
-     * 
-     * @see ConsoleApplication
-     */
-	public static void menuPrincipal() {
-		System.out
-				.println("Bonjour, bienvenue dans ce système de gestion des ordinateurs");
-		System.out.println("Pour lister les ordinateurs, tapez 1");
-		System.out.println("Pour lister les fournisseurs, tapez 2");
-		System.out.println("Pour créer un nouvel ordinateur, tapez 3");
-		System.out.println("Pour quitter, tapez 4");
-	}
-
-	/**
-     * Menu contextuel de notre application
-     * apparaît quand on liste les ordinateurs
-     * permet d'effectuer les tâches spécifiques aux ordinateurs
-     * 
-     * @see ClientActions#menuPrincipal()
-     * @see ConsoleApplication
-     */
-	public static void menuOrdinateur() {
-		System.out
-				.println("Bonjour, bienvenue dans ce système de gestion des ordinateurs");
-		System.out.println("Pour mettre à jour une entrée, tapez 1");
-		System.out.println("Pour supprimer une entrée, tapez 2");
-		System.out
-				.println("Pour obtenir plus de détails sur une entrée, tapez 3");
-		System.out.println("Pour revenir au menu principal, tapez 4");
-	}
-
+	
 	/**
      * Liste les ordinateurs en affichant leur nom et leur ID
      * Par souci de lisibilité, affichage par pages de 10
@@ -100,6 +77,7 @@ public class ClientActions {
 						page = sc.nextInt();
 						sc.nextLine();
 					} catch (InputMismatchException e) {
+						logger.error(e.getMessage());
 						erreur = true;
 						sc.nextLine();
 					}
@@ -113,7 +91,7 @@ public class ClientActions {
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 	};
 
@@ -144,6 +122,7 @@ public class ClientActions {
 						page = sc.nextInt();
 						sc.nextLine();
 					} catch (InputMismatchException e) {
+						logger.error(e.getMessage());
 						erreur = true;
 						sc.nextLine();
 					}
@@ -156,7 +135,7 @@ public class ClientActions {
 				}
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 	};
 
@@ -176,7 +155,7 @@ public class ClientActions {
 			ComputerDAO compDAO = new ComputerDAO(connect);
 			computer = compDAO.read(id);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		if(computer.getName() != null){
 		System.out
@@ -213,7 +192,7 @@ public class ClientActions {
 				fait = true;
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		return fait;
 	};
@@ -236,7 +215,7 @@ public class ClientActions {
 				fait = true;
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		return fait;
 	};
@@ -259,7 +238,7 @@ public class ClientActions {
 				fait = true;
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		return fait;
 	};

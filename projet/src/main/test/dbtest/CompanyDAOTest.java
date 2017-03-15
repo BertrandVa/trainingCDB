@@ -5,9 +5,11 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import main.java.com.excilys.cdb.dao.CompanyDAO;
-import main.java.com.excilys.cdb.dao.ConnectionFactory;
-import main.java.com.excilys.cdb.java.Company;
+
+import main.java.com.excilys.cdb.model.Company;
+import main.java.com.excilys.cdb.persistence.CompanyDAO;
+import main.java.com.excilys.cdb.persistence.ConnectionFactory;
+
 import org.junit.Test;
 
 /**

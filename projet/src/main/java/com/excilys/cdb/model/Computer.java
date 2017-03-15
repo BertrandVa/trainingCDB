@@ -1,4 +1,4 @@
-package main.java.com.excilys.cdb.java;
+package main.java.com.excilys.cdb.model;
 
 import java.util.Date;
 

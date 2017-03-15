@@ -1,4 +1,4 @@
-package main.java.com.excilys.cdb.java;
+package main.java.com.excilys.cdb.model;
 
 /**
  * On définit ici un fçournisseur, par son id et son nom

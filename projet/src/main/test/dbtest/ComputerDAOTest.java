@@ -1,14 +1,16 @@
 package main.test.dbtest;
 
 import static org.junit.Assert.*;
-import main.java.com.excilys.cdb.dao.ConnectionFactory;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import main.java.com.excilys.cdb.dao.ComputerDAO;
-import main.java.com.excilys.cdb.java.Computer;
+
+import main.java.com.excilys.cdb.model.Computer;
+import main.java.com.excilys.cdb.persistence.ComputerDAO;
+import main.java.com.excilys.cdb.persistence.ConnectionFactory;
+
 import org.junit.Test;
 
 /**

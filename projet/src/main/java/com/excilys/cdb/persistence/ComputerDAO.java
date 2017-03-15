@@ -1,4 +1,4 @@
-package main.java.com.excilys.cdb.dao;
+package main.java.com.excilys.cdb.persistence;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -11,7 +11,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import main.java.com.excilys.cdb.java.Computer;
+import main.java.com.excilys.cdb.model.Computer;
 
 /**
  * Cette classe de DAO implémente les méthodes nécessaires à l'accès aux données
@@ -38,7 +38,7 @@ public class ComputerDAO {
 	/**
 	 * logger
 	 */
-	final Logger logger = LoggerFactory.getLogger(Computer.class);
+	final Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
 
 	/**
 	 * Convertit notre Date en Timestamp lisible par la base de données
@@ -98,7 +98,7 @@ public class ComputerDAO {
 			statement.executeUpdate();
 			create = true;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		return create;
 	}
@@ -124,7 +124,7 @@ public class ComputerDAO {
 			computer.setId(id);
 			logger.debug("récupération de l'ordinateur réussie");
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		return computer;
 	}
@@ -152,7 +152,7 @@ public class ComputerDAO {
 			}
 			logger.debug("liste d'ordinateurs terminée");
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		return list;
 	}
@@ -194,7 +194,7 @@ public class ComputerDAO {
 			update = true;
 			logger.debug("mise à jour réussie");
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		return update;
 	}
@@ -214,6 +214,7 @@ public class ComputerDAO {
 					"DELETE FROM computer WHERE id =" + id);
 			logger.debug("suppression réussie");
 		} catch (SQLException e) {
+			logger.error(e.getMessage());
 			e.printStackTrace();
 		}
 
