@@ -19,6 +19,15 @@ public class SecureInput {
 	 */
 	final static Logger logger = LoggerFactory.getLogger(SecureInput.class);
 	
+	/**
+     * Retourne un entier et rien d'autre
+     * 
+     * @param Scanner 
+     * 			le scanner utilisé pour la lecture
+     * 
+     * @return int
+     * 			l'entier entré par l'utilisateur
+     */
 	public static int secureInt(Scanner sc){
 		int choice=0;
 		boolean erreur;
@@ -36,6 +45,15 @@ public class SecureInput {
 		return choice;
 	}
 	
+	/**
+     * Retourne une string et rien d'autre
+     * 
+     * @param Scanner 
+     * 			le scanner utilisé pour la lecture
+     * 
+     * @return string
+     * 			la string entrée par l'utilisateur
+     */
 	public static String secureString(Scanner sc){
 		boolean erreur;
 		String string = "";
