@@ -11,6 +11,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import main.java.com.excilys.cdb.model.Company;
 import main.java.com.excilys.cdb.model.Computer;
 
 /**
@@ -72,12 +73,13 @@ public class ComputerDAO {
 	 */
 	public boolean create(Computer computer) {
 		boolean create = false;
-		int maxId = 0;
+		long maxId = 0;
 		try {
 			ResultSet result = connection.createStatement().executeQuery(
 					"SELECT MAX(id) FROM company");
 			result.next();
 			maxId = result.getInt("MAX(id)");
+			result.close();
 			logger.debug("Id maximal du manufacturer" + maxId);
 			String SQL = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?)";
 			java.sql.PreparedStatement statement = null;
@@ -87,18 +89,26 @@ public class ComputerDAO {
 			Timestamp timestamp2 = getTimestamp(computer.getDiscontinuedDate());
 			statement.setTimestamp(2, timestamp1);
 			statement.setTimestamp(3, timestamp2);
-			if (computer.getManufacturer() > 0
-					&& computer.getManufacturer() <= maxId) {
-				statement.setInt(4, computer.getManufacturer());
+			if (computer.getManufacturer().getId() > 0
+					&& computer.getManufacturer().getId() <= maxId) {
+				statement.setLong(4, computer.getManufacturer().getId());
 				logger.debug("manufacturer ajouté");
 			} else {
 				statement.setNull(4, Types.INTEGER);
 				logger.debug("pas de manufacturer valide");
 			}
 			statement.executeUpdate();
+			statement.close();
 			create = true;
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
+		}finally{
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return create;
 	}
@@ -111,20 +121,35 @@ public class ComputerDAO {
 	 * 
 	 * @return computer l'ordinateur sélectionné
 	 */
-	public Computer read(int id) {
-		Computer computer = new Computer(null, -1, null, null);
+	public Computer read(long id) {
+		Computer computer = new Computer(null, null, null, null);
+		Company company = new Company(null);
 		try {
-			ResultSet result = this.connection.createStatement().executeQuery(
-					"SELECT * FROM computer WHERE id =" + id);
+			String SQL = "SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id  AND computer.id = ?";
+			java.sql.PreparedStatement statement = null;
+			statement = connection.prepareStatement(SQL);
+			statement.setLong(1, id);
+			ResultSet result = statement.executeQuery();
 			if (result.first())
+				company.setId(result.getLong("computer.company_id"));
+				company.setName(result.getString("company.name"));
 				computer = new Computer(result.getString("computer.name"),
-						result.getInt("computer.company_id"),
+						company,
 						result.getDate("computer.introduced"),
 						result.getDate("computer.discontinued"));
 			computer.setId(id);
+			statement.close();
+			result.close();	
 			logger.debug("récupération de l'ordinateur réussie");
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
+		}finally{
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return computer;
 	}
@@ -138,21 +163,33 @@ public class ComputerDAO {
 		List<Computer> list = new ArrayList<Computer>();
 		try {
 			ResultSet result = this.connection.createStatement().executeQuery(
-					"SELECT * FROM computer");
-
+					"SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id ORDER BY computer.id");
 			while (result.next()) {
+				Company company = new Company(null);
 				Computer computer = new Computer(
 						result.getString("computer.name"),
-						result.getInt("computer.company_id"),
+						null,
 						result.getDate("computer.introduced"),
 						result.getDate("computer.discontinued"));
 				computer.setId(result.getInt("computer.id"));
+				company.setId(result.getLong("computer.company_id"));
+				company.setName(result.getString("company.name"));
+				computer.setManufacturer(company);
 				list.add(computer);
 				
 			}
+			result.close();	
 			logger.debug("liste d'ordinateurs terminée");
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
+			e.printStackTrace();
+		}finally{
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return list;
 	}
@@ -173,6 +210,7 @@ public class ComputerDAO {
 					"SELECT MAX(id) FROM company");
 			result.next();
 			maxId = result.getInt("MAX(id)");
+			result.close();
 			String SQL = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ?  WHERE id = ?";
 			java.sql.PreparedStatement statement = null;
 			statement = connection.prepareStatement(SQL);
@@ -181,20 +219,28 @@ public class ComputerDAO {
 			Timestamp timestamp2 = getTimestamp(computer.getDiscontinuedDate());
 			statement.setTimestamp(2, timestamp1);
 			statement.setTimestamp(3, timestamp2);
-			if (computer.getManufacturer() > 0
-					&& computer.getManufacturer() <= maxId) {
-				statement.setInt(4, computer.getManufacturer());
+			if (computer.getManufacturer().getId() > 0
+					&& computer.getManufacturer().getId() <= maxId) {
+				statement.setLong(4, computer.getManufacturer().getId());
 				logger.debug("manufacturer ajouté");
 			} else {
 				statement.setNull(4, Types.INTEGER);
 				logger.debug("manufacturer invalide");
 			}
-			statement.setInt(5, computer.getId());
+			statement.setLong(5, computer.getId());
 			statement.executeUpdate();
+			statement.close();
 			update = true;
 			logger.debug("mise à jour réussie");
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
+		}finally{
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return update;
 	}
@@ -207,7 +253,7 @@ public class ComputerDAO {
 	 * 
 	 * @return boolean delete true si tout s'est bien passé, false autrement
 	 */
-	public boolean delete(int id) {
+	public boolean delete(long id) {
 		boolean delete = false;
 		try {
 			this.connection.createStatement().executeUpdate(
@@ -216,6 +262,13 @@ public class ComputerDAO {
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
 			e.printStackTrace();
+		}finally{
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 		return delete;

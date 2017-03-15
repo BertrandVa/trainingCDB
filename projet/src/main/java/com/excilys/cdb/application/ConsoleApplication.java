@@ -7,6 +7,7 @@ import java.util.Scanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import main.java.com.excilys.cdb.model.Company;
 import main.java.com.excilys.cdb.model.Computer;
 import main.java.com.excilys.cdb.services.ClientActions;
 
@@ -76,7 +77,7 @@ public class ConsoleApplication {
 						int id;
 						System.out
 								.println("Veuillez entrer l'id du champ à modifier");
-						Computer computer = new Computer(null, -1, null, null);
+						Computer computer = new Computer(null, null, null, null);
 						id = SecureInput.secureInt(sc);
 						computer.setId(id);
 						System.out
@@ -148,7 +149,9 @@ public class ConsoleApplication {
 						} while (erreur);
 						System.out
 								.println("Parfait ! entrez l'id de son fabriquant ou 0 pour ignorer");
-						computer.setManufacturer(SecureInput.secureInt(sc));
+						Company company = new Company(null);
+						company.setId(SecureInput.secureInt(sc));
+						computer.setManufacturer(company);
 						create = ClientActions.updateComputer(computer);
 						if (create) {
 							System.out.println("L'ordinateur a été mis à jour");
@@ -186,7 +189,7 @@ public class ConsoleApplication {
 						.println("Parfait ! entrez le nom de ce nouvel ordinateur");
 				boolean erreur;
 				boolean create;
-				Computer computer = new Computer(null, -1, null, null);				
+				Computer computer = new Computer(null, null, null, null);				
 						computer.setName(SecureInput.secureString(sc));						
 				System.out
 						.println("Parfait ! entrez sa date d'acquisition yyyy (entrée) MM (entrée) dd (entrée) ou 0 pour ignorer");
@@ -252,7 +255,9 @@ public class ConsoleApplication {
 				} while (erreur);
 				System.out
 						.println("Parfait ! entrez l'id de son fabriquant ou 0 pour ignorer");
-				computer.setManufacturer(SecureInput.secureInt(sc));
+				Company company = new Company(null);
+				company.setId(SecureInput.secureInt(sc));
+				computer.setManufacturer(company);
 				create = ClientActions.createComputer(computer);
 				if (create) {
 					System.out.println("L'ordinateur a été ajouté");

@@ -1,4 +1,4 @@
-package main.test.dbtest;
+package test.dbtest;
 
 import static org.junit.Assert.*;
 import java.sql.Connection;
@@ -29,7 +29,7 @@ public class ComputerDAOTest {
 	public void testCreateComputer() { // test de la création d'un ordinateur
 		boolean create = false;
 		String string = "test";
-		Computer computer = new Computer(string, 1, null, null);
+		Computer computer = new Computer(string, null, null, null);
 		Connection connect;
 		try {
 			connect = connection.getConnection();
@@ -44,7 +44,7 @@ public class ComputerDAOTest {
 	@Test
 	public void testRead() { // test récupération d'un ordinateur dans la BDD
 								// seuivant son id
-		Computer computer = new Computer(null, 0, null, null);
+		Computer computer = new Computer(null, null, null, null);
 		Connection connect;
 		int maxId = 0;
 		try {
@@ -83,7 +83,7 @@ public class ComputerDAOTest {
 	@Test
 	public void testUpdateComputer() {
 
-		Computer computer = new Computer("test", 2, null, null);
+		Computer computer = new Computer("test", null, null, null);
 		computer.setId(576);
 		Connection connect;
 		try {

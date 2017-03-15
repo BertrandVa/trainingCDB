@@ -14,7 +14,7 @@ public class Company {
      * Cet ID n'est pas modifiable par l'utilisateur
      * @see Company#getId()
      */
-	private int id;
+	private long id;
 	/**
      * Le nom de la compagnie
      * Ce nom est modifiable par l'utilisateur
@@ -44,7 +44,7 @@ public class Company {
      * 
      * @return {@link Company#id}
      */
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 	
@@ -56,7 +56,7 @@ public class Company {
      * @param id
      *            Le nouvel ID du fabriquant
      */
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 

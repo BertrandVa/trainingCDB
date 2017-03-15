@@ -1,4 +1,4 @@
-package main.test.dbtest;
+package test.dbtest;
 
 import static org.junit.Assert.*;
 import java.sql.Connection;

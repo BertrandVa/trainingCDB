@@ -12,35 +12,29 @@ import java.sql.SQLException;
  * 
  */
 
-public class ConnectionFactory { 
+public enum ConnectionFactory { INSTANCE; 
 	/**
      * Le driver à utiliser pour la connection JDBC
      * @see ConnectionFactory#connectionFactory
      */
-	String driverClassName = "com.mysql.jdbc.Driver";
+	private static final String driverClassName = "com.mysql.jdbc.Driver";
 	/**
      * L'URL de notre base de données
      * le ?zeroDateTimeBehavior=convertToNull permet de gérer les dates à 0 dans 
      * la BDD
      * @see ConnectionFactory#getConnection()
      */
-	String connectionUrl = "jdbc:mysql://localhost/computer-database-db-test?zeroDateTimeBehavior=convertToNull";
+	private static final String connectionUrl = "jdbc:mysql://localhost/computer-database-db-test?zeroDateTimeBehavior=convertToNull";
 	/**
      * L'utilisateur de la BDD
      * @see ConnectionFactory#getConnection()
      */
-	String dbUser = "admincdb";
+	private static final String dbUser = "admincdb";
 	/**
      * Le mot de passe de notre utilisateur pour la BDD
      * @see ConnectionFactory#getConnection()
      */
-	String dbPwd = "qwerty1234";
-
-	/**
-     * Notre unique instance de ConnectionFactory
-     * @see ConnectionFactory#getInstance()
-     */
-	private static ConnectionFactory connectionFactory = null;
+	private static final String dbPwd = "qwerty1234";
 
 	/**
      * Constructeur ConnectionFactory
@@ -62,9 +56,14 @@ public class ConnectionFactory {
      * @return connection à la BDD
      * @see ConnectionFactory#getInstance()
      */
-	public Connection getConnection() throws SQLException {
+	private Connection createConnection(){
 		Connection conn = null;
-		conn = DriverManager.getConnection(connectionUrl, dbUser, dbPwd);
+		try {
+			conn = DriverManager.getConnection(connectionUrl, dbUser, dbPwd);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return conn;
 	}
 
@@ -74,11 +73,8 @@ public class ConnectionFactory {
      * @return instance de ConnectionFactory
      * @see ConnectionFactory#getConnection()
      */
-	public static ConnectionFactory getInstance() {
-		if (connectionFactory == null) {
-			connectionFactory = new ConnectionFactory();
-		}
-		return connectionFactory;
+	public static Connection getConnection() {
+		return INSTANCE.createConnection();
 	}
 	
 

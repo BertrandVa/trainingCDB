@@ -17,23 +17,23 @@ public class Computer {
      * Ce nom est modifiable 
      * @see Computer#getName()
      * @see Computer#setName(String)
-     * @see Computer#Computer(String, int, Date, Date)
+     * @see Computer#Computer(String, Company, Date, Date)
      */
 	private String name;
 	/**
      * L'id du fabriquant de l'ordinateur
      * Cet ID est modifiable 
      * @see Computer#getManufacturer()
-     * @see Computer#setManufacturer(int)
-     * @see Computer#Computer(String, int, Date, Date)
+     * @see Computer#setManufacturer(Company)
+     * @see Computer#Computer(String, Company, Date, Date)
      */
-	private int manufacturer;
+	private Company manufacturer;
 	/**
      * La date d'introduction de l'ordinateur
      * Cette date est modifiable 
      * @see Computer#getIntroduceDate()
      * @see Computer#setIntroduceDate(Date)
-     * @see Computer#Computer(String, int, Date, Date)
+     * @see Computer#Computer(String, Company, Date, Date)
      */
 	private Date introduceDate;
 	/**
@@ -41,7 +41,7 @@ public class Computer {
      * Cette date est modifiable 
      * @see Computer#getDiscontinuedDate()
      * @see Computer#setDiscontinuedDate(Date)
-     * @see Computer#Computer(String, int, Date, Date)
+     * @see Computer#Computer(String, Company, Date, Date)
      */
 	private Date discontinuedDate;
 	/**
@@ -50,7 +50,7 @@ public class Computer {
      * @see Computer#setId(int)
      * @see Computer#getId()
      */
-	private int id;
+	private long id;
 
 	/**
      * Constructeur Computer
@@ -60,8 +60,8 @@ public class Computer {
      *
      * @param name
      *            Le nom de l'ordinateur
-     * @param manufacturer
-     *            L'id du fabriquant
+     * @param company
+     *            Le fabriquant
      * @param introduceDate
      *            La date d'arrivée de l'ordinateur
      * @param name
@@ -72,11 +72,11 @@ public class Computer {
      * @see Computer#introduceDate
      * @see Computer#manufacturer
      */
-	public Computer(String name, int manufacturer, Date introduceDate,
+	public Computer(String name, Company company, Date introduceDate,
 			Date discontinuedDate) {
 		super();
 		this.name = name;
-		this.manufacturer = manufacturer;
+		this.manufacturer = company;
 		this.introduceDate = introduceDate;
 		this.discontinuedDate = discontinuedDate;
 	}
@@ -105,7 +105,7 @@ public class Computer {
      * 
      * @return {@link Computer#manufacturer}
      */
-	public int getManufacturer() {
+	public Company getManufacturer() {
 		return manufacturer;
 	}
 
@@ -115,7 +115,7 @@ public class Computer {
      * @param manufacturer
      *            Le nouvel ID du fabriquant
      */
-	public void setManufacturer(int manufacturer){
+	public void setManufacturer(Company manufacturer){
 		this.manufacturer = manufacturer;
 	}
 
@@ -162,7 +162,7 @@ public class Computer {
      * 
      * @return {@link Computer#id} 
      */
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
@@ -174,7 +174,7 @@ public class Computer {
      * @param id
      *            Le nouvel ID de l'ordinateur
      */
-	public void setId(int id) { 
+	public void setId(long id) { 
 		this.id = id;
 	}
 

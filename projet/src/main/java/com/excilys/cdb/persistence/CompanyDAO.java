@@ -63,12 +63,20 @@ public class CompanyDAO {
 		
 			while (result.next()) {
 				Company company = new Company(result.getString("company.name"));
-				company.setId(result.getInt("company.id"));
+				company.setId(result.getLong("company.id"));
 				list.add(company);
 			}
+			result.close();
 			logger.debug("liste de fabriquants terminée");
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
+		}finally{
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return list;
 	}
