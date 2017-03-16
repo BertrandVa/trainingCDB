@@ -1,4 +1,4 @@
-package main.java.com.excilys.cdb.application;
+package com.excilys.cdb.application;
 
 import java.time.LocalDate;
 import java.util.InputMismatchException;

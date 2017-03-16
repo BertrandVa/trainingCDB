@@ -1,6 +1,6 @@
-package main.java.com.excilys.cdb.application;
+package com.excilys.cdb.application;
 
-import main.java.com.excilys.cdb.services.ClientActions;
+import com.excilys.cdb.services.ClientActions;
 
 
 public class Menus {

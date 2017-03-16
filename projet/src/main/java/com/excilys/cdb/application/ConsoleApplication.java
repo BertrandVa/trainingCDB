@@ -1,13 +1,13 @@
-package main.java.com.excilys.cdb.application;
+package com.excilys.cdb.application;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import main.java.com.excilys.cdb.model.Company;
-import main.java.com.excilys.cdb.model.Computer;
-import main.java.com.excilys.cdb.services.ClientActions;
+import com.excilys.cdb.model.Company;
+import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.services.ClientActions;
 
 /**
  * Cette classe est notre application à proprement parler, qui gère l'interface

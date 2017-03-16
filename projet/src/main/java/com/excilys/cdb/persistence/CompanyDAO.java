@@ -1,4 +1,4 @@
-package main.java.com.excilys.cdb.persistence;
+package com.excilys.cdb.persistence;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -8,7 +8,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import main.java.com.excilys.cdb.model.Company;
+import com.excilys.cdb.model.Company;
 
 /**
  * Cette classe de DAO implémente les méthodes nécessaires à l'accès aux données

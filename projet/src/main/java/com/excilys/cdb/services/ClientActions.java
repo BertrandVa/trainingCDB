@@ -1,13 +1,13 @@
-package main.java.com.excilys.cdb.services;
+package com.excilys.cdb.services;
 
 import java.util.ArrayList;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import main.java.com.excilys.cdb.model.Company;
-import main.java.com.excilys.cdb.model.Computer;
-import main.java.com.excilys.cdb.persistence.CompanyDAO;
-import main.java.com.excilys.cdb.persistence.ComputerDAO;
+import com.excilys.cdb.model.Company;
+import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.persistence.CompanyDAO;
+import com.excilys.cdb.persistence.ComputerDAO;
 
 /**
  * Cette classe définit les 6 actions possibles pour le client : "List
