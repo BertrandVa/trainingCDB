@@ -1,5 +1,6 @@
 package main.java.com.excilys.cdb.application;
 
+import java.time.LocalDate;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -67,7 +68,57 @@ public class SecureInput {
 				sc.nextLine();
 			}
 		} while (erreur);
-		return string;
+		return string;		
+	}
+	
+	/**
+     * Retourne une date valide et rien d'autre
+     * 
+     * @param Scanner 
+     * 			le scanner utilisé pour la lecture
+     * 
+     * @return LocalDate
+     * 			la date entrée par l'utilisateur
+     */
+	public static LocalDate secureDate(Scanner sc){
+		boolean erreur;
+		LocalDate date =null;
+		do {
+			erreur = false;
+			try {
+				int year = sc.nextInt();
+				sc.nextLine();
+				if (year != 0) {
+					boolean invalidMonth=true;
+					int month=0;
+					while(invalidMonth){
+						month = sc.nextInt();
+						sc.nextLine();
+						if(month>0 && month<=12){
+							invalidMonth=false;
+						}
+					}
+					boolean invalidDay=true;
+					int day = 0;
+					while(invalidDay){
+						day = sc.nextInt();
+						sc.nextLine();
+						if(day>0 && day<=31){
+							invalidDay=false;
+						}
+					}
+					date=LocalDate.of(year, month, day);
+					System.out.println(date);
+				} else if (year == 0) {
+					date=null;
+				}
+			} catch (InputMismatchException e) {
+				logger.error(e.getMessage());
+				erreur = true;
+				sc.nextLine();
+			}
+		} while (erreur);
+		return date;
 		
 	}
 	

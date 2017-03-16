@@ -1,6 +1,6 @@
 package main.java.com.excilys.cdb.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Objects;
 
 
@@ -37,7 +37,7 @@ public class Computer {
      * @see Computer#setIntroduceDate(Date)
      * @see Computer#Computer(String, Company, Date, Date)
      */
-	private Date introduceDate;
+	private LocalDate introduceDate;
 	/**
      * La date de départ de l'ordinateur
      * Cette date est modifiable 
@@ -45,7 +45,7 @@ public class Computer {
      * @see Computer#setDiscontinuedDate(Date)
      * @see Computer#Computer(String, Company, Date, Date)
      */
-	private Date discontinuedDate;
+	private LocalDate discontinuedDate;
 	/**
      * L'ID de l'ordinateur
      * Cet ID n'est pas modifiable directement par l'utilisateur 
@@ -105,7 +105,7 @@ public class Computer {
      * 
      * @return {@link Computer#introduceDate}
      */
-	public Date getIntroduceDate() {
+	public LocalDate getIntroduceDate() {
 		return introduceDate;
 	}
 
@@ -115,7 +115,7 @@ public class Computer {
      * 
      * @return {@link Computer#discontinuedDate} 
      */
-	public Date getDiscontinuedDate() {
+	public LocalDate getDiscontinuedDate() {
 		return discontinuedDate;
 	}
 
@@ -160,8 +160,8 @@ public class Computer {
 	public static class ComputerBuilder{
 		private String name;
 		private Company manufacturer;
-		private Date introduceDate;
-		private Date discontinuedDate;
+		private LocalDate introduceDate;
+		private LocalDate discontinuedDate;
 		private long id;
 		
 		public ComputerBuilder(String name){
@@ -178,12 +178,12 @@ public class Computer {
 			return this;
 		}
 		
-		public ComputerBuilder introduceDate(Date introduceDate){
+		public ComputerBuilder introduceDate(LocalDate introduceDate){
 			this.introduceDate=introduceDate;
 			return this;
 		}
 		
-		public ComputerBuilder discontinuedDate(Date discontinuedDate){
+		public ComputerBuilder discontinuedDate(LocalDate discontinuedDate){
 			this.discontinuedDate=discontinuedDate;
 			return this;
 		}

@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.sql.Types;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,27 +29,12 @@ import main.java.com.excilys.cdb.model.Computer;
 public enum ComputerDAO {
 	INSTANCE;
 
-	/**
-	 * récupère la connexion en cours
-	 */
-	private static Connection connection = ConnectionFactory.getConnection();
+	
 
 	/**
 	 * logger
 	 */
 	final Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
-
-	/**
-	 * Convertit notre Date en Timestamp lisible par la base de données
-	 * l'expression ternaire renvoie null si besoin
-	 * 
-	 * @param date
-	 *            date au format java.util.Date
-	 * @return Timestamp date au format de la BDD
-	 */
-	public Timestamp getTimestamp(java.util.Date date) {
-		return date == null ? null : new java.sql.Timestamp(date.getTime());
-	}
 
 	/**
 	 * Méthode create d'un ordinateur
@@ -59,6 +45,7 @@ public enum ComputerDAO {
 	 * @return boolean create true si tout s'est bien passé, false autrement
 	 */
 	public boolean create(Computer computer) {
+		Connection connection = ConnectionFactory.getConnection();
 		boolean create = false;
 		long maxId = 0;
 		try {
@@ -72,10 +59,8 @@ public enum ComputerDAO {
 			java.sql.PreparedStatement statement = null;
 			statement = connection.prepareStatement(SQL);
 			statement.setString(1, computer.getName());
-			Timestamp timestamp1 = getTimestamp(computer.getIntroduceDate());
-			Timestamp timestamp2 = getTimestamp(computer.getDiscontinuedDate());
-			statement.setTimestamp(2, timestamp1);
-			statement.setTimestamp(3, timestamp2);
+			statement.setDate(2, java.sql.Date.valueOf(computer.getIntroduceDate()));
+			statement.setDate(3, java.sql.Date.valueOf(computer.getDiscontinuedDate()));
 			if (computer.getManufacturer().getId() > 0
 					&& computer.getManufacturer().getId() <= maxId) {
 				statement.setLong(4, computer.getManufacturer().getId());
@@ -110,20 +95,31 @@ public enum ComputerDAO {
 	 */
 	public Computer read(long id) {
 		Computer computer = new Computer.ComputerBuilder(null).build();
+		Connection connection = ConnectionFactory.getConnection();
 		try {
-			String SQL = "SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id  AND computer.id = ?";
+			String SQL = "SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id  WHERE computer.id = ?";
 			java.sql.PreparedStatement statement = null;
 			statement = connection.prepareStatement(SQL);
 			statement.setLong(1, id);
 			ResultSet result = statement.executeQuery();
 			if (result.first()){
+				Timestamp timestamp1 = result.getTimestamp("computer.introduced");
+				Timestamp timestamp2 = result.getTimestamp("computer.discontinued");
+				LocalDate date1 = null;
+				LocalDate date2 =null;
+				if(timestamp1!= null){
+					date1= timestamp1.toLocalDateTime().toLocalDate();						
+				}
+				if(timestamp2!= null){
+					date2= timestamp2.toLocalDateTime().toLocalDate();						
+				}
 			Company	company = new Company.CompanyBuilder(result.getString("company.name"))
 														.id(result.getLong("computer.company_id"))
 														.build();
 			computer = new Computer.ComputerBuilder(result.getString("computer.name"))
 															.manufacturer(company)
-															.introduceDate(result.getDate("computer.introduced"))
-															.discontinuedDate(result.getDate("computer.discontinued"))
+															.introduceDate(date1)
+															.discontinuedDate(date2)
 															.id(id)
 															.build();
 			statement.close();
@@ -150,30 +146,43 @@ public enum ComputerDAO {
 	 */
 	public List<Computer> readAll(long debut, int nbItems) {
 		List<Computer> list = new ArrayList<Computer>();
-		Computer computer = new Computer.ComputerBuilder(null).build();
+		Connection connection = ConnectionFactory.getConnection();
 		try {
+			ResultSet result = connection.createStatement().executeQuery(
+					"SELECT MAX(id) FROM computer");
+			result.next();
+			long maxId = result.getInt("MAX(id)");
+			result.close();
 			for (int i = 0; i < nbItems; i++) {
-				long id = debut + i;
-				ResultSet result = connection.createStatement().executeQuery(
-						"SELECT MAX(id) FROM computer");
-				result.next();
-				long maxId = result.getInt("MAX(id)");
-				result.close();
+				long id = debut + i;				
 				if (id <= maxId) {
-					String SQL = "SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id  AND computer.id = ?";
+					String SQL = "SELECT * FROM `computer` LEFT JOIN company ON computer.company_id = company.id WHERE computer.id = ?";
 					java.sql.PreparedStatement statement = null;
 					statement = connection.prepareStatement(SQL);
 					statement.setLong(1, id);
+					System.out.println(statement);
 					result = statement.executeQuery();
 					if (result.first()){
+					Timestamp timestamp1 = result.getTimestamp("computer.introduced");
+					Timestamp timestamp2 = result.getTimestamp("computer.discontinued");
+					LocalDate date1 = null;
+					LocalDate date2 =null;
+					if(timestamp1!= null){
+						date1= timestamp1.toLocalDateTime().toLocalDate();						
+					}
+					if(timestamp2!= null){
+						date2= timestamp2.toLocalDateTime().toLocalDate();						
+					}
+					logger.debug(result.getString("computer.name"));
 					Company company = new Company.CompanyBuilder(result.getString("company.name")).id(result.getLong("computer.company_id")).build();
-					computer = new Computer.ComputerBuilder(result.getString("computer.name"))
+					Computer computer = new Computer.ComputerBuilder(result.getString("computer.name"))
 															.id(id)
-															.introduceDate(result.getDate("computer.introduced"))
-															.discontinuedDate(result.getDate("computer.discontinued"))
+															.introduceDate(date1)
+															.discontinuedDate(date2)
 															.manufacturer(company)
 															.build();
 					list.add(computer);
+					logger.debug(computer.toString());
 					}
 					}
 					result.close();
@@ -201,6 +210,7 @@ public enum ComputerDAO {
 	 * @return boolean update true si tout s'est bien passé, false autrement
 	 */
 	public boolean update(Computer computer) {
+		Connection connection = ConnectionFactory.getConnection();
 		boolean update = false;
 		int maxId = 0;
 		try {
@@ -213,10 +223,8 @@ public enum ComputerDAO {
 			java.sql.PreparedStatement statement = null;
 			statement = connection.prepareStatement(SQL);
 			statement.setString(1, computer.getName());
-			Timestamp timestamp1 = getTimestamp(computer.getIntroduceDate());
-			Timestamp timestamp2 = getTimestamp(computer.getDiscontinuedDate());
-			statement.setTimestamp(2, timestamp1);
-			statement.setTimestamp(3, timestamp2);
+			statement.setDate(2, java.sql.Date.valueOf(computer.getIntroduceDate()));
+			statement.setDate(3, java.sql.Date.valueOf(computer.getDiscontinuedDate()));
 			if (computer.getManufacturer().getId() > 0
 					&& computer.getManufacturer().getId() <= maxId) {
 				statement.setLong(4, computer.getManufacturer().getId());
@@ -252,6 +260,7 @@ public enum ComputerDAO {
 	 * @return boolean delete true si tout s'est bien passé, false autrement
 	 */
 	public boolean delete(long id) {
+		Connection connection = ConnectionFactory.getConnection();
 		boolean delete = false;
 		try {
 			connection.createStatement().executeUpdate(

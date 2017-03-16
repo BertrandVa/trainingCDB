@@ -1,13 +1,10 @@
 package main.java.com.excilys.cdb.application;
 
-import java.util.Date;
-import java.util.InputMismatchException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import main.java.com.excilys.cdb.model.Company;
 import main.java.com.excilys.cdb.model.Computer;
 import main.java.com.excilys.cdb.services.ClientActions;
@@ -25,7 +22,6 @@ public class ConsoleApplication {
 	/**
 	 * @param args
 	 */
-	@SuppressWarnings("deprecation")
 	public static void main(String[] args) {
 		/**
 		 * logger
@@ -86,8 +82,8 @@ public class ConsoleApplication {
 					 */
 					case 1:
 						int id=0;
-						Date date1 = new Date();
-						Date date2 = new Date();
+						LocalDate date1 = null;
+						LocalDate date2 = null;
 						String name ="";
 						System.out
 								.println("Veuillez entrer l'id du champ à modifier");
@@ -96,65 +92,12 @@ public class ConsoleApplication {
 						System.out
 								.println("Parfait ! entrez le nouveau nom de cet ordinateur");
 						boolean create;
-						boolean erreur;
 						System.out
 								.println("Parfait ! entrez sa date d'acquisition yyyy (entrée) MM (entrée) dd (entrée) ou 0 pour ignorer");
-						do {
-							/*
-							 * On sécurise ici l'entrée de l'utilisateur
-							 */
-							erreur = false;
-							try {
-								int year = sc.nextInt();
-								sc.nextLine();
-								if (year != 0) {
-									int month = sc.nextInt();
-									sc.nextLine();
-									int day = sc.nextInt();
-									sc.nextLine();
-									date1.setDate(day);
-									date1.setMonth(month - 1);
-									date1.setYear(year);
-									sc.nextLine();
-									System.out.println(date1);
-								} else if (year == 0) {
-									date1=null;
-								}
-							} catch (InputMismatchException e) {
-								logger.error(e.getMessage());
-								erreur = true;
-								sc.nextLine();
-							}
-						} while (erreur);
+						date1=SecureInput.secureDate(sc);
 						System.out
 								.println("Parfait ! entrez sa date de départ yyyy (entrée) MM (entrée) dd (entrée) ou 0 pour ignorer");
-						do {
-							/*
-							 * On sécurise ici l'entrée de l'utilisateur
-							 */
-							erreur = false;
-							try {
-								int year = sc.nextInt();
-								sc.nextLine();
-								if (year != 0) {
-									int month = sc.nextInt();
-									sc.nextLine();
-									int day = sc.nextInt();
-									sc.nextLine();
-									date2.setDate(day);
-									date2.setMonth(month - 1);
-									date2.setYear(year);
-									sc.nextLine();
-									System.out.println(date2);
-								} else if (year == 0) {
-									date2=null;
-								}
-							} catch (InputMismatchException e) {
-								logger.error(e.getMessage());
-								erreur = true;
-								sc.nextLine();
-							}
-						} while (erreur);
+						date2=SecureInput.secureDate(sc);
 						System.out
 								.println("Parfait ! entrez l'id de son fabriquant ou 0 pour ignorer");
 						Company company = new Company.CompanyBuilder(null)
@@ -211,71 +154,19 @@ public class ConsoleApplication {
 			case 3:
 				System.out
 						.println("Parfait ! entrez le nom de ce nouvel ordinateur");
-				boolean erreur;
 				boolean create;
-				String name = "jean";
-				Date date1 = new Date();
-				Date date2 = new Date();
+				String name = "";
+				LocalDate date1 =null;
+				LocalDate date2 =null;
 				name=SecureInput.secureString(sc);	
 				logger.debug(name);
 				System.out
 						.println("Parfait ! entrez sa date d'acquisition yyyy (entrée) MM (entrée) dd (entrée) ou 0 pour ignorer");
-				do {
-					/*
-					 * On sécurise ici l'entrée de l'utilisateur
-					 */
-					erreur = false;
-					try {
-						int year = sc.nextInt();
-						sc.nextLine();
-						if (year != 0) {
-							int month = sc.nextInt();
-							sc.nextLine();
-							int day = sc.nextInt();
-							sc.nextLine();
-							date1.setDate(day);
-							date1.setMonth(month - 1);
-							date1.setYear(year);
-							sc.nextLine();
-							System.out.println(date1);
-						} else if (year == 0) {
-							date1=null;
-						}
-					} catch (InputMismatchException e) {
-						logger.error(e.getMessage());
-						erreur = true;
-						sc.nextLine();
-					}
-				} while (erreur);
+				date1=SecureInput.secureDate(sc);
 				System.out
 						.println("Parfait ! entrez sa date de départ yyyy (entrée) MM (entrée) dd (entrée) ou 0 pour ignorer");
-				do {
-					/*
-					 * On sécurise ici l'entrée de l'utilisateur
-					 */
-					erreur = false;
-					try {
-						int year = sc.nextInt();
-						sc.nextLine();
-						if (year != 0) {
-							int month = sc.nextInt();
-							sc.nextLine();
-							int day = sc.nextInt();
-							sc.nextLine();
-							date2.setDate(day);
-							date2.setMonth(month - 1);
-							date2.setYear(year);
-							sc.nextLine();
-							System.out.println(date2);
-						} else if (year == 0) {
-							date2=null;
-						}
-					} catch (InputMismatchException e) {
-						logger.error(e.getMessage());
-						erreur = true;
-						sc.nextLine();
-					}
-				} while (erreur);
+			
+				date2 = SecureInput.secureDate(sc);
 				System.out
 						.println("Parfait ! entrez l'id de son fabriquant ou 0 pour ignorer");
 				Company company = new Company.CompanyBuilder(null).id(SecureInput.secureInt(sc)).build();

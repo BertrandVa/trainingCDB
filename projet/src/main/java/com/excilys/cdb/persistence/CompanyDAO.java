@@ -30,16 +30,12 @@ public enum CompanyDAO {
 	final Logger logger = LoggerFactory.getLogger(CompanyDAO.class);
 
 	/**
-	 * récupère la connexion en cours
-	 */
-	private static Connection connection = ConnectionFactory.getConnection();
-
-	/**
 	 * Méthode d'affichage de tous les fabriquants
 	 * 
 	 * @return List une arraylist contenant l'ensemble de nos fabriquants
 	 */
 	public List<Company> readAll(long debut, int nbItems) {
+		Connection connection = ConnectionFactory.getConnection();
 		List<Company> list = new ArrayList<Company>();
 		try {
 			for (int i = 0; i < nbItems; i++) {
@@ -67,6 +63,7 @@ public enum CompanyDAO {
 		} finally {
 			try {
 				connection.close();
+				connection=null;
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
