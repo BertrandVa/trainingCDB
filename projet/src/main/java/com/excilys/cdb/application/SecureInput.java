@@ -60,7 +60,7 @@ public class SecureInput {
 		do {
 			erreur = false;
 			try {			
-				sc.nextLine();
+				string=sc.nextLine();
 			} catch (InputMismatchException e) {
 				logger.error(e.getMessage());
 				erreur = true;

@@ -85,17 +85,18 @@ public class ConsoleApplication {
 					 * ordinateur 4: retour au menu principal
 					 */
 					case 1:
-						int id;
+						int id=0;
+						Date date1 = new Date();
+						Date date2 = new Date();
+						String name ="";
 						System.out
 								.println("Veuillez entrer l'id du champ à modifier");
-						Computer computer = new Computer(null, null, null, null);
+						Computer computer = new Computer.ComputerBuilder(null).build();
 						id = SecureInput.secureInt(sc);
-						computer.setId(id);
 						System.out
 								.println("Parfait ! entrez le nouveau nom de cet ordinateur");
 						boolean create;
 						boolean erreur;
-						computer.setName(SecureInput.secureString(sc));
 						System.out
 								.println("Parfait ! entrez sa date d'acquisition yyyy (entrée) MM (entrée) dd (entrée) ou 0 pour ignorer");
 						do {
@@ -111,15 +112,13 @@ public class ConsoleApplication {
 									sc.nextLine();
 									int day = sc.nextInt();
 									sc.nextLine();
-									Date date = new Date();
-									date.setDate(day);
-									date.setMonth(month - 1);
-									date.setYear(year);
-									computer.setIntroduceDate(date);
+									date1.setDate(day);
+									date1.setMonth(month - 1);
+									date1.setYear(year);
 									sc.nextLine();
-									System.out.println(date);
+									System.out.println(date1);
 								} else if (year == 0) {
-									computer.setIntroduceDate(null);
+									date1=null;
 								}
 							} catch (InputMismatchException e) {
 								logger.error(e.getMessage());
@@ -142,15 +141,13 @@ public class ConsoleApplication {
 									sc.nextLine();
 									int day = sc.nextInt();
 									sc.nextLine();
-									Date date = new Date();
-									date.setDate(day);
-									date.setMonth(month - 1);
-									date.setYear(year);
-									computer.setDiscontinuedDate(date);
+									date2.setDate(day);
+									date2.setMonth(month - 1);
+									date2.setYear(year);
 									sc.nextLine();
-									System.out.println(date);
+									System.out.println(date2);
 								} else if (year == 0) {
-									computer.setIntroduceDate(null);
+									date2=null;
 								}
 							} catch (InputMismatchException e) {
 								logger.error(e.getMessage());
@@ -160,9 +157,16 @@ public class ConsoleApplication {
 						} while (erreur);
 						System.out
 								.println("Parfait ! entrez l'id de son fabriquant ou 0 pour ignorer");
-						Company company = new Company(null);
-						company.setId(SecureInput.secureInt(sc));
-						computer.setManufacturer(company);
+						Company company = new Company.CompanyBuilder(null)
+															.id(SecureInput.secureInt(sc))
+															.build();
+						computer = new Computer.ComputerBuilder(name)
+												.id(id)
+												.manufacturer(company)
+												.introduceDate(date1)
+												.discontinuedDate(date2)
+												.build();
+												
 						create = ClientActions.updateComputer(computer);
 						if (create) {
 							System.out.println("L'ordinateur a été mis à jour");
@@ -209,8 +213,11 @@ public class ConsoleApplication {
 						.println("Parfait ! entrez le nom de ce nouvel ordinateur");
 				boolean erreur;
 				boolean create;
-				Computer computer = new Computer(null, null, null, null);				
-						computer.setName(SecureInput.secureString(sc));						
+				String name = "jean";
+				Date date1 = new Date();
+				Date date2 = new Date();
+				name=SecureInput.secureString(sc);	
+				logger.debug(name);
 				System.out
 						.println("Parfait ! entrez sa date d'acquisition yyyy (entrée) MM (entrée) dd (entrée) ou 0 pour ignorer");
 				do {
@@ -226,15 +233,13 @@ public class ConsoleApplication {
 							sc.nextLine();
 							int day = sc.nextInt();
 							sc.nextLine();
-							Date date = new Date();
-							date.setDate(day);
-							date.setMonth(month - 1);
-							date.setYear(year);
-							computer.setIntroduceDate(date);
+							date1.setDate(day);
+							date1.setMonth(month - 1);
+							date1.setYear(year);
 							sc.nextLine();
-							System.out.println(date);
+							System.out.println(date1);
 						} else if (year == 0) {
-							computer.setIntroduceDate(null);
+							date1=null;
 						}
 					} catch (InputMismatchException e) {
 						logger.error(e.getMessage());
@@ -257,15 +262,13 @@ public class ConsoleApplication {
 							sc.nextLine();
 							int day = sc.nextInt();
 							sc.nextLine();
-							Date date = new Date();
-							date.setDate(day);
-							date.setMonth(month - 1);
-							date.setYear(year);
-							computer.setDiscontinuedDate(date);
+							date2.setDate(day);
+							date2.setMonth(month - 1);
+							date2.setYear(year);
 							sc.nextLine();
-							System.out.println(date);
+							System.out.println(date2);
 						} else if (year == 0) {
-							computer.setIntroduceDate(null);
+							date2=null;
 						}
 					} catch (InputMismatchException e) {
 						logger.error(e.getMessage());
@@ -275,10 +278,14 @@ public class ConsoleApplication {
 				} while (erreur);
 				System.out
 						.println("Parfait ! entrez l'id de son fabriquant ou 0 pour ignorer");
-				Company company = new Company(null);
-				company.setId(SecureInput.secureInt(sc));
-				computer.setManufacturer(company);
+				Company company = new Company.CompanyBuilder(null).id(SecureInput.secureInt(sc)).build();
+				Computer computer = new Computer.ComputerBuilder(name)
+												.discontinuedDate(date2)
+												.introduceDate(date1)
+												.manufacturer(company)
+												.build();
 				create = ClientActions.createComputer(computer);
+				logger.debug(computer.getName());
 				if (create) {
 					System.out.println("L'ordinateur a été ajouté");
 				} else {

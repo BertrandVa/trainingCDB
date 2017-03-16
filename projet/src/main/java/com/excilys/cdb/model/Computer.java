@@ -3,6 +3,7 @@ package main.java.com.excilys.cdb.model;
 import java.util.Date;
 import java.util.Objects;
 
+
 /**
  * On définit ici un simple ordinateur
  * Celui-ci contient un id, un fournisseur, une date d'arrivée et de départ et un id
@@ -73,13 +74,12 @@ public class Computer {
      * @see Computer#introduceDate
      * @see Computer#manufacturer
      */
-	public Computer(String name, Company company, Date introduceDate,
-			Date discontinuedDate) {
-		super();
-		this.name = name;
-		this.manufacturer = company;
-		this.introduceDate = introduceDate;
-		this.discontinuedDate = discontinuedDate;
+	private Computer(ComputerBuilder builder) {
+		this.name = builder.name;
+		this.manufacturer = builder.manufacturer;
+		this.introduceDate = builder.introduceDate;
+		this.discontinuedDate = builder.discontinuedDate;
+		this.id=builder.id;
 	}
 
 	/**
@@ -92,32 +92,12 @@ public class Computer {
 	}
 
 	/**
-     * Met à jour le nom de l'ordinateur
-     * 
-     * @param name
-     *            Le nouveau nom de l'ordinateur
-     */
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	/**
      * Retourne l'id du fabriquant
      * 
      * @return {@link Computer#manufacturer}
      */
 	public Company getManufacturer() {
 		return manufacturer;
-	}
-
-	/**
-     * Met à jour le fabriquant de l'ordinateur
-     * 
-     * @param manufacturer
-     *            Le nouvel ID du fabriquant
-     */
-	public void setManufacturer(Company manufacturer){
-		this.manufacturer = manufacturer;
 	}
 
 	/**
@@ -129,15 +109,6 @@ public class Computer {
 		return introduceDate;
 	}
 
-	/**
-     * Met à jour la date d'arrivée de l'ordinateur
-     * 
-     * @param introduceDate
-     *            La date d'introduction
-     */
-	public void setIntroduceDate(Date introduceDate) {
-		this.introduceDate = introduceDate;
-	}
 
 	/**
      * Retourne la date de départ de l'ordinateur
@@ -149,16 +120,6 @@ public class Computer {
 	}
 
 	/**
-     * Met à jour la date de départ de l'ordinateur
-     *
-     * @param discontinuedDate
-     *            La nouvelle date de départ
-     */
-	public void setDiscontinuedDate(Date discontinuedDate) {
-		this.discontinuedDate = discontinuedDate;
-	}
-
-	/**
      * Retourne l'id de l'ordinateur
      * 
      * @return {@link Computer#id} 
@@ -167,17 +128,6 @@ public class Computer {
 		return id;
 	}
 
-	/**
-     * Met à jour l'ID de l'ordinateur
-     * Ne pas utiliser dans une entrée User
-     * Vérifier cohérence avec la BDD
-     * 
-     * @param id
-     *            Le nouvel ID de l'ordinateur
-     */
-	public void setId(long id) { 
-		this.id = id;
-	}
 	
 	 @Override
 	    public boolean equals(Object o) {
@@ -207,4 +157,39 @@ public class Computer {
 				+ discontinuedDate + ", id=" + id + "]";
 	}
 
+	public static class ComputerBuilder{
+		private String name;
+		private Company manufacturer;
+		private Date introduceDate;
+		private Date discontinuedDate;
+		private long id;
+		
+		public ComputerBuilder(String name){
+			this.name=name;
+		}
+		
+		public ComputerBuilder id(long id){
+			this.id=id;
+			return this;
+		}
+		
+		public ComputerBuilder manufacturer(Company manufacturer){
+			this.manufacturer=manufacturer;
+			return this;
+		}
+		
+		public ComputerBuilder introduceDate(Date introduceDate){
+			this.introduceDate=introduceDate;
+			return this;
+		}
+		
+		public ComputerBuilder discontinuedDate(Date discontinuedDate){
+			this.discontinuedDate=discontinuedDate;
+			return this;
+		}
+		
+		public Computer build(){
+			return new Computer(this);
+		}
+	}
 }

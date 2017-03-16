@@ -55,9 +55,7 @@ public enum CompanyDAO {
 									"SELECT * FROM company WHERE id =" + id);
 
 					if (result.first()) {
-						Company company = new Company(
-								result.getString("company.name"));
-						company.setId(result.getLong("company.id"));
+						Company company = new Company.CompanyBuilder(result.getString("company.name")).id(result.getLong("company.id")).build();
 						list.add(company);
 					}
 					result.close();

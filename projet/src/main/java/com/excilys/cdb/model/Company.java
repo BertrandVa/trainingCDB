@@ -37,8 +37,9 @@ public class Company {
      * @see Company#name
      */
 
-	public Company(String name) {
-		this.name = name;
+	private Company(CompanyBuilder builder) {
+		this.name = builder.name;
+		this.id = builder.id;
 	}
 
 	 /**
@@ -50,17 +51,6 @@ public class Company {
 		return id;
 	}
 	
-	/**
-     * Met à jour l'ID de la compagnie
-     * Ne pas utiliser dans une entrée User
-     * Vérifier cohérence avec la BDD
-     * 
-     * @param id
-     *            Le nouvel ID du fabriquant
-     */
-	public void setId(long id) {
-		this.id = id;
-	}
 
 	 /**
      * Retourne le nom de la compagnie
@@ -69,15 +59,6 @@ public class Company {
      */
 	public String getName() {
 		return name;
-	}
-
-	/**
-     * Met à jour le nom de la compagnie
-     * @param id
-     *            Le nouveau nom de la compagnie
-     */
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	@Override
@@ -112,6 +93,22 @@ public class Company {
 	public String toString() {
 		return "Company [id=" + id + ", name=" + name + "]";
 	}
-
-
+	
+	public static class CompanyBuilder{
+		private long id;
+		private final String name;
+		
+		public CompanyBuilder(String name){
+			this.name=name;
+		}
+		
+		public CompanyBuilder id(long id){
+			this.id=id;
+			return this;
+		}
+		
+		public Company build(){
+			return new Company(this);
+		}
+	}
 }

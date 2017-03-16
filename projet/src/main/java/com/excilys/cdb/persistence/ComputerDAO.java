@@ -109,22 +109,25 @@ public enum ComputerDAO {
 	 * @return computer l'ordinateur sélectionné
 	 */
 	public Computer read(long id) {
-		Computer computer = new Computer(null, null, null, null);
-		Company company = new Company(null);
+		Computer computer = new Computer.ComputerBuilder(null).build();
 		try {
 			String SQL = "SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id  AND computer.id = ?";
 			java.sql.PreparedStatement statement = null;
 			statement = connection.prepareStatement(SQL);
 			statement.setLong(1, id);
 			ResultSet result = statement.executeQuery();
-			if (result.first())
-				company.setId(result.getLong("computer.company_id"));
-			company.setName(result.getString("company.name"));
-			computer = new Computer(result.getString("computer.name"), company,
-					result.getDate("computer.introduced"),
-					result.getDate("computer.discontinued"));
-			computer.setId(id);
+			if (result.first()){
+			Company	company = new Company.CompanyBuilder(result.getString("company.name"))
+														.id(result.getLong("computer.company_id"))
+														.build();
+			computer = new Computer.ComputerBuilder(result.getString("computer.name"))
+															.manufacturer(company)
+															.introduceDate(result.getDate("computer.introduced"))
+															.discontinuedDate(result.getDate("computer.discontinued"))
+															.id(id)
+															.build();
 			statement.close();
+			}
 			result.close();
 			logger.debug("récupération de l'ordinateur réussie");
 		} catch (SQLException e) {
@@ -147,8 +150,7 @@ public enum ComputerDAO {
 	 */
 	public List<Computer> readAll(long debut, int nbItems) {
 		List<Computer> list = new ArrayList<Computer>();
-		Computer computer = new Computer(null, null, null, null);
-		Company company = new Company(null);
+		Computer computer = new Computer.ComputerBuilder(null).build();
 		try {
 			for (int i = 0; i < nbItems; i++) {
 				long id = debut + i;
@@ -163,14 +165,16 @@ public enum ComputerDAO {
 					statement = connection.prepareStatement(SQL);
 					statement.setLong(1, id);
 					result = statement.executeQuery();
-					if (result.first())
-						company.setId(result.getLong("computer.company_id"));
-					company.setName(result.getString("company.name"));
-					computer = new Computer(result.getString("computer.name"), company,
-							result.getDate("computer.introduced"),
-							result.getDate("computer.discontinued"));
-					computer.setId(id);
+					if (result.first()){
+					Company company = new Company.CompanyBuilder(result.getString("company.name")).id(result.getLong("computer.company_id")).build();
+					computer = new Computer.ComputerBuilder(result.getString("computer.name"))
+															.id(id)
+															.introduceDate(result.getDate("computer.introduced"))
+															.discontinuedDate(result.getDate("computer.discontinued"))
+															.manufacturer(company)
+															.build();
 					list.add(computer);
+					}
 					}
 					result.close();
 				}

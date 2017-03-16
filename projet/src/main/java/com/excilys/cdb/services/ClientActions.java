@@ -70,7 +70,7 @@ public class ClientActions {
 	 */
 	public static void showComputerDetails(int id) {
 
-		Computer computer = new Computer(null, null, null, null);
+		Computer computer = new Computer.ComputerBuilder(null).build();
 		ComputerDAO compDAO = ComputerDAO.INSTANCE;
 		computer = compDAO.read(id);
 		if (computer.getName() != null) {
