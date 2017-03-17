@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="6.11.2">
+<file name="/home/excilys/workspace/computer-database/projet/src/main/java/com/excilys/cdb/application/Menus.java">
+</file>
+<file name="/home/excilys/workspace/computer-database/projet/src/main/java/com/excilys/cdb/application/ConsoleApplication.java">
+</file>
+<file name="/home/excilys/workspace/computer-database/projet/src/main/java/com/excilys/cdb/application/SecureInput.java">
+</file>
+<file name="/home/excilys/workspace/computer-database/projet/src/main/java/com/excilys/cdb/services/ClientActions.java">
+</file>
+<file name="/home/excilys/workspace/computer-database/projet/src/main/java/com/excilys/cdb/persistence/ComputerDAO.java">
+</file>
+<file name="/home/excilys/workspace/computer-database/projet/src/main/java/com/excilys/cdb/persistence/CompanyDAO.java">
+</file>
+<file name="/home/excilys/workspace/computer-database/projet/src/main/java/com/excilys/cdb/persistence/ConnectionFactory.java">
+</file>
+<file name="/home/excilys/workspace/computer-database/projet/src/main/java/com/excilys/cdb/model/Company.java">
+</file>
+<file name="/home/excilys/workspace/computer-database/projet/src/main/java/com/excilys/cdb/model/Computer.java">
+</file>
+<file name="/home/excilys/workspace/computer-database/projet/src/main/resources/database.properties">
+</file>
+</checkstyle>

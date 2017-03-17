@@ -2,7 +2,7 @@
 	<company id="1" name="Apple Inc."/>
 	<company id="2" name="Thinking Machines"/>
 	<company id="3" name="RCA"/>
-  	<computer id="574" name="iPhone 4S" company_id="1"/>
+  	<computer id="574" name="iPhone 4S" introduced="[NULL]" discontinued="[NULL]" company_id="[NULL]" />
   	<computer id="573" name="Gateway LT3103U" introduced="2011-11-04" discontinued="2013-10-12" company_id="1"/>
 	<computer id="572" name="Dell Vostro" introduced="2011-11-04" discontinued="2013-10-12" company_id="2"/>
 	<computer id="571" name="Lenovo Thinkpad Edge 11" introduced="2011-11-04" discontinued="2013-10-12" company_id="1"/>
