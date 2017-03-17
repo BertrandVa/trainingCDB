@@ -1,0 +1,20 @@
+<dataset>
+	<company id="1" name="Apple Inc."/>
+	<company id="2" name="Thinking Machines"/>
+	<company id="3" name="RCA"/>
+  	<computer id="574" name="iPhone 4S" introduced="[NULL]" discontinued="[NULL]" company_id="[NULL]" />
+  	<computer id="573" name="Gateway LT3103U" introduced="2011-11-04" discontinued="2013-10-12" company_id="1"/>
+	<computer id="572" name="Dell Vostro" introduced="2011-11-04" discontinued="2013-10-12" company_id="2"/>
+	<computer id="571" name="Lenovo Thinkpad Edge 11" introduced="2011-11-04" discontinued="2013-10-12" company_id="1"/>
+	<computer id="570" name="HP Veer" introduced="2011-11-04" discontinued="2013-10-12" company_id="3"/>
+	<computer id="569" name="HP TouchPad" introduced="2011-11-04" discontinued="2013-10-12" company_id="1"/>
+	<computer id="568" name="IPad 2" introduced="2011-11-04" discontinued="2013-10-12" company_id="2"/>
+	<computer id="567" name="Dell Inspiron 560 Desktop Computer" introduced="2011-11-04" discontinued="2013-10-12" company_id="1"/>
+	<computer id="566" name="iPhone 4S" introduced="2011-11-04" discontinued="2013-10-12" company_id="3"/>
+	<computer id="565" name="iPhone 4S" introduced="2011-11-04" discontinued="2013-10-12" company_id="1"/>
+	<computer id="564" name="iPhone 4S" introduced="2011-11-04" discontinued="2013-10-12" company_id="2"/>
+	<computer id="563" name="iPhone 4S" introduced="2011-11-04" discontinued="2013-10-12" company_id="3"/>
+	<computer id="562" name="iPhone 4S" introduced="2011-11-04" discontinued="2013-10-12" company_id="1"/>
+	<computer id="561" name="iPhone 4S" introduced="2011-11-04" discontinued="2013-10-12" company_id="2"/>
+	<computer id="560" name="iPhone 4S" introduced="2011-11-04" discontinued="2010-10-12" company_id="3"/>
+</dataset>
