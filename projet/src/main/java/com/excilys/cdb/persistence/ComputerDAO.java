@@ -106,12 +106,14 @@ public enum ComputerDAO {
 				Timestamp timestamp1 = result.getTimestamp("computer.introduced");
 				Timestamp timestamp2 = result.getTimestamp("computer.discontinued");
 				LocalDate date1 = null;
-				LocalDate date2 =null;
+				LocalDate date2 = null;
 				if(timestamp1!= null){
 					date1= timestamp1.toLocalDateTime().toLocalDate();						
 				}
+				System.out.println(timestamp2);
 				if(timestamp2!= null){
-					date2= timestamp2.toLocalDateTime().toLocalDate();						
+					date2= timestamp2.toLocalDateTime().toLocalDate();	
+					
 				}
 			Company	company = new Company.CompanyBuilder(result.getString("company.name"))
 														.id(result.getLong("computer.company_id"))

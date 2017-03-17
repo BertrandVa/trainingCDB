@@ -45,13 +45,16 @@ public class ComputerDAOTest {
 	
 
 	@Test
-	public void findsAndReadsExistingComputerById() throws Exception {
+	public void findsAndReadsExistingComputerByIdWithOnlyMandatoryParameters() throws Exception {
 		Computer computer = new Computer.ComputerBuilder(null).build();
 		ComputerDAO compDAO = ComputerDAO.INSTANCE;
 		computer = compDAO.read(574);		
 		assertEquals(computer.getId(),574);
 		assertEquals(computer.getName(),("iPhone 4S"));
 		assertEquals(computer.getManufacturer().getId(),(1));
+		assertEquals(computer.getManufacturer().getName(),"Apple Inc.");
+		assertNull(computer.getIntroduceDate());
+		assertNull(computer.getDiscontinuedDate()); //si la date n'est pas précisée, elle doit être nulle
 	}
 
 }

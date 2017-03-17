@@ -4,6 +4,13 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import org.apache.commons.configuration2.Configuration;
+import org.apache.commons.configuration2.FileBasedConfiguration;
+import org.apache.commons.configuration2.PropertiesConfiguration;
+import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
+import org.apache.commons.configuration2.builder.fluent.Parameters;
+import org.apache.commons.configuration2.ex.ConfigurationException;
+
 /**
  * Singleton créant la connexion à la BDD
  * Une seule instance de connexion disponible
@@ -13,42 +20,7 @@ import java.sql.SQLException;
  */
 
 public enum ConnectionFactory { INSTANCE; 
-	/**
-     * Le driver à utiliser pour la connection JDBC
-     * @see ConnectionFactory#connectionFactory
-     */
-	private static final String driverClassName = "com.mysql.jdbc.Driver";
-	/**
-     * L'URL de notre base de données
-     * le ?zeroDateTimeBehavior=convertToNull permet de gérer les dates à 0 dans 
-     * la BDD
-     * @see ConnectionFactory#getConnection()
-     */
-	private static final String connectionUrl = "jdbc:mysql://localhost/computer-database-db-test?zeroDateTimeBehavior=convertToNull";
-	/**
-     * L'utilisateur de la BDD
-     * @see ConnectionFactory#getConnection()
-     */
-	private static final String dbUser = "admincdb";
-	/**
-     * Le mot de passe de notre utilisateur pour la BDD
-     * @see ConnectionFactory#getConnection()
-     */
-	private static final String dbPwd = "qwerty1234";
 
-	/**
-     * Constructeur ConnectionFactory
-     * privé car il ne doit y avoir qu'une seule instance
-     * 
-     * @see ConnectionFactory#getInstance()
-     */
-	private ConnectionFactory() {
-		try {
-			Class.forName(driverClassName);
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-	}
 
 	/**
      * Connexion à la base de données
@@ -58,12 +30,32 @@ public enum ConnectionFactory { INSTANCE;
      */
 	private Connection createConnection(){
 		Connection conn = null;
-		try {
-			conn = DriverManager.getConnection(connectionUrl, dbUser, dbPwd);
+		Parameters params = new Parameters();
+		FileBasedConfigurationBuilder<FileBasedConfiguration> builder =
+		    new FileBasedConfigurationBuilder<FileBasedConfiguration>(PropertiesConfiguration.class)
+		    .configure(params.properties()
+		        .setFileName("database.properties"));
+		try
+		{
+		    Configuration config = builder.getConfiguration();
+		    String driver = config.getString("jdbc.driverClassName");
+		    String url = config.getString("jdbc.url");
+		    String username = config.getString("jdbc.username");
+		    String password = config.getString("jdbc.password");
+		    Class.forName(driver);
+		    conn = DriverManager.getConnection(url, username, password);		    
+		}
+		catch(ConfigurationException cex)
+		{
+		    // loading of the configuration file failed
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	           
 		return conn;
 	}
 
