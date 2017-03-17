@@ -3,6 +3,8 @@ package dbTest;
 import static org.junit.Assert.*;
 import java.io.File;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.dbunit.IDatabaseTester;
 import org.dbunit.JdbcDatabaseTester;
@@ -52,12 +54,12 @@ public class ComputerDAOTest {
 
     /*
      * Les tests suivants ont pour but de tester la lecture d'un ordinateur dans
-     * la BDD 3 cas s'offrent à nous : L'ordinateur n'existe pas, testé avec
-     * findsAndReadsUnexistingComputer L'ordinateur existe, mais seuls les
+     * la BDD. 3 cas s'offrent à nous : L'ordinateur n'existe pas, testé avec
+     * findsAndReadsUnexistingComputer. L'ordinateur existe, mais seuls les
      * champs obligatoires sont remplis, testé avec
-     * findAndReadsExistingComputerWithOnlyMandatoryParameters L'ordinateur
+     * findAndReadsExistingComputerWithOnlyMandatoryParameters. L'ordinateur
      * existe et tous les champs sont remplis, testé avec
-     * findsAndReadsExistingComputerWithAllParameters
+     * findsAndReadsExistingComputerWithAllParameters.
      */
 
     @Test
@@ -213,5 +215,163 @@ public class ComputerDAOTest {
         assertEquals(computer2.getDiscontinuedDate(),
                 LocalDate.of(1998, 07, 03));
 
+    }
+
+    /*
+     * Les tests suivants ont pour but de tester la lecture de plusieurs
+     * ordinateurs dans la BDD. Plusieurs cas s'offrent à nous : L'utilisateur
+     * souhaite afficher 1 seul ordinateur testé avec
+     * findsAndReadsExistingComputerByPage. L'utilisateur souhaite afficher
+     * plusieurs ordinateurs findsAndReadsExistingComputersByPage(). L'id de
+     * départ n'existe pas dans la BDD
+     * testé avec findsAndReadsExistingComputersByPageWithFirstIdNotInDB
+     *  La liste dépasse la fin de la BDD
+     *  findsAndReadsExistingComputersByPageGoingTooFar
+     */
+
+    @Test
+    public void findsAndReadsExistingComputerByPage() throws Exception {
+        List<Computer> list = new ArrayList<Computer>();
+        Computer computer = new Computer.ComputerBuilder(null).build();
+        ComputerDAO compDAO = ComputerDAO.INSTANCE;
+        list = compDAO.readAll(574, 1);
+        computer = list.get(0);
+        assertEquals(computer.getId(), 574);
+        assertEquals(computer.getName(), ("iPhone 4S"));
+        assertEquals(computer.getManufacturer().getId(), (0));
+        assertNull(computer.getManufacturer().getName());
+        assertNull(computer.getIntroduceDate());
+        assertNull(computer.getDiscontinuedDate());
+    }
+
+    @Test
+    public void findsAndReadsExistingComputersByPage() throws Exception {
+        List<Computer> list = new ArrayList<Computer>();
+        Computer computer1 = new Computer.ComputerBuilder(null).build();
+        Computer computer2 = new Computer.ComputerBuilder(null).build();
+        Computer computer3 = new Computer.ComputerBuilder(null).build();
+        ComputerDAO compDAO = ComputerDAO.INSTANCE;
+        list = compDAO.readAll(572, 3);
+        computer1 = list.get(0);
+        computer2 = list.get(1);
+        computer3 = list.get(2);
+        assertEquals(computer1.getId(), 572);
+        assertEquals(computer2.getId(), 573);
+        assertEquals(computer3.getId(), 574);
+        assertEquals(computer1.getName(), ("Dell Vostro"));
+        assertEquals(computer2.getName(), ("Gateway LT3103U"));
+        assertEquals(computer3.getName(), ("iPhone 4S"));
+        assertEquals(computer1.getManufacturer().getId(), (2));
+        assertEquals(computer2.getManufacturer().getId(), (1));
+        assertEquals(computer3.getManufacturer().getId(), (0));
+        assertEquals(computer1.getManufacturer().getName(), "Thinking Machines");
+        assertEquals(computer2.getManufacturer().getName(), "Apple Inc.");
+        assertNull(computer3.getManufacturer().getName());
+        assertEquals(computer1.getIntroduceDate(), LocalDate.of(2011, 11, 04));
+        assertEquals(computer2.getIntroduceDate(), LocalDate.of(2011, 11, 04));
+        assertNull(computer3.getIntroduceDate());
+        assertEquals(computer1.getDiscontinuedDate(),
+                LocalDate.of(2013, 10, 12));
+        assertEquals(computer2.getDiscontinuedDate(),
+                LocalDate.of(2013, 10, 12));
+        assertNull(computer3.getDiscontinuedDate());
+    }
+
+    @Test
+    public void findsAndReadsExistingComputersByPageWithFirstIdNotInDB()
+            throws Exception {
+        List<Computer> list = new ArrayList<Computer>();
+        Computer computer1 = new Computer.ComputerBuilder(null).build();
+        Computer computer2 = new Computer.ComputerBuilder(null).build();
+        Computer computer3 = new Computer.ComputerBuilder(null).build();
+        ComputerDAO compDAO = ComputerDAO.INSTANCE;
+        list = compDAO.readAll(5000, 3);
+        if (list.size() != 0) {
+            computer1 = list.get(0);
+            computer2 = list.get(1);
+            computer3 = list.get(2);
+        }
+        assertEquals(computer1.getId(), 0);
+        assertEquals(computer2.getId(), 0);
+        assertEquals(computer3.getId(), 0);
+        assertNull(computer1.getName());
+        assertNull(computer2.getName());
+        assertNull(computer3.getName());
+        assertNull(computer1.getManufacturer());
+        assertNull(computer2.getManufacturer());
+        assertNull(computer3.getManufacturer());
+        assertNull(computer1.getIntroduceDate());
+        assertNull(computer2.getIntroduceDate());
+        assertNull(computer3.getIntroduceDate());
+        assertNull(computer1.getDiscontinuedDate());
+        assertNull(computer2.getDiscontinuedDate());
+        assertNull(computer3.getDiscontinuedDate());
+    }
+    
+    @Test
+    public void findsAndReadsExistingComputersByPageGoingTooFar()
+            throws Exception {
+        List<Computer> list = new ArrayList<Computer>();
+        Computer computer1 = new Computer.ComputerBuilder(null).build();
+        Computer computer2 = new Computer.ComputerBuilder(null).build();
+        Computer computer3 = new Computer.ComputerBuilder(null).build();
+        ComputerDAO compDAO = ComputerDAO.INSTANCE;
+        list = compDAO.readAll(573, 3);
+        if (list.size() > 0) {
+            computer1 = list.get(0);
+        }
+        if(list.size() > 1){
+            computer2 = list.get(1);
+        }
+        if (list.size() > 2){
+            computer3 = list.get(2);
+        }
+        assertEquals(computer1.getId(), 573);
+        assertEquals(computer2.getId(), 574);
+        assertEquals(computer3.getId(), 0);
+        assertEquals(computer1.getName(),"Gateway LT3103U");
+        assertEquals(computer2.getName(), ("iPhone 4S"));
+        assertNull(computer3.getName());
+        assertEquals(computer1.getManufacturer().getId(), 1);
+        assertEquals(computer2.getManufacturer().getId(), 0);
+        assertEquals(computer1.getManufacturer().getName(), "Apple Inc.");
+        assertNull(computer2.getManufacturer().getName());
+        assertNull(computer3.getManufacturer());
+        assertEquals(computer1.getIntroduceDate(), LocalDate.of(2011, 11, 04));
+        assertNull(computer2.getIntroduceDate());
+        assertNull(computer3.getIntroduceDate());
+        assertEquals(computer1.getDiscontinuedDate(),
+                LocalDate.of(2013, 10, 12));
+        assertNull(computer2.getDiscontinuedDate());
+        assertNull(computer3.getDiscontinuedDate());
+    }
+
+
+    /*
+     * Les tests suivants ont pour but de tester la mise à jour d'un champ dans la BDD. 
+     * Plusieurs cas s'offrent à nous : 
+     * L'utilisateur met à jour des champs existants testé avec
+     * findsAndReadsExistingComputerByPage.
+     * L'utilisateur met tous les champs à jour
+     * plusieurs ordinateurs findsAndReadsExistingComputersByPage().
+     * L'utilisateur supprime le nom de l'ordinateur
+     * testé avec findsAndReadsExistingComputersByPageWithFirstIdNotInDB
+     *  l'utilisateur change mal la date de départ
+     *  findsAndReadsExistingComputersByPageGoingTooFar
+     */
+    
+    @Test
+    public void updateComputerWithoutName() throws Exception {
+        Computer computer = new Computer.ComputerBuilder(null).id(563).build();
+        ComputerDAO compDAO = ComputerDAO.INSTANCE;
+        boolean update = false;
+        update = compDAO.update(computer);
+        Computer computer2 = compDAO.read(computer.getId());
+        assertNotNull(computer2.getName());
+        assertNotNull(computer2.getManufacturer());
+        assertNotNull(computer2.getIntroduceDate());
+        assertNotNull(computer2.getDiscontinuedDate());
+        assertEquals(computer2.getId(), 563);
+        assertEquals(update,true);
     }
 }
