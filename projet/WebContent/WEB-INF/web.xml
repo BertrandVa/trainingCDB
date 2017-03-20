@@ -2,17 +2,18 @@
 <web-app id="WebApp_ID" version="3.0"
 	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
-	<servlet>
-		<servlet-name>dashboard</servlet-name>
-		<jsp-file>/WEB-INF/views/dashboard.html</jsp-file>
-	</servlet>
+
 	<servlet>
 		<servlet-name>editComputer</servlet-name>
-		<jsp-file>/WEB-INF/views/editComputer.html</jsp-file>
+		<servlet-class>com.excilys.cdb.web.EditComputer</servlet-class>
 	</servlet>
 	<servlet>
 		<servlet-name>addComputer</servlet-name>
-		<jsp-file>/WEB-INF/views/addComputer.html</jsp-file>
+		<servlet-class>com.excilys.cdb.web.AddComputer</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>dashboard</servlet-name>
+		<servlet-class>com.excilys.cdb.web.Dashboard</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>dashboard</servlet-name>
