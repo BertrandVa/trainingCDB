@@ -18,6 +18,7 @@
 	</repositories>
 	<properties>
 		<slf4jVersion>1.6.1</slf4jVersion>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
 	<dependencies>
@@ -127,6 +128,7 @@
 			</plugin>
 
 		</plugins>
+
 	</build>
 	<packaging>war</packaging>
 </project>
