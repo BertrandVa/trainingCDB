@@ -13,8 +13,6 @@ import com.excilys.cdb.persistence.ComputerDAO;
  * Cette classe définit les 6 actions possibles pour le client : "List
  * computers, list companies, show computer details, create a computer, update a
  * computer et delete a computer".
- * Cette classe gère également les deux menus (menu principal et menu de gestion
- * des utilisateurs) de l'interface utilisateur.
  * @author bertrand
  */
 

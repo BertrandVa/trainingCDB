@@ -34,17 +34,17 @@
 									type="text" class="form-control" id="computerName"
 									placeholder="Computer name" name="computerName"
 									value="<c:out value="${param.computerName}"/>" required>
-								<span class="erreur">${erreurs['computerName']}</span>
+								<span class="erreur">${form.erreurs['computerName']}</span>
 							</div>
 							<div class="form-group">
 								<label for="introduced">Introduced date</label> <input
 									type="date" class="form-control" id="introduced"
-									placeholder="Introduced date" name="introduce"> <span class="erreur">${erreurs['introduced']}</span>
+									placeholder="Introduced date" name="introduce"> <span class="erreur">${form.erreurs['introduce']}</span>
 							</div>
 							<div class="form-group">
 								<label for="discontinued">Discontinued date</label> <input
 									type="date" class="form-control" id="discontinued"
-									placeholder="Discontinued date" name="discontinued"> <span class="erreur">${erreurs['discontinued']}</span>
+									placeholder="Discontinued date" name="discontinued"> <span class="erreur">${form.erreurs['discontinued']}</span>
 							</div>
 							<div class="form-group">
 								<label for="companyId">Company</label> <select
@@ -57,7 +57,7 @@
 							<input type="submit" value="Add" class="btn btn-primary">
 							or <a href="dashboard" class="btn btn-default">Cancel</a>
 						</div>
-						<p class="${empty erreurs ? 'succes' : 'erreur'}">${resultat}</p>
+						<p class="${empty form.erreurs ? 'succes' : 'erreur'}">${form.getResultat()}</p>
 					</form>
 				</div>
 			</div>
