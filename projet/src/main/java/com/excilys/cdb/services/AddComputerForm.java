@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
-import com.excilys.cdb.persistence.ComputerDAO;
 
 /**
  * Cette classe est une classe de service permettant l'ajout d'un ordinateur dans la base de données.
@@ -56,6 +55,8 @@ public class AddComputerForm {
     /**
      * Récupération du résultat de la requête.
      * @see AddComputerForm#resultat
+     * @return resultat
+     *                  le résultat de notre requête.
      */
     public String getResultat() {
         return resultat;
@@ -64,13 +65,15 @@ public class AddComputerForm {
     /**
      * récpération de notre hash map d'erreurs.
      * @see AddComputerForm#erreurs
+     * @return erreurs
+     *                 notre hash map d'erreurs.
      */
     public Map<String, String> getErreurs() {
         return erreurs;
     }
 
     /**
-     * Création de notre ordinateur dans la BDD en vérifiant les champs entrés par l'utilisateur. 
+     * Création de notre ordinateur dans la BDD en vérifiant les champs entrés par l'utilisateur.
      * Si un champ n'est pas valide, l'erreur est renvoyée et l'ordinateur n'est pas créé.
      * @see AddComputerForm#checkName(String)
      * @see AddComputerForm#checkDiscontinuedDate(String, LocalDate)
@@ -79,7 +82,7 @@ public class AddComputerForm {
      * @see ComputerDAO.java
      * @param request
      *              la requête de notre servlet
-     * @return computer 
+     * @return computer
      *               l'ordinateur créé en base de données
      */
     public Computer createComputer(HttpServletRequest request) {
@@ -120,17 +123,15 @@ public class AddComputerForm {
             setErreur(CHAMP_INTRODUCE_DATE, e.getMessage());
         }
         try {
-            checkDiscontinuedDate(request.getParameter(CHAMP_DISCONTINUED_DATE),introduceDate);
+            checkDiscontinuedDate(request.getParameter(CHAMP_DISCONTINUED_DATE), introduceDate);
 
         } catch (Exception e) {
             setErreur(CHAMP_DISCONTINUED_DATE, e.getMessage());
         }
-        
-       
         if (erreurs.isEmpty()) {
-            ComputerDAO compDAO = ComputerDAO.INSTANCE;
-            if (computer.getName() != null && computer.getName() != "") {
-                compDAO.create(computer);
+            boolean fait = false;
+            fait = ClientActions.createComputer(computer);
+            if (fait) {
                 resultat = "Succès de l'ajout.";
             } else {
                 resultat = "Echec de l'ajout.";
@@ -146,6 +147,8 @@ public class AddComputerForm {
      * @see AddComputerForm#createComputer(HttpServletRequest)
      * @param name
      *              le nom de l'ordinateur à vérifier
+     * @throws Exception
+     *              l'erreur à retourner
      */
     private void checkName(String name) throws Exception {
         if (name == null || (name != null && name.trim().length() < 3)) {
@@ -159,9 +162,11 @@ public class AddComputerForm {
      * @see AddComputerForm#createComputer(HttpServletRequest)
      * @param introduceDate
      *              la date à vérifier
+     * @throws Exception
+     *              l'erreur à retourner
      */
     private void checkIntroduceDate(String introduceDate) throws Exception {
-        if (introduceDate != null && introduceDate!= "") {
+        if (introduceDate != null && introduceDate != "") {
             try {
                 toDate(introduceDate);
             } catch (Exception e) {
@@ -179,13 +184,15 @@ public class AddComputerForm {
      *              la date à vérifier
      * @param introduceDate
      *               la date d'introduction à vérifier
+     * @throws Exception
+     *              l'erreur à retourner
      */
     private void checkDiscontinuedDate(String discontinuedDate,
          LocalDate introduceDate) throws Exception {
-        if (discontinuedDate != null && discontinuedDate!= "") {
+        if (discontinuedDate != null && discontinuedDate != "") {
             try {
                 toDate(discontinuedDate);
-                if(introduceDate!=null && toDate(discontinuedDate).isBefore(introduceDate)){
+                if (introduceDate != null && toDate(discontinuedDate).isBefore(introduceDate)) {
                     throw new Exception("La date de départ ne peut-être antérieure à la date d'introduction");
                 }
             } catch (DateTimeParseException e) {
@@ -198,7 +205,7 @@ public class AddComputerForm {
     /**
      * Prise en compte de l'erreur lors du remplissage du formulaire.
      * @see AddComputerForm#erreurs
-     * @param champ 
+     * @param champ
      *              le champ impacté par l'erreur
      * @param message
      *               le message associé à l'erreur

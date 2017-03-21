@@ -25,7 +25,7 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2017</copyright>
     <item>
-      <title>File: 10,
+      <title>File: 14,
              Errors: 0,
              Warnings: 0,
              Infos: 0
@@ -116,6 +116,34 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="${project.url}/checkstyle.html#com.excilys.cdb.web.EditComputer.java">com/excilys/cdb/web/EditComputer.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="${project.url}/checkstyle.html#com.excilys.cdb.services.AddComputerForm.java">com/excilys/cdb/services/AddComputerForm.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="${project.url}/checkstyle.html#com.excilys.cdb.model.Computer.java">com/excilys/cdb/model/Computer.java</a>
                 </td>
                 <td>
@@ -144,7 +172,35 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="${project.url}/checkstyle.html#com.excilys.cdb.web.AddComputer.java">com/excilys/cdb/web/AddComputer.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="${project.url}/checkstyle.html#com.excilys.cdb.persistence.CompanyDAO.java">com/excilys/cdb/persistence/CompanyDAO.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="${project.url}/checkstyle.html#com.excilys.cdb.web.Dashboard.java">com/excilys/cdb/web/Dashboard.java</a>
                 </td>
                 <td>
                   0

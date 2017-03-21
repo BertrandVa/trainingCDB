@@ -8,6 +8,8 @@
 </file>
 <file name="/home/excilys/workspace/computer-database/projet/src/main/java/com/excilys/cdb/services/ClientActions.java">
 </file>
+<file name="/home/excilys/workspace/computer-database/projet/src/main/java/com/excilys/cdb/services/AddComputerForm.java">
+</file>
 <file name="/home/excilys/workspace/computer-database/projet/src/main/java/com/excilys/cdb/persistence/ComputerDAO.java">
 </file>
 <file name="/home/excilys/workspace/computer-database/projet/src/main/java/com/excilys/cdb/persistence/CompanyDAO.java">
@@ -17,6 +19,12 @@
 <file name="/home/excilys/workspace/computer-database/projet/src/main/java/com/excilys/cdb/model/Company.java">
 </file>
 <file name="/home/excilys/workspace/computer-database/projet/src/main/java/com/excilys/cdb/model/Computer.java">
+</file>
+<file name="/home/excilys/workspace/computer-database/projet/src/main/java/com/excilys/cdb/web/AddComputer.java">
+</file>
+<file name="/home/excilys/workspace/computer-database/projet/src/main/java/com/excilys/cdb/web/EditComputer.java">
+</file>
+<file name="/home/excilys/workspace/computer-database/projet/src/main/java/com/excilys/cdb/web/Dashboard.java">
 </file>
 <file name="/home/excilys/workspace/computer-database/projet/src/main/resources/database.properties">
 </file>

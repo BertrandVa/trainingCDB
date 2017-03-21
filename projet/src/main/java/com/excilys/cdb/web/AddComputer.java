@@ -10,7 +10,7 @@ import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.services.AddComputerForm;
 
 /**
- * Cette classe est notre servlet pour l'ajout d'un ordinateur
+ * Cette classe est notre servlet pour l'ajout d'un ordinateur.
  * @author bertrand
  */
 public class AddComputer extends HttpServlet {
@@ -22,7 +22,7 @@ public class AddComputer extends HttpServlet {
 
     /**
      * L'adresse de notre jsp.
-     * @see addComputer.jsp
+     * @see AddComputer.jsp
      * @see AddComputer#doGet(HttpServletRequest, HttpServletResponse)
      * @see AddComputer#doPost(HttpServletRequest, HttpServletResponse)
      */
@@ -45,6 +45,10 @@ public class AddComputer extends HttpServlet {
      *              La requête de notre servlet
      * @param response
      *              la réponse de notre servlet
+     * @throws ServletException
+     *                         Exception
+     * @throws  IOException
+     *                      Eception
      */
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -61,18 +65,18 @@ public class AddComputer extends HttpServlet {
      *              La requête de notre servlet
      * @param response
      *              la réponse de notre servlet
+     * @throws ServletException
+     *                          Exception
+     * @throws  IOException
+     *                          Exception
      */
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
         AddComputerForm form = new AddComputerForm();
         Computer computer = form.createComputer(request);
-        request.setAttribute( FORM, form );
-        request.setAttribute( COMPUTER, computer );
-        
-        
+        request.setAttribute(FORM, form);
+        request.setAttribute(COMPUTER, computer);
         this.getServletContext().getRequestDispatcher(VUE).forward(request,
                 response);
-
     }
 }
