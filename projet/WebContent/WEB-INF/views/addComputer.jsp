@@ -13,6 +13,7 @@
 	media="screen">
 <link href="/computer-database/css/main.css" rel="stylesheet"
 	media="screen">
+<script src="/computer-database/js/script.js"></script>
 </head>
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
@@ -27,23 +28,23 @@
 			<div class="row">
 				<div class="col-xs-8 col-xs-offset-2 box">
 					<h1>Add Computer</h1>
-					<form action="addComputer" method="post">
+					<form action="addComputer" method="post" onsubmit="return verifForm(this)">
 						<fieldset>
 							<div class="form-group">
 								<label for="computerName">Computer name</label> <input
 									type="text" class="form-control" id="computerName"
-									placeholder="Computer name" name="computerName"
+									placeholder="Computer name" name="computerName" onblur="verifName(this)"
 									value="<c:out value="${param.computerName}"/>" required>
 								<span class="erreur">${form.erreurs['computerName']}</span>
 							</div>
 							<div class="form-group">
 								<label for="introduced">Introduced date</label> <input
-									type="date" class="form-control" id="introduced"
+									type="date" class="form-control" id="introduced" onblur="verifName(this)"
 									placeholder="Introduced date" name="introduce"> <span class="erreur">${form.erreurs['introduce']}</span>
 							</div>
 							<div class="form-group">
 								<label for="discontinued">Discontinued date</label> <input
-									type="date" class="form-control" id="discontinued"
+									type="date" class="form-control" id="discontinued" onblur="verifName(this)"
 									placeholder="Discontinued date" name="discontinued"> <span class="erreur">${form.erreurs['discontinued']}</span>
 							</div>
 							<div class="form-group">
