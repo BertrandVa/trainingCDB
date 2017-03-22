@@ -129,7 +129,6 @@ public class ClientActions {
 
     /**
      * Permet la suppression d'un ordinateur dans la BDD.
-     * @see ClientActions#menuOrdinateur()
      * @see ComputerDAO#delete(int)
      * @param id
      *            l'id de l'ordinateur à supprimer
@@ -144,5 +143,29 @@ public class ClientActions {
             fait = true;
         }
         return fait;
+    };
+    
+    /**
+     * Permet de récupérer le nombre d'ordinateurs dans la BDD.
+     * @see ComputerDAO#update(Computer)
+     * @return nbComputer
+     *             le nombre d'ordinateurs dans la BDD
+     */
+    public static int countComputer() {
+        ComputerDAO compDAO = ComputerDAO.INSTANCE;
+        int nbComputer=compDAO.countComputer();
+            return nbComputer;
+    };
+    
+    /**
+     * Permet de récupérer le nombre d'ordinateurs dans la BDD.
+     * @see ComputerDAO#update(Computer)
+     * @return nbComputer
+     *             le nombre d'ordinateurs dans la BDD
+     */
+    public static int maxPages(int nbId) {
+        ComputerDAO compDAO = ComputerDAO.INSTANCE;
+        int nbComputer=compDAO.countPages(nbId);
+            return nbComputer;
     };
 }

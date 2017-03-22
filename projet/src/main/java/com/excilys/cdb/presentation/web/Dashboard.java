@@ -1,4 +1,4 @@
-package com.excilys.cdb.web;
+package com.excilys.cdb.presentation.web;
 
 import java.io.IOException;
 
@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import com.excilys.cdb.services.ClientActions;
 
 public class Dashboard extends HttpServlet {
@@ -30,13 +29,14 @@ public class Dashboard extends HttpServlet {
      * @see Dashboard.jsp
      * @see Dashboard#doGet(HttpServletRequest, HttpServletResponse)
      */
-    private long debut = 15;
+    private long debut = 1;
     /**
      * Le nombre d'ordinateurs à afficher.
      * @see Dashboard.jsp
      * @see Dashboard#doGet(HttpServletRequest, HttpServletResponse)
      */
     private int nbId = 10;
+    
 
     /**
      * logger.
@@ -77,8 +77,20 @@ public class Dashboard extends HttpServlet {
         if (request.getParameter("submit") != null) {
             setNbId(Integer.parseInt(request.getParameter("submit")));
         }
+        if(request.getParameter("page")!=null){
+            Long nbPage = (Long.parseLong(request.getParameter("page")));
+            setDebut((nbPage-1) * nbId + 1);
+        }
         request.setAttribute("computerList",
                 ClientActions.listComputers(debut, nbId));
+        request.setAttribute("nbComputer", ClientActions.countComputer());
+        if(request.getParameter("page")!=null){
+            request.setAttribute("currentPage" , request.getParameter("page"));
+        }
+        else{
+            request.setAttribute("currentPage", 1);
+        } 
+        request.setAttribute("maxPage", ClientActions.maxPages(nbId));
         this.getServletContext().getRequestDispatcher(VUE).forward(request,
                 response);
     }

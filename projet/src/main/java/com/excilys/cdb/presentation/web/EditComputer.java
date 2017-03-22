@@ -1,4 +1,4 @@
-package com.excilys.cdb.web;
+package com.excilys.cdb.presentation.web;
 
 import java.io.IOException;
 

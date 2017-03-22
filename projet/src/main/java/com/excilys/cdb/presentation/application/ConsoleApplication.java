@@ -1,4 +1,4 @@
-package com.excilys.cdb.application;
+package com.excilys.cdb.presentation.application;
 
 import java.time.LocalDate;
 import java.util.List;

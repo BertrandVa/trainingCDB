@@ -1,5 +1,6 @@
 <%@ page pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="/WEB-INF/taglib.tld" prefix="pagination" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -24,7 +25,7 @@
 
 	<section id="main">
 		<div class="container">
-			<h1 id="homeTitle">121 Computers found</h1>
+			<h1 id="homeTitle">${nbComputer} Computers found</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
@@ -89,18 +90,9 @@
 
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
-			<ul class="pagination">
-				<li><a href="#" aria-label="Previous"> <span
-						aria-hidden="true">&laquo;</span>
-				</a></li>
-				<li><a href="#">1</a></li>
-				<li><a href="#">2</a></li>
-				<li><a href="#">3</a></li>
-				<li><a href="#">4</a></li>
-				<li><a href="#">5</a></li>
-				<li><a href="#" aria-label="Next"> <span aria-hidden="true">&raquo;</span>
-				</a></li>
-			</ul>
+			<!-- <ul class="pagination">-->
+		 	<c:url var="searchUri" value="/dashboard?page=##" />
+             <pagination:display  maxLinks="5" currentPage="${currentPage}" maxPages="${maxPage}" uri="${searchUri}" />
 			<div class="btn-group btn-group-sm pull-right" role="group">
 				<form action="dashboard" method="get">
 					<input type="submit" name="submit" value="10" class="btn btn-default">

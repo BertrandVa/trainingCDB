@@ -84,7 +84,7 @@ public enum ComputerDAO {
                 } else {
                     statement.setNull(4, Types.INTEGER);
                 }
-                statement.executeUpdate();
+               // statement.executeUpdate();
                 ResultSet generatedKeys = statement.getGeneratedKeys();
                 if (generatedKeys.next()) {
                     id = generatedKeys.getLong(1);
@@ -300,5 +300,47 @@ public enum ComputerDAO {
         }
 
         return delete;
+    }
+    
+    /**
+     * Méthode count pour les ordinateurs.
+     * @return nbEntrees
+     *                  le nombre d'entrées dans la BDD.
+     */
+    public int countComputer() {
+        Connection connection = ConnectionFactory.getConnection();
+        int maxId = 0;
+        try {
+            ResultSet result = connection.createStatement().executeQuery(
+                    "SELECT COUNT(*) AS count FROM computer");
+            result.next();
+            maxId = result.getInt("count");
+            result.close();
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+        }
+        return maxId;
+    }
+    
+    /**
+     * Méthode count pour les pages selon le nombre d'affichages.
+     * @return nbEntrees
+     *                  le nombre d'entrées dans la BDD.
+     */
+    public int countPages(int nbId) {
+        Connection connection = ConnectionFactory.getConnection();
+        int maxId = 0;
+        int nbPages = 0;
+        try {
+            ResultSet result = connection.createStatement().executeQuery(
+                    "SELECT COUNT(*) AS count FROM computer");
+            result.next();
+            maxId = result.getInt("count");
+            result.close();
+            nbPages = maxId/nbId + 1;
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+        }
+        return nbPages;
     }
 }

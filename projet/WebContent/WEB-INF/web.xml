@@ -5,15 +5,15 @@
 
 	<servlet>
 		<servlet-name>editComputer</servlet-name>
-		<servlet-class>com.excilys.cdb.web.EditComputer</servlet-class>
+		<servlet-class>com.excilys.cdb.presentation.web.EditComputer</servlet-class>
 	</servlet>
 	<servlet>
 		<servlet-name>addComputer</servlet-name>
-		<servlet-class>com.excilys.cdb.web.AddComputer</servlet-class>
+		<servlet-class>com.excilys.cdb.presentation.web.AddComputer</servlet-class>
 	</servlet>
 	<servlet>
 		<servlet-name>dashboard</servlet-name>
-		<servlet-class>com.excilys.cdb.web.Dashboard</servlet-class>
+		<servlet-class>com.excilys.cdb.presentation.web.Dashboard</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>dashboard</servlet-name>

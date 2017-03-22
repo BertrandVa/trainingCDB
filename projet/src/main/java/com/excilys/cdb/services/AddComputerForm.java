@@ -155,6 +155,9 @@ public class AddComputerForm {
             throw new Exception(
                     "Le nom d'utilisateur doit contenir au moins 3 caractères.");
         }
+        if(name != null && name.contains("<")){
+            throw new Exception("Arrête de t'amuser et vas jouer ailleurs");
+        }
     }
 
     /**
