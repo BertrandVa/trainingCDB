@@ -144,7 +144,7 @@ public class ClientActions {
         }
         return fait;
     };
-    
+
     /**
      * Permet de récupérer le nombre d'ordinateurs dans la BDD.
      * @see ComputerDAO#update(Computer)
@@ -153,19 +153,21 @@ public class ClientActions {
      */
     public static int countComputer() {
         ComputerDAO compDAO = ComputerDAO.INSTANCE;
-        int nbComputer=compDAO.countComputer();
+        int nbComputer = compDAO.countComputer();
             return nbComputer;
     };
-    
+
     /**
-     * Permet de récupérer le nombre d'ordinateurs dans la BDD.
+     * Permet de récupérer le nombre de pages dans la BDD.
      * @see ComputerDAO#update(Computer)
-     * @return nbComputer
+     * @return nbPages
      *             le nombre d'ordinateurs dans la BDD
+     * @param nbId
+     *              le nombre d'ordinateurs par page
      */
     public static int maxPages(int nbId) {
         ComputerDAO compDAO = ComputerDAO.INSTANCE;
-        int nbComputer=compDAO.countPages(nbId);
-            return nbComputer;
+        int nbPages = compDAO.countPages(nbId);
+            return nbPages;
     };
 }

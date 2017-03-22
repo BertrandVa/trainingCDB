@@ -36,7 +36,6 @@ public class Dashboard extends HttpServlet {
      * @see Dashboard#doGet(HttpServletRequest, HttpServletResponse)
      */
     private int nbId = 10;
-    
 
     /**
      * logger.
@@ -77,19 +76,18 @@ public class Dashboard extends HttpServlet {
         if (request.getParameter("submit") != null) {
             setNbId(Integer.parseInt(request.getParameter("submit")));
         }
-        if(request.getParameter("page")!=null){
+        if (request.getParameter("page") != null) {
             Long nbPage = (Long.parseLong(request.getParameter("page")));
-            setDebut((nbPage-1) * nbId + 1);
+            setDebut((nbPage - 1) * nbId + 1);
         }
         request.setAttribute("computerList",
                 ClientActions.listComputers(debut, nbId));
         request.setAttribute("nbComputer", ClientActions.countComputer());
-        if(request.getParameter("page")!=null){
-            request.setAttribute("currentPage" , request.getParameter("page"));
-        }
-        else{
+        if (request.getParameter("page") != null) {
+            request.setAttribute("currentPage", request.getParameter("page"));
+        } else {
             request.setAttribute("currentPage", 1);
-        } 
+        }
         request.setAttribute("maxPage", ClientActions.maxPages(nbId));
         this.getServletContext().getRequestDispatcher(VUE).forward(request,
                 response);

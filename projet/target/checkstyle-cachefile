@@ -1,15 +1,22 @@
-#Tue Mar 21 14:28:27 CET 2017
-/home/excilys/workspace/computer-database/projet/src/main/java/com/excilys/cdb/web/EditComputer.java=1490092526000
-/home/excilys/workspace/computer-database/projet/src/main/java/com/excilys/cdb/persistence/ComputerDAO.java=1489765501000
-/home/excilys/workspace/computer-database/projet/src/main/java/com/excilys/cdb/application/ConsoleApplication.java=1489760581000
-/home/excilys/workspace/computer-database/projet/src/main/java/com/excilys/cdb/services/ClientActions.java=1490089200000
-/home/excilys/workspace/computer-database/projet/src/main/java/com/excilys/cdb/persistence/ConnectionFactory.java=1489762671000
-/home/excilys/workspace/computer-database/projet/src/main/java/com/excilys/cdb/application/Menus.java=1489760748000
-/home/excilys/workspace/computer-database/projet/src/main/java/com/excilys/cdb/model/Company.java=1489761726000
-/home/excilys/workspace/computer-database/projet/src/main/java/com/excilys/cdb/model/Computer.java=1490023970000
+#Wed Mar 22 10:59:13 CET 2017
 /home/excilys/workspace/computer-database/projet/src/main/java/com/excilys/cdb/web/Dashboard.java=1490102838000
 /home/excilys/workspace/computer-database/projet/src/main/java/com/excilys/cdb/web/AddComputer.java=1490092389000
-/home/excilys/workspace/computer-database/projet/src/main/java/com/excilys/cdb/services/AddComputerForm.java=1490102899000
+/home/excilys/workspace/computer-database/projet/src/main/java/com/excilys/cdb/presentation/web/tags/TagLib.java=1490176745000
 /home/excilys/workspace/computer-database/projet/src/main/java/com/excilys/cdb/persistence/CompanyDAO.java=1489762342000
-configuration*?=AFEF908BD0F61F872C25C39F56EA06F516AB2FF0
+/home/excilys/workspace/computer-database/projet/src/main/java/com/excilys/cdb/presentation/web/EditComputer.java=1490110019000
+/home/excilys/workspace/computer-database/projet/src/main/java/com/excilys/cdb/presentation/web/AddComputer.java=1490110019000
+/home/excilys/workspace/computer-database/projet/src/main/java/com/excilys/cdb/model/Company.java=1489761726000
+/home/excilys/workspace/computer-database/projet/src/main/java/com/excilys/cdb/application/Menus.java=1489760748000
+/home/excilys/workspace/computer-database/projet/src/main/java/com/excilys/cdb/persistence/ConnectionFactory.java=1489762671000
+/home/excilys/workspace/computer-database/projet/src/main/java/com/excilys/cdb/presentation/application/ConsoleApplication.java=1490110061000
+/home/excilys/workspace/computer-database/projet/src/main/java/com/excilys/cdb/persistence/ComputerDAO.java=1490174870000
+/home/excilys/workspace/computer-database/projet/src/main/java/com/excilys/cdb/model/Computer.java=1490023970000
+/home/excilys/workspace/computer-database/projet/src/main/java/com/excilys/cdb/application/ConsoleApplication.java=1489760581000
+/home/excilys/workspace/computer-database/projet/src/main/java/com/excilys/cdb/services/ClientActions.java=1490175526000
 /home/excilys/workspace/computer-database/projet/src/main/java/com/excilys/cdb/application/SecureInput.java=1489761104000
+/home/excilys/workspace/computer-database/projet/src/main/java/com/excilys/cdb/presentation/application/SecureInput.java=1490110061000
+/home/excilys/workspace/computer-database/projet/src/main/java/com/excilys/cdb/services/AddComputerForm.java=1490175240000
+configuration*?=AFEF908BD0F61F872C25C39F56EA06F516AB2FF0
+/home/excilys/workspace/computer-database/projet/src/main/java/com/excilys/cdb/presentation/application/Menus.java=1490110061000
+/home/excilys/workspace/computer-database/projet/src/main/java/com/excilys/cdb/presentation/web/Dashboard.java=1490175027000
+/home/excilys/workspace/computer-database/projet/src/main/java/com/excilys/cdb/web/EditComputer.java=1490092526000

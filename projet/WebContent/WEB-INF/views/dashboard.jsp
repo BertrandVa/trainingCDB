@@ -77,10 +77,10 @@
 						<tr>
 							<td class="editMode"><input type="checkbox" name="cb"
 								class="cb" value="0"></td>
-							<td><a href="editComputer.html" onclick=""></a>${elem.getName()}</td>
-							<td>${elem.getIntroduceDate()}</td>
-							<td>${elem.getDiscontinuedDate()}</td>
-							<td>${elem.getManufacturer().getName()}</td>
+							<td><a href="editComputer" onclick=""></a><c:out value="${elem.getName()}"/></td>
+							<td><c:out value="${elem.getIntroduceDate()}"/></td>
+							<td><c:out value="${elem.getDiscontinuedDate()}"/></td>
+							<td><c:out value="${elem.getManufacturer().getName()}"/></td>
 						</tr>
 					</c:forEach>
 				</tbody>
