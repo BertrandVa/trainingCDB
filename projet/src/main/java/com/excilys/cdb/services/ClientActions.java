@@ -43,8 +43,7 @@ public class ClientActions {
     }
 
     /**
-     * Liste les fabriquants en affichant leur nom et leur ID Par souci de
-     * lisibilité, affichage par pages de 10.
+     * Liste les fabriquants en affichant leur nom et leur ID.
      * @see ClientActions#menuPrincipal()
      * @see CompanyDAO#readAll()
      * @param debut
@@ -155,6 +154,17 @@ public class ClientActions {
         ComputerDAO compDAO = ComputerDAO.INSTANCE;
         int nbComputer = compDAO.countComputer();
             return nbComputer;
+    };
+    
+    /**
+     * Permet de récupérer le nombre de fabriquants dans la BDD.
+     * @return nbCompanies
+     *             le nombre de fabriquants dans la BDD
+     */
+    public static int countCompanies() {
+        CompanyDAO compDAO = CompanyDAO.INSTANCE;
+        int nbCompanies = compDAO.countCompanies();
+            return nbCompanies;
     };
 
     /**

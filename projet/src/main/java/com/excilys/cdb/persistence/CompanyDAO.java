@@ -73,4 +73,25 @@ public enum CompanyDAO {
         return list;
     }
 
+    /**
+     * Méthode count pour les compagnies.
+     * 
+     * @return nbEntrees le nombre d'entrées dans la BDD.
+     */
+    public int countCompanies() {
+        Connection connection = ConnectionFactory.getConnection();
+        int maxId = 0;
+        try {
+            ResultSet result = connection.createStatement()
+                    .executeQuery("SELECT COUNT(*) AS count FROM company");
+            result.next();
+            maxId = result.getInt("count");
+            result.close();
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+        }
+        return maxId;
+    }
+
+
 }

@@ -50,7 +50,10 @@
 							<div class="form-group">
 								<label for="companyId">Company</label> <select
 									class="form-control" id="companyId" name=companyId>
-									<option value="0">--</option>
+									<option value="">--</option>
+									<c:forEach var="elem" items="${requestScope.companyList}">
+										<option value="${elem.id}">${elem.name}</option>
+									</c:forEach>
 								</select>
 							</div>
 						</fieldset>

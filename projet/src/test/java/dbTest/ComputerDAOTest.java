@@ -351,13 +351,13 @@ public class ComputerDAOTest {
      * Les tests suivants ont pour but de tester la mise à jour d'un champ dans la BDD. 
      * Plusieurs cas s'offrent à nous : 
      * L'utilisateur met à jour des champs existants testé avec
-     * findsAndReadsExistingComputerByPage.
+     * updateComputerWithExistingParameters
      * L'utilisateur met tous les champs à jour
-     * plusieurs ordinateurs findsAndReadsExistingComputersByPage().
+     * testé avec updateComputerWithAllParameters
      * L'utilisateur supprime le nom de l'ordinateur
-     * testé avec findsAndReadsExistingComputersByPageWithFirstIdNotInDB
-     *  l'utilisateur change mal la date de départ
-     *  findsAndReadsExistingComputersByPageGoingTooFar
+     * testé avec updateComputerWithoutName
+     * l'utilisateur change mal la date de départ
+     * updateComputerWithBadDiscontinuedDate
      */
     
     @Test
@@ -372,6 +372,132 @@ public class ComputerDAOTest {
         assertNotNull(computer2.getIntroduceDate());
         assertNotNull(computer2.getDiscontinuedDate());
         assertEquals(computer2.getId(), 563);
+        assertEquals(update,false);
+    }
+    
+    @Test
+    public void updateComputerWithBadDiscontinuedDate() throws Exception {
+        Computer computer = new Computer.ComputerBuilder("Jean").id(563)
+                .introduceDate(LocalDate.of(2011, 11, 04))
+                .discontinuedDate(LocalDate.of(2010, 12, 03)).build();
+        ComputerDAO compDAO = ComputerDAO.INSTANCE;
+        boolean update = false;
+        update = compDAO.update(computer);
+        Computer computer2 = compDAO.read(563);
+        assertEquals(computer2.getName(),"Jean");
+        assertEquals(computer2.getManufacturer().getId(),0);
+        assertEquals(computer2.getIntroduceDate(),LocalDate.of(2011, 11, 04));
+        assertNull(computer2.getDiscontinuedDate());
+        assertEquals(computer2.getId(), 563);
         assertEquals(update,true);
+    }
+    
+    @Test
+    public void updateComputerWithExistingParameters() throws Exception {
+        Computer computer = new Computer.ComputerBuilder("jean").id(563).build();
+        ComputerDAO compDAO = ComputerDAO.INSTANCE;
+        boolean update = false;
+        update = compDAO.update(computer);
+        Computer computer2 = compDAO.read(563);
+        assertEquals(computer2.getName(),"jean");
+        assertNull(computer2.getManufacturer().getName());
+        assertEquals(computer2.getManufacturer().getId(), 0);
+        assertNull(computer2.getIntroduceDate());
+        assertNull(computer2.getDiscontinuedDate());
+        assertEquals(computer2.getId(), 563);
+        assertEquals(update,true);
+    }
+
+    @Test
+    public void updateComputerWithAllParameters() throws Exception {
+        Company company = new Company.CompanyBuilder("Apple de Terre")
+                                     .id(2)
+                                      .build();
+        Computer computer = new Computer.ComputerBuilder("jean")
+                .id(563)
+                .introduceDate(LocalDate.of(1998, 03, 10))
+                .discontinuedDate(LocalDate.of(2016, 12, 28))
+                .manufacturer(company)
+                .build();
+        ComputerDAO compDAO = ComputerDAO.INSTANCE;
+        boolean update = false;
+        update = compDAO.update(computer);
+        Computer computer2 = compDAO.read(563);
+        assertEquals(computer2.getName(),"jean");
+        assertEquals(computer2.getManufacturer().getName(), "Thinking Machines"); //en effet, la compagnie Apple de Terre n'existe pas dans la BDD ;)
+        assertEquals(computer2.getManufacturer().getId(), 2);
+        assertEquals(computer2.getIntroduceDate(), LocalDate.of(1998, 03, 10));
+        assertEquals(computer2.getDiscontinuedDate(), LocalDate.of(2016, 12, 28));
+        assertEquals(computer2.getId(), 563);
+        assertEquals(update,true);
+    }
+
+    /*
+     * Les tests suivants ont pour but de tester la suppression d'un champ dans la BDD. 
+     * Deux cas s'offrent à nous : 
+     * Le champ existe
+     * testé avec DeleteExistingComputer
+     * Le champ n'existe pas
+     * testé avec DeleteUnexistingComputer
+     */
+    
+    @Test
+    public void DeleteExistingComputer() throws Exception {
+        Computer computer = new Computer.ComputerBuilder(null).id(561).build();
+        ComputerDAO compDAO = ComputerDAO.INSTANCE;
+        boolean delete = false;
+        delete = compDAO.delete(computer.getId());
+        Computer computer2 = compDAO.read(computer.getId());
+        assertNull(computer2.getName());
+        assertNull(computer2.getManufacturer());
+        assertNull(computer2.getIntroduceDate());
+        assertNull(computer2.getDiscontinuedDate());
+        assertEquals(computer2.getId(), 0);
+        assertEquals(delete, true);
+    }
+    
+    @Test
+    public void DeleteUnexistingComputer() throws Exception {
+        Computer computer = new Computer.ComputerBuilder(null).id(2000).build();
+        ComputerDAO compDAO = ComputerDAO.INSTANCE;
+        boolean delete = false;
+        delete = compDAO.delete(computer.getId());
+        Computer computer2 = compDAO.read(computer.getId());
+        assertNull(computer2.getName());
+        assertNull(computer2.getManufacturer());
+        assertNull(computer2.getIntroduceDate());
+        assertNull(computer2.getDiscontinuedDate());
+        assertEquals(computer2.getId(), 0);
+        assertEquals(delete, false);
+    }
+
+    /*
+     * Le test suivant a pour but de tester le décompte des ordinateurs dans la BDD. 
+     */
+    
+    @Test
+    public void TestCountComputers() throws Exception {
+        ComputerDAO compDAO = ComputerDAO.INSTANCE;
+        int count1 = compDAO.countComputer();
+        boolean delete = compDAO.delete(561);
+        int count2 = compDAO.countComputer();
+        assertEquals(count1, 15);
+        assertEquals(count2, 14);
+        assertTrue(delete);
+    }
+    
+    /*
+     * Le test suivant a pour but de tester le décompte des pages dans la BDD. 
+     */
+    
+    @Test
+    public void TestCountPages() throws Exception {
+        ComputerDAO compDAO = ComputerDAO.INSTANCE;
+        int count1 = compDAO.countPages(3);
+        int count2 = compDAO.countPages(5);
+        int count3 = compDAO.countPages(0);
+        assertEquals(count1, 5);
+        assertEquals(count2, 3);
+        assertEquals(count3, 0);
     }
 }

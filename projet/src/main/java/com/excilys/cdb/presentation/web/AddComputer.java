@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.services.AddComputerForm;
+import com.excilys.cdb.services.ClientActions;
 
 /**
  * Cette classe est notre servlet pour l'ajout d'un ordinateur.
@@ -52,6 +53,7 @@ public class AddComputer extends HttpServlet {
      */
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setAttribute("companyList",  ClientActions.listCompanies(1, ClientActions.countCompanies()));
         this.getServletContext().getRequestDispatcher(VUE).forward(request,
                 response);
     }

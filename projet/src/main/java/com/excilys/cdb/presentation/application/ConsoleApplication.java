@@ -92,6 +92,7 @@ public class ConsoleApplication {
                         id = SecureInput.secureInt(sc);
                         System.out
                                 .println("Parfait ! entrez le nouveau nom de cet ordinateur");
+                        name = SecureInput.secureString(sc);
                         boolean create;
                         System.out
                                 .println("Parfait ! entrez sa date d'acquisition yyyy (entrée) MM (entrée) dd (entrée) ou 0 pour ignorer");
