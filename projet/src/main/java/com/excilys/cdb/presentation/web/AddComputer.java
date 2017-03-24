@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.cdb.model.Computer;
-import com.excilys.cdb.services.AddComputerForm;
+import com.excilys.cdb.services.ComputerForm;
 import com.excilys.cdb.services.ClientActions;
 
 /**
@@ -74,7 +74,7 @@ public class AddComputer extends HttpServlet {
      */
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        AddComputerForm form = new AddComputerForm();
+        ComputerForm form = new ComputerForm();
         Computer computer = form.createComputer(request);
         request.setAttribute(FORM, form);
         request.setAttribute(COMPUTER, computer);

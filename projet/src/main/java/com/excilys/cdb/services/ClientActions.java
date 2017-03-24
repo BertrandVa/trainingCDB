@@ -67,25 +67,12 @@ public class ClientActions {
      * @param id
      *            l'id de l'ordinateur à détailler
      */
-    public static void showComputerDetails(long id) {
+    public static Computer showComputerDetails(long id) {
 
         Computer computer = new Computer.ComputerBuilder(null).build();
         ComputerDAO compDAO = ComputerDAO.INSTANCE;
         computer = compDAO.read(id);
-        if (computer.getName() != null) {
-            System.out
-                    .println("Vous avez demandé des informations sur l'ordinateur");
-            System.out.println("");
-            System.out.println("Son nom est " + computer.getName());
-            System.out.println("Il a été fabriqué par "
-                    + computer.getManufacturer().getName());
-            System.out.println("Il est arrivé dans l'entreprise le "
-                    + computer.getIntroduceDate());
-            System.out.println("Il a quitté la compagnie le "
-                    + computer.getDiscontinuedDate());
-        } else {
-            System.out.println("cet ID n'existe pas");
-        }
+        return computer;
     }
 
     /**
@@ -155,7 +142,7 @@ public class ClientActions {
         int nbComputer = compDAO.countComputer();
             return nbComputer;
     };
-    
+
     /**
      * Permet de récupérer le nombre de fabriquants dans la BDD.
      * @return nbCompanies

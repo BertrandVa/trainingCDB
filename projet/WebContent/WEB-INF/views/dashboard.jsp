@@ -76,8 +76,8 @@
 					<c:forEach var="elem" items="${computerList}">
 						<tr>
 							<td class="editMode"><input type="checkbox" name="cb"
-								class="cb" value="0"></td>
-							<td><a href="editComputer" onclick=""></a><c:out value="${elem.getName()}"/></td>
+								class="cb" value="${elem.getId()}"></td>
+							<td><a href="editComputer?id=${elem.getId()}"><c:out value="${elem.getName()}"/></a></td>
 							<td><c:out value="${elem.getIntroduceDate()}"/></td>
 							<td><c:out value="${elem.getDiscontinuedDate()}"/></td>
 							<td><c:out value="${elem.getManufacturer().getName()}"/></td>

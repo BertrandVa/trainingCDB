@@ -14,7 +14,6 @@ import com.excilys.cdb.model.Company;
  * Cette classe de DAO implémente les méthodes nécessaires à l'accès aux données
  * de la table company. Le client ne demandant qu'un accès aux données, il n'y a
  * pas de suppression, de création ou d'update.
- * 
  * @author bertrand
  */
 
@@ -28,7 +27,6 @@ public enum CompanyDAO {
 
     /**
      * Méthode d'affichage de tous les fabriquants.
-     * 
      * @return List une arraylist contenant l'ensemble de nos fabriquants
      * @param debut
      *            le premier id à afficher
@@ -69,7 +67,6 @@ public enum CompanyDAO {
 
     /**
      * Méthode count pour les compagnies.
-     * 
      * @return nbEntrees le nombre d'entrées dans la BDD.
      */
     public int countCompanies() {

@@ -17,12 +17,11 @@ import com.zaxxer.hikari.HikariDataSource;
 
 public enum HikariConnectionFactory {
     INSTANCE;
-    
 
     /**
      * logger.
      */
-    static final Logger LOGGER= LoggerFactory.getLogger(HikariConnectionFactory.class);
+    static final Logger LOGGER = LoggerFactory.getLogger(HikariConnectionFactory.class);
 
     /**
      * Connexion à la base de données.
@@ -35,10 +34,11 @@ public enum HikariConnectionFactory {
         FileBasedConfigurationBuilder<FileBasedConfiguration> builder = new FileBasedConfigurationBuilder<FileBasedConfiguration>(
                 PropertiesConfiguration.class).configure(params.properties()
                 .setFileName("hikari.properties"));
-        
         try {
             Configuration config = builder.getConfiguration();
             config = builder.getConfiguration();
+            String driver = config.getString("dataSource.driverClass");
+            Class.forName(driver);
             String url = config.getString("jdbcUrl");
             String username = config.getString("dataSource.user");
             String password = config.getString("dataSource.password");
@@ -48,18 +48,16 @@ public enum HikariConnectionFactory {
             cfg.setPassword(password);
             cfg.addDataSourceProperty("cachePrepStmts", "true");
             cfg.addDataSourceProperty("prepStmtCacheSize", "250");
-            cfg.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");            
+            cfg.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
             cfg.setConnectionTestQuery("show tables");
             cfg.setMaximumPoolSize(1);
             HikariDataSource ds = new HikariDataSource(cfg);
             conn = ds.getConnection();
-        } catch (ConfigurationException | SQLException e) {
+        } catch (ConfigurationException | SQLException | ClassNotFoundException e) {
              LOGGER.error(e.getMessage());
         }
         return conn;
     }
-    
-    
 
     /**
      * Renvoie la seule instance existante de notre connexion.

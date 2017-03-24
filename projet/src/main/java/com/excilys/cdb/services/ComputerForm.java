@@ -18,7 +18,7 @@ import com.excilys.cdb.model.Computer;
  * Cette classe est une classe de service permettant l'ajout d'un ordinateur dans la base de données.
  * @author bertrand
  */
-public class AddComputerForm {
+public class ComputerForm {
     /**
      * le champ nom de notre ordinateur, défini dans la JSP.
      */
@@ -38,12 +38,12 @@ public class AddComputerForm {
 
     /**
      * le résultat de notre requête.
-     * @see AddComputerForm#getResultat()
+     * @see ComputerForm#getResultat()
      */
     private String resultat;
     /**
      * Il s'agit d'une hash map avec nos erreurs et les champs touchés.
-     * @see AddComputerForm#getErreurs()
+     * @see ComputerForm#getErreurs()
      */
     private Map<String, String> erreurs = new HashMap<String, String>();
     /**
@@ -54,7 +54,7 @@ public class AddComputerForm {
 
     /**
      * Récupération du résultat de la requête.
-     * @see AddComputerForm#resultat
+     * @see ComputerForm#resultat
      * @return resultat
      *                  le résultat de notre requête.
      */
@@ -64,7 +64,7 @@ public class AddComputerForm {
 
     /**
      * récpération de notre hash map d'erreurs.
-     * @see AddComputerForm#erreurs
+     * @see ComputerForm#erreurs
      * @return erreurs
      *                 notre hash map d'erreurs.
      */
@@ -75,9 +75,9 @@ public class AddComputerForm {
     /**
      * Création de notre ordinateur dans la BDD en vérifiant les champs entrés par l'utilisateur.
      * Si un champ n'est pas valide, l'erreur est renvoyée et l'ordinateur n'est pas créé.
-     * @see AddComputerForm#checkName(String)
-     * @see AddComputerForm#checkDiscontinuedDate(String, LocalDate)
-     * @see AddComputerForm#checkIntroduceDate(String)
+     * @see ComputerForm#checkName(String)
+     * @see ComputerForm#checkDiscontinuedDate(String, LocalDate)
+     * @see ComputerForm#checkIntroduceDate(String)
      * @see AddComputer.java
      * @see ComputerDAO.java
      * @param request
@@ -141,10 +141,80 @@ public class AddComputerForm {
         }
         return computer;
     }
+    
+    /**
+     * Mise à jour de notre ordinateur dans la BDD en vérifiant les champs entrés par l'utilisateur.
+     * Si un champ n'est pas valide, l'erreur est renvoyée et l'ordinateur n'est pas créé.
+     * @see ComputerForm#checkName(String)
+     * @see ComputerForm#checkDiscontinuedDate(String, LocalDate)
+     * @see ComputerForm#checkIntroduceDate(String)
+     * @see AddComputer.java
+     * @see ComputerDAO.java
+     * @param request
+     *              la requête de notre servlet
+     * @return computer
+     *               l'ordinateur créé en base de données
+     */
+    public Computer updateComputer(HttpServletRequest request) {
+        String name = request.getParameter(CHAMP_NOM);
+        String company = request.getParameter(CHAMP_COMPANY);
+        Company manufacturer = new Company.CompanyBuilder(null)
+                .id(Long.parseLong(company)).build();
+
+        LocalDate introduceDate = null;
+        LocalDate discontinuedDate = null;
+
+        LOGGER.debug(request.getParameter(CHAMP_INTRODUCE_DATE));
+        LOGGER.debug(request.getParameter(CHAMP_DISCONTINUED_DATE));
+
+        if (request.getParameter(CHAMP_INTRODUCE_DATE) != null
+                && request.getParameter(CHAMP_INTRODUCE_DATE) != "") {
+            introduceDate = toDate(request.getParameter(CHAMP_INTRODUCE_DATE));
+        }
+        if (request.getParameter(CHAMP_DISCONTINUED_DATE) != null
+                && request.getParameter(CHAMP_DISCONTINUED_DATE) != "") {
+            discontinuedDate = toDate(
+                    request.getParameter(CHAMP_DISCONTINUED_DATE));
+        }
+
+        Computer computer = new Computer.ComputerBuilder(name)
+                .introduceDate(introduceDate).discontinuedDate(discontinuedDate)
+                .manufacturer(manufacturer).build();
+
+        try {
+            checkName(name);
+
+        } catch (Exception e) {
+            setErreur(CHAMP_NOM, e.getMessage());
+        }
+        try {
+            checkIntroduceDate(request.getParameter(CHAMP_INTRODUCE_DATE));
+        } catch (Exception e) {
+            setErreur(CHAMP_INTRODUCE_DATE, e.getMessage());
+        }
+        try {
+            checkDiscontinuedDate(request.getParameter(CHAMP_DISCONTINUED_DATE), introduceDate);
+
+        } catch (Exception e) {
+            setErreur(CHAMP_DISCONTINUED_DATE, e.getMessage());
+        }
+        if (erreurs.isEmpty()) {
+            boolean fait = false;
+            fait = ClientActions.updateComputer(computer);
+            if (fait) {
+                resultat = "Succès de la mise à jour";
+            } else {
+                resultat = "Echec de la mise à jour";
+            }
+        } else {
+            resultat = "Echec de la mise à jour";
+        }
+        return computer;
+    }
 
     /**
      * Vérification du nom qui ne doit pas être vide, ni faire moins de 3 caractères.
-     * @see AddComputerForm#createComputer(HttpServletRequest)
+     * @see ComputerForm#createComputer(HttpServletRequest)
      * @param name
      *              le nom de l'ordinateur à vérifier
      * @throws Exception
@@ -162,7 +232,7 @@ public class AddComputerForm {
 
     /**
      * Vérification de la date d'introduction qui, si elle existe, doit être une date au bon format.
-     * @see AddComputerForm#createComputer(HttpServletRequest)
+     * @see ComputerForm#createComputer(HttpServletRequest)
      * @param introduceDate
      *              la date à vérifier
      * @throws Exception
@@ -182,7 +252,7 @@ public class AddComputerForm {
     /**
      * Vérification de la date de départ qui, si elle existe, doit être une date au bon format.
      * De plus, si une date d'introduction a été précisée, la date de départ ne peut lui être antérieure.
-     * @see AddComputerForm#createComputer(HttpServletRequest)
+     * @see ComputerForm#createComputer(HttpServletRequest)
      * @param discontinuedDate
      *              la date à vérifier
      * @param introduceDate
@@ -207,7 +277,7 @@ public class AddComputerForm {
 
     /**
      * Prise en compte de l'erreur lors du remplissage du formulaire.
-     * @see AddComputerForm#erreurs
+     * @see ComputerForm#erreurs
      * @param champ
      *              le champ impacté par l'erreur
      * @param message
@@ -219,7 +289,7 @@ public class AddComputerForm {
 
     /**
      * Convertit une string en LocalDate.
-     * @see AddComputerForm#createComputer(HttpServletRequest)
+     * @see ComputerForm#createComputer(HttpServletRequest)
      * @param string
      *              la chaîne de caractères à parser
      * @return date
