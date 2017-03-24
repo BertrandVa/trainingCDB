@@ -12,9 +12,9 @@ import com.excilys.cdb.model.Company;
 
 /**
  * Cette classe de DAO implémente les méthodes nécessaires à l'accès aux données
- * de la table company.
- * Le client ne demandant qu'un accès aux données, il n'y a pas de suppression,
- * de création ou d'update.
+ * de la table company. Le client ne demandant qu'un accès aux données, il n'y a
+ * pas de suppression, de création ou d'update.
+ * 
  * @author bertrand
  */
 
@@ -28,20 +28,20 @@ public enum CompanyDAO {
 
     /**
      * Méthode d'affichage de tous les fabriquants.
+     * 
      * @return List une arraylist contenant l'ensemble de nos fabriquants
      * @param debut
-     *              le premier id à afficher
+     *            le premier id à afficher
      * @param nbItems
-     *              le nombre d'items à afficher
+     *            le nombre d'items à afficher
      */
     public List<Company> readAll(long debut, int nbItems) {
-        Connection connection = HikariConnectionFactory.getConnection();
         List<Company> list = new ArrayList<Company>();
-        try {
+        try (Connection connection = HikariConnectionFactory.getConnection();) {
             for (int i = 0; i < nbItems; i++) {
                 long id = debut + i;
-                ResultSet result = connection.createStatement().executeQuery(
-                        "SELECT MAX(id) FROM company");
+                ResultSet result = connection.createStatement()
+                        .executeQuery("SELECT MAX(id) FROM company");
                 result.next();
                 long maxId = result.getInt("MAX(id)");
                 logger.debug("liste de fabriquants terminée");
@@ -52,8 +52,9 @@ public enum CompanyDAO {
 
                     if (result.first()) {
                         Company company = new Company.CompanyBuilder(
-                                result.getString("company.name")).id(
-                                result.getLong("company.id")).build();
+                                result.getString("company.name"))
+                                        .id(result.getLong("company.id"))
+                                        .build();
                         list.add(company);
                     }
                     result.close();
@@ -62,14 +63,6 @@ public enum CompanyDAO {
             logger.debug("liste de fabriquants terminée");
         } catch (SQLException e) {
             logger.error(e.getMessage());
-        } finally {
-            try {
-                connection.close();
-                connection = null;
-            } catch (SQLException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
         }
         return list;
     }
@@ -80,19 +73,17 @@ public enum CompanyDAO {
      * @return nbEntrees le nombre d'entrées dans la BDD.
      */
     public int countCompanies() {
-        Connection connection = HikariConnectionFactory.getConnection();
         int maxId = 0;
-        try {
-            ResultSet result = connection.createStatement()
-                    .executeQuery("SELECT COUNT(*) AS count FROM company");
-            result.next();
-            maxId = result.getInt("count");
-            result.close();
+        try (Connection connection = HikariConnectionFactory.getConnection();) {
+            try (ResultSet result = connection.createStatement()
+                    .executeQuery("SELECT COUNT(*) AS count FROM company");) {
+                result.next();
+                maxId = result.getInt("count");
+            }
         } catch (SQLException e) {
             logger.error(e.getMessage());
         }
         return maxId;
     }
-
 
 }

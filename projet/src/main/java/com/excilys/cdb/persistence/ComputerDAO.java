@@ -29,7 +29,7 @@ public enum ComputerDAO {
     /**
      * logger.
      */
-    static final Logger LOGGER= LoggerFactory.getLogger(ComputerDAO.class);
+    static final Logger LOGGER = LoggerFactory.getLogger(ComputerDAO.class);
 
     /**
      * Méthode create d'un ordinateur.
@@ -39,67 +39,60 @@ public enum ComputerDAO {
      * @return boolean create true si tout s'est bien passé, false autrement
      */
     public long create(Computer computer) {
-        Connection connection = HikariConnectionFactory.getConnection();
         long id = 0;
         long maxId = 0;
         if (computer.getName() != null && computer.getName() != "") {
-            try {
-                ResultSet result = connection.createStatement()
-                        .executeQuery("SELECT MAX(id) FROM company");
-                result.next();
-                maxId = result.getInt("MAX(id)");
-                result.close();
+            try (Connection connection = HikariConnectionFactory
+                    .getConnection();) {
+                try (ResultSet result = connection.createStatement()
+                        .executeQuery("SELECT MAX(id) FROM company");) {
+                    result.next();
+                    maxId = result.getInt("MAX(id)");
+                }
                 LOGGER.debug("Id maximal du manufacturer" + maxId);
                 String sql = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?)";
-                java.sql.PreparedStatement statement = null;
-                statement = connection.prepareStatement(sql);
-                statement.setString(1, computer.getName());
-                if (computer.getIntroduceDate() != null) {
-                    statement.setDate(2,
-                            java.sql.Date.valueOf(computer.getIntroduceDate()));
-                } else {
-                    statement.setDate(2, null);
-                }
-                if (computer.getDiscontinuedDate() != null) {
-                    if (computer.getIntroduceDate() == null
-                            || computer.getIntroduceDate()
-                                    .isBefore(computer.getDiscontinuedDate())) {
-                        statement.setDate(3, java.sql.Date
-                                .valueOf(computer.getDiscontinuedDate()));
+                try (java.sql.PreparedStatement statement = connection
+                        .prepareStatement(sql);) {
+                    statement.setString(1, computer.getName());
+                    if (computer.getIntroduceDate() != null) {
+                        statement.setDate(2, java.sql.Date
+                                .valueOf(computer.getIntroduceDate()));
+                    } else {
+                        statement.setDate(2, null);
+                    }
+                    if (computer.getDiscontinuedDate() != null) {
+                        if (computer.getIntroduceDate() == null
+                                || computer.getIntroduceDate().isBefore(
+                                        computer.getDiscontinuedDate())) {
+                            statement.setDate(3, java.sql.Date
+                                    .valueOf(computer.getDiscontinuedDate()));
+                        } else {
+                            statement.setDate(3, null);
+                        }
                     } else {
                         statement.setDate(3, null);
                     }
-                } else {
-                    statement.setDate(3, null);
-                }
-                if (computer.getManufacturer() != null) {
-                    if (computer.getManufacturer().getId() > 0
-                            && computer.getManufacturer().getId() <= maxId) {
-                        statement.setLong(4,
-                                computer.getManufacturer().getId());
-                        LOGGER.debug("manufacturer ajouté");
+                    if (computer.getManufacturer() != null) {
+                        if (computer.getManufacturer().getId() > 0 && computer
+                                .getManufacturer().getId() <= maxId) {
+                            statement.setLong(4,
+                                    computer.getManufacturer().getId());
+                            LOGGER.debug("manufacturer ajouté");
+                        } else {
+                            statement.setNull(4, Types.INTEGER);
+                            LOGGER.debug("pas de manufacturer valide");
+                        }
                     } else {
                         statement.setNull(4, Types.INTEGER);
-                        LOGGER.debug("pas de manufacturer valide");
                     }
-                } else {
-                    statement.setNull(4, Types.INTEGER);
+                    statement.executeUpdate();
+                    ResultSet generatedKeys = statement.getGeneratedKeys();
+                    if (generatedKeys.next()) {
+                        id = generatedKeys.getLong(1);
+                    }
                 }
-                statement.executeUpdate();
-                ResultSet generatedKeys = statement.getGeneratedKeys();
-                if (generatedKeys.next()) {
-                    id = generatedKeys.getLong(1);
-                }
-                statement.close();
             } catch (SQLException e) {
                 LOGGER.error(e.getMessage());
-            } finally {
-                try {
-                    connection.close();
-                } catch (SQLException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
             }
         }
         return id;
@@ -114,48 +107,41 @@ public enum ComputerDAO {
      */
     public Computer read(long id) {
         Computer computer = new Computer.ComputerBuilder(null).build();
-        Connection connection = HikariConnectionFactory.getConnection();
-        try {
+        try (Connection connection = HikariConnectionFactory.getConnection();) {
             String sql = "SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id  WHERE computer.id = ?";
-            java.sql.PreparedStatement statement = null;
-            statement = connection.prepareStatement(sql);
-            statement.setLong(1, id);
-            ResultSet result = statement.executeQuery();
-            if (result.first()) {
-                Timestamp timestamp1 = result
-                        .getTimestamp("computer.introduced");
-                Timestamp timestamp2 = result
-                        .getTimestamp("computer.discontinued");
-                LocalDate date1 = null;
-                LocalDate date2 = null;
-                if (timestamp1 != null) {
-                    date1 = timestamp1.toLocalDateTime().toLocalDate();
-                }
-                if (timestamp2 != null) {
-                    date2 = timestamp2.toLocalDateTime().toLocalDate();
+            try (java.sql.PreparedStatement statement = connection
+                    .prepareStatement(sql);) {
+                statement.setLong(1, id);
+                try (ResultSet result = statement.executeQuery();) {
+                    if (result.first()) {
+                        Timestamp timestamp1 = result
+                                .getTimestamp("computer.introduced");
+                        Timestamp timestamp2 = result
+                                .getTimestamp("computer.discontinued");
+                        LocalDate date1 = null;
+                        LocalDate date2 = null;
+                        if (timestamp1 != null) {
+                            date1 = timestamp1.toLocalDateTime().toLocalDate();
+                        }
+                        if (timestamp2 != null) {
+                            date2 = timestamp2.toLocalDateTime().toLocalDate();
 
+                        }
+                        Company company = new Company.CompanyBuilder(
+                                result.getString("company.name")).id(
+                                        result.getLong("computer.company_id"))
+                                        .build();
+                        computer = new Computer.ComputerBuilder(
+                                result.getString("computer.name"))
+                                        .manufacturer(company)
+                                        .introduceDate(date1)
+                                        .discontinuedDate(date2).id(id).build();
+                    }
                 }
-                Company company = new Company.CompanyBuilder(
-                        result.getString("company.name"))
-                                .id(result.getLong("computer.company_id"))
-                                .build();
-                computer = new Computer.ComputerBuilder(
-                        result.getString("computer.name")).manufacturer(company)
-                                .introduceDate(date1).discontinuedDate(date2)
-                                .id(id).build();
-                statement.close();
             }
-            result.close();
             LOGGER.debug("récupération de l'ordinateur réussie");
         } catch (SQLException e) {
             LOGGER.error(e.getMessage());
-        } finally {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
         }
         return computer;
     }
@@ -171,8 +157,7 @@ public enum ComputerDAO {
      */
     public List<Computer> readAll(long debut, int nbItems) {
         List<Computer> list = new ArrayList<Computer>();
-        Connection connection = HikariConnectionFactory.getConnection();
-        try {
+        try (Connection connection = HikariConnectionFactory.getConnection();) {
             ResultSet result = connection.createStatement()
                     .executeQuery("SELECT MAX(id) FROM computer");
             result.next();
@@ -219,13 +204,6 @@ public enum ComputerDAO {
             LOGGER.debug("liste de fabriquants terminée");
         } catch (SQLException e) {
             LOGGER.error(e.getMessage());
-        } finally {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
         }
         return list;
     }
@@ -238,67 +216,59 @@ public enum ComputerDAO {
      * @return boolean update true si tout s'est bien passé, false autrement
      */
     public boolean update(Computer computer) {
-        Connection connection = HikariConnectionFactory.getConnection();
         boolean update = false;
         int maxId = 0;
-        try {
+        try (Connection connection = HikariConnectionFactory.getConnection();) {
             if (computer.getName() != null) {
-                ResultSet result = connection.createStatement()
-                        .executeQuery("SELECT MAX(id) FROM company");
-                result.next();
-                maxId = result.getInt("MAX(id)");
-                result.close();
-                String sql = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ?  WHERE id = ?";
-                java.sql.PreparedStatement statement = null;
-                statement = connection.prepareStatement(sql);
-                statement.setString(1, computer.getName());
-                if (computer.getIntroduceDate() != null) {
-                    statement.setDate(2,
-                            java.sql.Date.valueOf(computer.getIntroduceDate()));
-                } else {
-                    statement.setDate(2, null);
+                try (ResultSet result = connection.createStatement()
+                        .executeQuery("SELECT MAX(id) FROM company");) {
+                    result.next();
+                    maxId = result.getInt("MAX(id)");
                 }
-                if (computer.getDiscontinuedDate() != null) {
-                    if (computer.getIntroduceDate() == null
-                            || computer.getIntroduceDate()
-                                    .isBefore(computer.getDiscontinuedDate())) {
-                        statement.setDate(3, java.sql.Date
-                                .valueOf(computer.getDiscontinuedDate()));
+                String sql = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ?  WHERE id = ?";
+                try (java.sql.PreparedStatement statement = connection
+                        .prepareStatement(sql);) {
+                    statement.setString(1, computer.getName());
+                    if (computer.getIntroduceDate() != null) {
+                        statement.setDate(2, java.sql.Date
+                                .valueOf(computer.getIntroduceDate()));
+                    } else {
+                        statement.setDate(2, null);
+                    }
+                    if (computer.getDiscontinuedDate() != null) {
+                        if (computer.getIntroduceDate() == null
+                                || computer.getIntroduceDate().isBefore(
+                                        computer.getDiscontinuedDate())) {
+                            statement.setDate(3, java.sql.Date
+                                    .valueOf(computer.getDiscontinuedDate()));
+                        } else {
+                            statement.setDate(3, null);
+                        }
                     } else {
                         statement.setDate(3, null);
                     }
-                } else {
-                    statement.setDate(3, null);
-                }
-                if (computer.getManufacturer() != null) {
-                    if (computer.getManufacturer().getId() > 0
-                            && computer.getManufacturer().getId() <= maxId) {
-                        statement.setLong(4,
-                                computer.getManufacturer().getId());
-                        LOGGER.debug("manufacturer ajouté");
+                    if (computer.getManufacturer() != null) {
+                        if (computer.getManufacturer().getId() > 0 && computer
+                                .getManufacturer().getId() <= maxId) {
+                            statement.setLong(4,
+                                    computer.getManufacturer().getId());
+                            LOGGER.debug("manufacturer ajouté");
+                        } else {
+                            statement.setNull(4, Types.INTEGER);
+                            LOGGER.debug("manufacturer invalide");
+                        }
                     } else {
                         statement.setNull(4, Types.INTEGER);
-                        LOGGER.debug("manufacturer invalide");
+                        LOGGER.debug("pas de manufacturer valide");
                     }
-                } else {
-                    statement.setNull(4, Types.INTEGER);
-                    LOGGER.debug("pas de manufacturer valide");
+                    statement.setLong(5, computer.getId());
+                    statement.executeUpdate();
                 }
-                statement.setLong(5, computer.getId());
-                statement.executeUpdate();
-                statement.close();
                 update = true;
                 LOGGER.debug("mise à jour réussie");
             }
         } catch (SQLException e) {
             LOGGER.error(e.getMessage());
-        } finally {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
         }
         return update;
     }
@@ -311,15 +281,14 @@ public enum ComputerDAO {
      * @return boolean delete true si tout s'est bien passé, false autrement
      */
     public boolean delete(long id) {
-        Connection connection = HikariConnectionFactory.getConnection();
         boolean delete = false;
-        try {
+        try (Connection connection = HikariConnectionFactory.getConnection();) {
             int maxId = 0;
-            ResultSet result = connection.createStatement()
-                    .executeQuery("SELECT MAX(id) FROM computer");
-            result.next();
-            maxId = result.getInt("MAX(id)");
-            result.close();
+            try (ResultSet result = connection.createStatement()
+                    .executeQuery("SELECT MAX(id) FROM computer");) {
+                result.next();
+                maxId = result.getInt("MAX(id)");
+            }
             if (id < maxId) {
                 connection.createStatement()
                         .executeUpdate("DELETE FROM computer WHERE id =" + id);
@@ -328,14 +297,6 @@ public enum ComputerDAO {
             }
         } catch (SQLException e) {
             LOGGER.error(e.getMessage());
-            e.printStackTrace();
-        } finally {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
         }
 
         return delete;
@@ -347,14 +308,13 @@ public enum ComputerDAO {
      * @return nbEntrees le nombre d'entrées dans la BDD.
      */
     public int countComputer() {
-        Connection connection = HikariConnectionFactory.getConnection();
         int maxId = 0;
-        try {
-            ResultSet result = connection.createStatement()
-                    .executeQuery("SELECT COUNT(*) AS count FROM computer");
-            result.next();
-            maxId = result.getInt("count");
-            result.close();
+        try (Connection connection = HikariConnectionFactory.getConnection();) {
+            try (ResultSet result = connection.createStatement()
+                    .executeQuery("SELECT COUNT(*) AS count FROM computer");) {
+                result.next();
+                maxId = result.getInt("count");
+            }
         } catch (SQLException e) {
             LOGGER.error(e.getMessage());
         }
@@ -369,15 +329,14 @@ public enum ComputerDAO {
      *            le nombre d'ids affichés par pages
      */
     public int countPages(int nbId) {
-        Connection connection = HikariConnectionFactory.getConnection();
         int maxId = 0;
         int nbPages = 0;
-        try {
-            ResultSet result = connection.createStatement()
-                    .executeQuery("SELECT COUNT(*) AS count FROM computer");
-            result.next();
-            maxId = result.getInt("count");
-            result.close();
+        try (Connection connection = HikariConnectionFactory.getConnection();) {
+            try (ResultSet result = connection.createStatement()
+                    .executeQuery("SELECT COUNT(*) AS count FROM computer");) {
+                result.next();
+                maxId = result.getInt("count");
+            }
             if (nbId != 0) {
                 if (maxId % nbId == 0) {
                     nbPages = maxId / nbId;

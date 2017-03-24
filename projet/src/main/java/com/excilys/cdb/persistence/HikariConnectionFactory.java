@@ -50,6 +50,7 @@ public enum HikariConnectionFactory {
             cfg.addDataSourceProperty("prepStmtCacheSize", "250");
             cfg.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");            
             cfg.setConnectionTestQuery("show tables");
+            cfg.setMaximumPoolSize(1);
             HikariDataSource ds = new HikariDataSource(cfg);
             conn = ds.getConnection();
         } catch (ConfigurationException | SQLException e) {
