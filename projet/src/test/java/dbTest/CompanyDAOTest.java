@@ -2,14 +2,53 @@ package dbTest;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.dbunit.IDatabaseTester;
+import org.dbunit.JdbcDatabaseTester;
+import org.dbunit.dataset.IDataSet;
+import org.dbunit.dataset.ReplacementDataSet;
+import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
+import org.dbunit.operation.DatabaseOperation;
+import org.junit.Before;
 import org.junit.Test;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.persistence.CompanyDAO;
 
 
 public class CompanyDAOTest {
+    private static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
+    private static final String JDBC_URL = "jdbc:mysql://localhost/dbUnit?zeroDateTimeBehavior=convertToNull";
+    private static final String USER = "admindb";
+    private static final String PASSWORD = "qwerty1234";
+
+    @Before
+    public void importDataSet() throws Exception {
+        IDataSet dataSet = readDataSet();
+        ReplacementDataSet dataSetter = new ReplacementDataSet(dataSet);
+        dataSetter.addReplacementObject("[NULL]", null);
+        cleanlyInsert(dataSetter);
+    }
+
+    private IDataSet readDataSet() throws Exception {
+        return new FlatXmlDataSetBuilder().build(new File(
+                "src/test/java/dbTest/dataset.xml"));
+    }
+
+    private void cleanlyInsert(ReplacementDataSet dataSet) {
+        try {
+            IDatabaseTester databaseTester = new JdbcDatabaseTester(
+                    JDBC_DRIVER, JDBC_URL, USER, PASSWORD);
+            databaseTester.setSetUpOperation(DatabaseOperation.CLEAN_INSERT);
+            databaseTester.setDataSet(dataSet);
+            databaseTester.onSetup();
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
 
     /*
      * Les tests suivants ont pour but de tester la lecture de plusieurs

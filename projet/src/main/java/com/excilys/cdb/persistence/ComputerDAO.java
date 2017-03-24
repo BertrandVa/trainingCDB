@@ -29,7 +29,7 @@ public enum ComputerDAO {
     /**
      * logger.
      */
-    final Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
+    static final Logger LOGGER= LoggerFactory.getLogger(ComputerDAO.class);
 
     /**
      * Méthode create d'un ordinateur.
@@ -39,7 +39,7 @@ public enum ComputerDAO {
      * @return boolean create true si tout s'est bien passé, false autrement
      */
     public long create(Computer computer) {
-        Connection connection = ConnectionFactory.getConnection();
+        Connection connection = HikariConnectionFactory.getConnection();
         long id = 0;
         long maxId = 0;
         if (computer.getName() != null && computer.getName() != "") {
@@ -49,7 +49,7 @@ public enum ComputerDAO {
                 result.next();
                 maxId = result.getInt("MAX(id)");
                 result.close();
-                logger.debug("Id maximal du manufacturer" + maxId);
+                LOGGER.debug("Id maximal du manufacturer" + maxId);
                 String sql = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?)";
                 java.sql.PreparedStatement statement = null;
                 statement = connection.prepareStatement(sql);
@@ -77,10 +77,10 @@ public enum ComputerDAO {
                             && computer.getManufacturer().getId() <= maxId) {
                         statement.setLong(4,
                                 computer.getManufacturer().getId());
-                        logger.debug("manufacturer ajouté");
+                        LOGGER.debug("manufacturer ajouté");
                     } else {
                         statement.setNull(4, Types.INTEGER);
-                        logger.debug("pas de manufacturer valide");
+                        LOGGER.debug("pas de manufacturer valide");
                     }
                 } else {
                     statement.setNull(4, Types.INTEGER);
@@ -92,7 +92,7 @@ public enum ComputerDAO {
                 }
                 statement.close();
             } catch (SQLException e) {
-                logger.error(e.getMessage());
+                LOGGER.error(e.getMessage());
             } finally {
                 try {
                     connection.close();
@@ -114,7 +114,7 @@ public enum ComputerDAO {
      */
     public Computer read(long id) {
         Computer computer = new Computer.ComputerBuilder(null).build();
-        Connection connection = ConnectionFactory.getConnection();
+        Connection connection = HikariConnectionFactory.getConnection();
         try {
             String sql = "SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id  WHERE computer.id = ?";
             java.sql.PreparedStatement statement = null;
@@ -146,9 +146,9 @@ public enum ComputerDAO {
                 statement.close();
             }
             result.close();
-            logger.debug("récupération de l'ordinateur réussie");
+            LOGGER.debug("récupération de l'ordinateur réussie");
         } catch (SQLException e) {
-            logger.error(e.getMessage());
+            LOGGER.error(e.getMessage());
         } finally {
             try {
                 connection.close();
@@ -171,7 +171,7 @@ public enum ComputerDAO {
      */
     public List<Computer> readAll(long debut, int nbItems) {
         List<Computer> list = new ArrayList<Computer>();
-        Connection connection = ConnectionFactory.getConnection();
+        Connection connection = HikariConnectionFactory.getConnection();
         try {
             ResultSet result = connection.createStatement()
                     .executeQuery("SELECT MAX(id) FROM computer");
@@ -200,7 +200,7 @@ public enum ComputerDAO {
                         if (timestamp2 != null) {
                             date2 = timestamp2.toLocalDateTime().toLocalDate();
                         }
-                        logger.debug(result.getString("computer.name"));
+                        LOGGER.debug(result.getString("computer.name"));
                         Company company = new Company.CompanyBuilder(
                                 result.getString("company.name")).id(
                                         result.getLong("computer.company_id"))
@@ -211,14 +211,14 @@ public enum ComputerDAO {
                                         .discontinuedDate(date2)
                                         .manufacturer(company).build();
                         list.add(computer);
-                        logger.debug(computer.toString());
+                        LOGGER.debug(computer.toString());
                     }
                 }
                 result.close();
             }
-            logger.debug("liste de fabriquants terminée");
+            LOGGER.debug("liste de fabriquants terminée");
         } catch (SQLException e) {
-            logger.error(e.getMessage());
+            LOGGER.error(e.getMessage());
         } finally {
             try {
                 connection.close();
@@ -238,7 +238,7 @@ public enum ComputerDAO {
      * @return boolean update true si tout s'est bien passé, false autrement
      */
     public boolean update(Computer computer) {
-        Connection connection = ConnectionFactory.getConnection();
+        Connection connection = HikariConnectionFactory.getConnection();
         boolean update = false;
         int maxId = 0;
         try {
@@ -275,23 +275,23 @@ public enum ComputerDAO {
                             && computer.getManufacturer().getId() <= maxId) {
                         statement.setLong(4,
                                 computer.getManufacturer().getId());
-                        logger.debug("manufacturer ajouté");
+                        LOGGER.debug("manufacturer ajouté");
                     } else {
                         statement.setNull(4, Types.INTEGER);
-                        logger.debug("manufacturer invalide");
+                        LOGGER.debug("manufacturer invalide");
                     }
                 } else {
                     statement.setNull(4, Types.INTEGER);
-                    logger.debug("pas de manufacturer valide");
+                    LOGGER.debug("pas de manufacturer valide");
                 }
                 statement.setLong(5, computer.getId());
                 statement.executeUpdate();
                 statement.close();
                 update = true;
-                logger.debug("mise à jour réussie");
+                LOGGER.debug("mise à jour réussie");
             }
         } catch (SQLException e) {
-            logger.error(e.getMessage());
+            LOGGER.error(e.getMessage());
         } finally {
             try {
                 connection.close();
@@ -311,7 +311,7 @@ public enum ComputerDAO {
      * @return boolean delete true si tout s'est bien passé, false autrement
      */
     public boolean delete(long id) {
-        Connection connection = ConnectionFactory.getConnection();
+        Connection connection = HikariConnectionFactory.getConnection();
         boolean delete = false;
         try {
             int maxId = 0;
@@ -323,11 +323,11 @@ public enum ComputerDAO {
             if (id < maxId) {
                 connection.createStatement()
                         .executeUpdate("DELETE FROM computer WHERE id =" + id);
-                logger.debug("suppression réussie");
+                LOGGER.debug("suppression réussie");
                 delete = true;
             }
         } catch (SQLException e) {
-            logger.error(e.getMessage());
+            LOGGER.error(e.getMessage());
             e.printStackTrace();
         } finally {
             try {
@@ -347,7 +347,7 @@ public enum ComputerDAO {
      * @return nbEntrees le nombre d'entrées dans la BDD.
      */
     public int countComputer() {
-        Connection connection = ConnectionFactory.getConnection();
+        Connection connection = HikariConnectionFactory.getConnection();
         int maxId = 0;
         try {
             ResultSet result = connection.createStatement()
@@ -356,7 +356,7 @@ public enum ComputerDAO {
             maxId = result.getInt("count");
             result.close();
         } catch (SQLException e) {
-            logger.error(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
         return maxId;
     }
@@ -369,7 +369,7 @@ public enum ComputerDAO {
      *            le nombre d'ids affichés par pages
      */
     public int countPages(int nbId) {
-        Connection connection = ConnectionFactory.getConnection();
+        Connection connection = HikariConnectionFactory.getConnection();
         int maxId = 0;
         int nbPages = 0;
         try {
@@ -386,7 +386,7 @@ public enum ComputerDAO {
                 }
             }
         } catch (SQLException e) {
-            logger.error(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
         return nbPages;
     }

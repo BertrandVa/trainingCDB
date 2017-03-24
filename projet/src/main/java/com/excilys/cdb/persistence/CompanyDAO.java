@@ -35,7 +35,7 @@ public enum CompanyDAO {
      *              le nombre d'items à afficher
      */
     public List<Company> readAll(long debut, int nbItems) {
-        Connection connection = ConnectionFactory.getConnection();
+        Connection connection = HikariConnectionFactory.getConnection();
         List<Company> list = new ArrayList<Company>();
         try {
             for (int i = 0; i < nbItems; i++) {
@@ -44,6 +44,7 @@ public enum CompanyDAO {
                         "SELECT MAX(id) FROM company");
                 result.next();
                 long maxId = result.getInt("MAX(id)");
+                logger.debug("liste de fabriquants terminée");
                 result.close();
                 if (id <= maxId) {
                     result = connection.createStatement().executeQuery(
@@ -79,7 +80,7 @@ public enum CompanyDAO {
      * @return nbEntrees le nombre d'entrées dans la BDD.
      */
     public int countCompanies() {
-        Connection connection = ConnectionFactory.getConnection();
+        Connection connection = HikariConnectionFactory.getConnection();
         int maxId = 0;
         try {
             ResultSet result = connection.createStatement()
