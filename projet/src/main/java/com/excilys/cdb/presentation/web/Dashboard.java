@@ -9,7 +9,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.services.ClientActions;
+import com.excilys.cdb.services.ComputerForm;
 
 public class Dashboard extends HttpServlet {
 
@@ -92,4 +95,36 @@ public class Dashboard extends HttpServlet {
         this.getServletContext().getRequestDispatcher(VUE).forward(request,
                 response);
     }
+
+
+    /**
+     * Envoi de notre formulaire.
+     * @see AddComputer#FORM
+     * @see AddComputer#COMPUTER
+     * @see AddComputer#VUE
+     * @param request
+     *              La requête de notre servlet
+     * @param response
+     *              la réponse de notre servlet
+     * @throws ServletException
+     *                          Exception
+     * @throws  IOException
+     *                          Exception
+     */
+    public void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+         String ids = request.getParameter("selection");
+         if (ids.contains(",")) {
+             String[] strs = ids.split("[,]");
+             for (int i=0; i < strs.length; i++) {
+                 ClientActions.deleteComputer(Integer.parseInt(strs[i]));
+             }
+         } else {
+            ClientActions.deleteComputer(Integer.parseInt(ids));
+         }
+
+        this.getServletContext().getRequestDispatcher(VUE).forward(request,
+                response);
+    }
+
 }

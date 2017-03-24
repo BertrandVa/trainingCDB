@@ -102,9 +102,9 @@
 			</div>
 		</div>
 	</footer>
-	<script src="../js/jquery.min.js"></script>
-	<script src="../js/bootstrap.min.js"></script>
-	<script src="../js/dashboard.js"></script>
+	<script src="/computer-database/js/jquery.min.js"></script>
+	<script src="/computer-database/js/bootstrap.min.js"></script>
+	<script src="/computer-database/js/dashboard.js"></script>
 
 </body>
 </html>
