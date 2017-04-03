@@ -48,7 +48,7 @@ public class ClientActionsTest {
         ComputerDAO compDAO = mock(ComputerDAO.class);
         Whitebox.setInternalState(ComputerDAO.class,"INSTANCE", compDAO);
         when(compDAO.readAll(574, 1, "computer.id","")).thenReturn(liste);
-        list = ClientActions.listComputers(574, 1, "computer.id");
+        list = ClientActions.listComputers(574, 1, "computer.id", "'%'");
         computer = list.get(0);
         assertEquals(computer.getId(), 574);
         assertEquals(computer.getName(), ("iPhone 4S"));

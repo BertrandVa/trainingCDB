@@ -12,6 +12,7 @@ import com.excilys.cdb.services.ClientActions;
 /**
  * Cette classe est notre application à proprement parler, qui gère l'interface
  * en ligne de commande (entrées/sorties).
+ * 
  * @author bertrand
  */
 
@@ -19,7 +20,7 @@ public class ConsoleApplication {
 
     /**
      * @param args
-     *             les arguments
+     *            les arguments
      */
     public static void main(String[] args) {
         /**
@@ -44,27 +45,28 @@ public class ConsoleApplication {
             /*
              * On propose ici les actions correspondant au choix de
              * l'utilisateur 1: liste les ordinateurs par pages 2: liste les
-             * fabriquants par pages 3: crée un ordinateur dans la BDD 4: quitte
-             * l'application
+             * fabriquants par pages 3: crée un ordinateur dans la BDD 4:
+             * supprime une compagnie 5: quitte l'application
              */
             case 1:
-                System.out
-                        .println("Sélectionnez le premier id que vous désirez voir");
+                System.out.println(
+                        "Sélectionnez le premier id que vous désirez voir");
                 int idComputer = SecureInput.secureInt(sc);
-                System.out
-                        .println("Parfait ! entrez le nombre d'éléments à afficher");
+                System.out.println(
+                        "Parfait ! entrez le nombre d'éléments à afficher");
                 int nbElements = SecureInput.secureInt(sc);
                 List<Computer> list = ClientActions.listComputers(idComputer,
-                        nbElements, "computer.id");
+                        nbElements, "computer.id", "'%'");
                 for (int i = 0; i < list.size(); i++) {
-                    System.out.println(list.get(i).getId() + " "
-                            + list.get(i).getName());
+                    System.out.println(
+                            list.get(i).getId() + " " + list.get(i).getName());
                 }
                 boolean continu2 = true; // permet le retour au menu principal
                 while (continu2) {
                     Menus.menuOrdinateur();
                     int choix = 0;
-                    while (choix != 1 && choix != 2 && choix != 3 && choix != 4) {
+                    while (choix != 1 && choix != 2 && choix != 3
+                            && choix != 4) {
                         /*
                          * On vérifie ici l'entrée de l'utilisateur Elle doit
                          * correspondre à un choix proposé
@@ -85,25 +87,25 @@ public class ConsoleApplication {
                         LocalDate date1 = null;
                         LocalDate date2 = null;
                         String name = "";
-                        System.out
-                                .println("Veuillez entrer l'id du champ à modifier");
+                        System.out.println(
+                                "Veuillez entrer l'id du champ à modifier");
                         Computer computer = new Computer.ComputerBuilder(null)
                                 .build();
                         id = SecureInput.secureInt(sc);
-                        System.out
-                                .println("Parfait ! entrez le nouveau nom de cet ordinateur");
+                        System.out.println(
+                                "Parfait ! entrez le nouveau nom de cet ordinateur");
                         name = SecureInput.secureString(sc);
                         boolean create;
-                        System.out
-                                .println("Parfait ! entrez sa date d'acquisition yyyy (entrée) MM (entrée) dd (entrée) ou 0 pour ignorer");
+                        System.out.println(
+                                "Parfait ! entrez sa date d'acquisition yyyy (entrée) MM (entrée) dd (entrée) ou 0 pour ignorer");
                         date1 = SecureInput.secureDate(sc);
-                        System.out
-                                .println("Parfait ! entrez sa date de départ yyyy (entrée) MM (entrée) dd (entrée) ou 0 pour ignorer");
+                        System.out.println(
+                                "Parfait ! entrez sa date de départ yyyy (entrée) MM (entrée) dd (entrée) ou 0 pour ignorer");
                         date2 = SecureInput.secureDate(sc);
-                        System.out
-                                .println("Parfait ! entrez l'id de son fabriquant ou 0 pour ignorer");
-                        Company company = new Company.CompanyBuilder(null).id(
-                                SecureInput.secureInt(sc)).build();
+                        System.out.println(
+                                "Parfait ! entrez l'id de son fabriquant ou 0 pour ignorer");
+                        Company company = new Company.CompanyBuilder(null)
+                                .id(SecureInput.secureInt(sc)).build();
                         computer = new Computer.ComputerBuilder(name).id(id)
                                 .manufacturer(company).introduceDate(date1)
                                 .discontinuedDate(date2).build();
@@ -116,15 +118,15 @@ public class ConsoleApplication {
                         }
 
                     case 2:
-                        System.out
-                                .println("Veuillez entrer l'id du champ à supprimer");
+                        System.out.println(
+                                "Veuillez entrer l'id du champ à supprimer");
                         id = sc.nextInt(SecureInput.secureInt(sc));
                         ClientActions.deleteComputer(id);
                         System.out.println("Action effectuée");
 
                     case 3:
-                        System.out
-                                .println("Veuillez entrer l'id du champ à afficher");
+                        System.out.println(
+                                "Veuillez entrer l'id du champ à afficher");
                         id = SecureInput.secureInt(sc);
                         ClientActions.showComputerDetails(id);
                         break;
@@ -136,11 +138,11 @@ public class ConsoleApplication {
                 break;
 
             case 2:
-                System.out
-                        .println("Sélectionnez le premier id que vous désirez voir");
+                System.out.println(
+                        "Sélectionnez le premier id que vous désirez voir");
                 int id = SecureInput.secureInt(sc);
-                System.out
-                        .println("Parfait ! entrez le nombre d'éléments à afficher");
+                System.out.println(
+                        "Parfait ! entrez le nombre d'éléments à afficher");
                 int nbElementsVoulus = SecureInput.secureInt(sc);
                 List<Company> listeComp = ClientActions.listCompanies(id,
                         nbElementsVoulus);
@@ -151,25 +153,25 @@ public class ConsoleApplication {
                 break;
 
             case 3:
-                System.out
-                        .println("Parfait ! entrez le nom de ce nouvel ordinateur");
+                System.out.println(
+                        "Parfait ! entrez le nom de ce nouvel ordinateur");
                 boolean create;
                 String name = "";
                 LocalDate date1 = null;
                 LocalDate date2 = null;
                 name = SecureInput.secureString(sc);
                 logger.debug(name);
-                System.out
-                        .println("Parfait ! entrez sa date d'acquisition yyyy (entrée) MM (entrée) dd (entrée) ou 0 pour ignorer");
+                System.out.println(
+                        "Parfait ! entrez sa date d'acquisition yyyy (entrée) MM (entrée) dd (entrée) ou 0 pour ignorer");
                 date1 = SecureInput.secureDate(sc);
-                System.out
-                        .println("Parfait ! entrez sa date de départ yyyy (entrée) MM (entrée) dd (entrée) ou 0 pour ignorer");
+                System.out.println(
+                        "Parfait ! entrez sa date de départ yyyy (entrée) MM (entrée) dd (entrée) ou 0 pour ignorer");
 
                 date2 = SecureInput.secureDate(sc);
-                System.out
-                        .println("Parfait ! entrez l'id de son fabriquant ou 0 pour ignorer");
-                Company company = new Company.CompanyBuilder(null).id(
-                        SecureInput.secureInt(sc)).build();
+                System.out.println(
+                        "Parfait ! entrez l'id de son fabriquant ou 0 pour ignorer");
+                Company company = new Company.CompanyBuilder(null)
+                        .id(SecureInput.secureInt(sc)).build();
                 Computer computer = new Computer.ComputerBuilder(name)
                         .discontinuedDate(date2).introduceDate(date1)
                         .manufacturer(company).build();
@@ -181,6 +183,20 @@ public class ConsoleApplication {
                     System.out.println("Il y a eu un problème");
                 }
                 break;
+             
+            case 4:
+                System.out.println(
+                        "Parfait ! entrez l'id de la compagnie à supprimer");
+                       long idCompany = SecureInput.secureInt(sc);
+                boolean fait = ClientActions.deleteCompany(idCompany);
+                if(fait){
+                    System.out.println("action effectuée");
+                }
+                else{
+                    System.out.println("il y a eu un problème");
+                }
+                break;
+              
             default:
                 continu = false;
             }

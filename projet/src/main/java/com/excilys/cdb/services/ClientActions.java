@@ -167,4 +167,13 @@ public class ClientActions {
         int nbPages = compDAO.countPages(nbId);
             return nbPages;
     };
+    
+    /**
+     * Permet de supprimer des compagnies et les ordinateurs associés.
+     */
+    public static boolean deleteCompany(long id) {
+        CompanyDAO compDAO = CompanyDAO.INSTANCE;
+        boolean fait = compDAO.deleteCompanyAndRelatedComputers(id);
+            return fait;
+    };
 }

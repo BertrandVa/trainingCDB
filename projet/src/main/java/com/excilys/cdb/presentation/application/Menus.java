@@ -20,7 +20,8 @@ public class Menus {
         System.out.println("Pour lister les ordinateurs, tapez 1");
         System.out.println("Pour lister les fournisseurs, tapez 2");
         System.out.println("Pour créer un nouvel ordinateur, tapez 3");
-        System.out.println("Pour quitter, tapez 4");
+        System.out.println("Pour supprimer une compagnie, tapez 4");
+        System.out.println("Pour quitter, tapez 5");
     }
 
     /**
