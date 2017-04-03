@@ -88,31 +88,35 @@ public class Dashboard extends HttpServlet {
             switch (request.getParameter("sort")) {
             case "name":
                 request.setAttribute("computerList", ClientActions
-                        .listComputers(getDebut(), getNbId(), "computer.name"));
+                        .listComputers(getDebut(), getNbId(), "computer.name", "'%'"));
                 break;
             case "introduce":
                 request.setAttribute("computerList", ClientActions
-                        .listComputers(getDebut(), getNbId(), "computer.introduced"));
+                        .listComputers(getDebut(), getNbId(), "computer.introduced","'%'"));
                 break;
             case "discontinued":
                 request.setAttribute("computerList", ClientActions
-                        .listComputers(getDebut(), getNbId(), "computer.discontinued"));
+                        .listComputers(getDebut(), getNbId(), "computer.discontinued", "'%'"));
                 break;
             case "company":
                 request.setAttribute("computerList", ClientActions
-                        .listComputers(getDebut(), getNbId(), "computer.company_id"));
+                        .listComputers(getDebut(), getNbId(), "computer.company_id","'%'"));
                 break;
             default:
                 request.setAttribute("computerList", ClientActions
-                        .listComputers(getDebut(), getNbId(), "computer.id"));
+                        .listComputers(getDebut(), getNbId(), "computer.id","'%'"));
                 break;
             }
         } else {
             request.setAttribute("computerList",
-                    ClientActions.listComputers(debut, nbId, "computer.id"));
+                    ClientActions.listComputers(debut, nbId, "computer.id","'%'"));
+        }
+        if (request.getParameter("search") != null) {
+            request.setAttribute("computerList", ClientActions.listComputers(getDebut(), getNbId(), "computer.name", String.format("'%%"+request.getParameter("search")+"%%'")));
         }
         request.setAttribute("nbComputer", ClientActions.countComputer());
         request.setAttribute("sort", request.getParameter("sort"));
+        request.setAttribute("search", request.getParameter("search"));
         if (request.getParameter("page") != null) {
             request.setAttribute("currentPage", request.getParameter("page"));
         } else {

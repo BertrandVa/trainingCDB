@@ -155,7 +155,7 @@ public enum ComputerDAO {
      * @param nbItems
      *            le nombre d'items à afficher
      */
-    public List<Computer> readAll(long debut, int nbItems, String champ ) {
+    public List<Computer> readAll(long debut, int nbItems, String champ, String match ) {
         List<Computer> list = new ArrayList<Computer>();
         try (Connection connection = HikariConnectionFactory.getConnection();) {
             ResultSet result = connection.createStatement()
@@ -164,11 +164,10 @@ public enum ComputerDAO {
             long maxId = result.getInt("MAX(id)");
             long currentId = debut;
             result.close();
-            String sql = "SELECT * FROM `computer` LEFT JOIN company ON computer.id = company.id ORDER BY %s";
-            sql=String.format(sql, champ);
+            String sql = "SELECT * FROM `computer` LEFT JOIN company ON computer.id = company.id WHERE %s COLLATE latin1_GENERAL_CI like %s ORDER BY %s";
+            sql=String.format(sql, champ, match, champ);
             LOGGER.error(sql);
-            java.sql.PreparedStatement statement = null;
-            statement = connection.prepareStatement(sql);
+            java.sql.PreparedStatement statement = connection.prepareStatement(sql);
             LOGGER.debug(statement.toString());
             result = statement.executeQuery();
             while (list.size() <= nbItems && currentId <= maxId) {

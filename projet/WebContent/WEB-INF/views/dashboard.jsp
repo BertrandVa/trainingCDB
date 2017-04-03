@@ -91,7 +91,7 @@
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
 			<!-- <ul class="pagination">-->
-		 	<c:url var="searchUri" value="/dashboard?sort=${sort}&page=##" />
+		 	<c:url var="searchUri" value="/dashboard?search=${search}&sort=${sort}&page=##" />
              <pagination:display  maxLinks="5" currentPage="${currentPage}" maxPages="${maxPage}" uri="${searchUri}" />
 			<div class="btn-group btn-group-sm pull-right" role="group">
 				<form action="dashboard" method="get">
