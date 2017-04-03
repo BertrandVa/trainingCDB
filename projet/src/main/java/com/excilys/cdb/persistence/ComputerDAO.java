@@ -1,6 +1,7 @@
 package com.excilys.cdb.persistence;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -51,46 +52,7 @@ public enum ComputerDAO {
                 }
                 LOGGER.debug("Id maximal du manufacturer" + maxId);
                 String sql = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?)";
-                try (java.sql.PreparedStatement statement = connection
-                        .prepareStatement(sql);) {
-                    statement.setString(1, computer.getName());
-                    if (computer.getIntroduceDate() != null) {
-                        statement.setDate(2, java.sql.Date
-                                .valueOf(computer.getIntroduceDate()));
-                    } else {
-                        statement.setDate(2, null);
-                    }
-                    if (computer.getDiscontinuedDate() != null) {
-                        if (computer.getIntroduceDate() == null
-                                || computer.getIntroduceDate().isBefore(
-                                        computer.getDiscontinuedDate())) {
-                            statement.setDate(3, java.sql.Date
-                                    .valueOf(computer.getDiscontinuedDate()));
-                        } else {
-                            statement.setDate(3, null);
-                        }
-                    } else {
-                        statement.setDate(3, null);
-                    }
-                    if (computer.getManufacturer() != null) {
-                        if (computer.getManufacturer().getId() > 0 && computer
-                                .getManufacturer().getId() <= maxId) {
-                            statement.setLong(4,
-                                    computer.getManufacturer().getId());
-                            LOGGER.debug("manufacturer ajouté");
-                        } else {
-                            statement.setNull(4, Types.INTEGER);
-                            LOGGER.debug("pas de manufacturer valide");
-                        }
-                    } else {
-                        statement.setNull(4, Types.INTEGER);
-                    }
-                    statement.executeUpdate();
-                    ResultSet generatedKeys = statement.getGeneratedKeys();
-                    if (generatedKeys.next()) {
-                        id = generatedKeys.getLong(1);
-                    }
-                }
+                id = prepare(connection, computer, maxId, sql, 0);
             } catch (SQLException e) {
                 LOGGER.error(e.getMessage());
             }
@@ -155,7 +117,8 @@ public enum ComputerDAO {
      * @param nbItems
      *            le nombre d'items à afficher
      */
-    public List<Computer> readAll(long debut, int nbItems, String champ, String match ) {
+    public List<Computer> readAll(long debut, int nbItems, String champ,
+            String match) {
         List<Computer> list = new ArrayList<Computer>();
         try (Connection connection = HikariConnectionFactory.getConnection();) {
             ResultSet result = connection.createStatement()
@@ -165,37 +128,45 @@ public enum ComputerDAO {
             long currentId = debut;
             result.close();
             String sql = "SELECT * FROM `computer` LEFT JOIN company ON computer.id = company.id WHERE %s COLLATE latin1_GENERAL_CI like %s ORDER BY %s";
-            sql=String.format(sql, champ, match, champ);
+            sql = String.format(sql, champ, match, champ);
             LOGGER.error(sql);
-            java.sql.PreparedStatement statement = connection.prepareStatement(sql);
+            java.sql.PreparedStatement statement = connection
+                    .prepareStatement(sql);
             LOGGER.debug(statement.toString());
             result = statement.executeQuery();
             while (list.size() <= nbItems && currentId <= maxId) {
-                if (result.next()) {
-                    Timestamp timestamp1 = result
-                            .getTimestamp("computer.introduced");
-                    Timestamp timestamp2 = result
-                            .getTimestamp("computer.discontinued");
-                    LocalDate date1 = null;
-                    LocalDate date2 = null;
-                    if (timestamp1 != null) {
-                        date1 = timestamp1.toLocalDateTime().toLocalDate();
+                boolean ajout = false;
+                while (!ajout) {
+                    if (result.next()) {
+                        Timestamp timestamp1 = result
+                                .getTimestamp("computer.introduced");
+                        Timestamp timestamp2 = result
+                                .getTimestamp("computer.discontinued");
+                        LocalDate date1 = null;
+                        LocalDate date2 = null;
+                        if (timestamp1 != null) {
+                            date1 = timestamp1.toLocalDateTime().toLocalDate();
+                        }
+                        if (timestamp2 != null) {
+                            date2 = timestamp2.toLocalDateTime().toLocalDate();
+                        }
+                        Company company = new Company.CompanyBuilder(
+                                result.getString("company.name")).id(
+                                        result.getLong("computer.company_id"))
+                                        .build();
+                        LOGGER.debug(company.toString());
+                        Computer computer = new Computer.ComputerBuilder(
+                                result.getString("computer.name"))
+                                        .id(result.getLong("computer.id"))
+                                        .introduceDate(date1)
+                                        .discontinuedDate(date2)
+                                        .manufacturer(company).build();
+                        if (computer.getId() >= currentId) {
+                            list.add(computer);
+                            ajout = true;
+                        }
+                        LOGGER.debug(computer.toString());
                     }
-                    if (timestamp2 != null) {
-                        date2 = timestamp2.toLocalDateTime().toLocalDate();
-                    }
-                    LOGGER.debug(result.getString("computer.name"));
-                    Company company = new Company.CompanyBuilder(
-                            result.getString("company.name"))
-                                    .id(result.getLong("computer.company_id"))
-                                    .build();
-                    Computer computer = new Computer.ComputerBuilder(
-                            result.getString("computer.name")).id(result.getLong("computer.id"))
-                                    .introduceDate(date1)
-                                    .discontinuedDate(date2)
-                                    .manufacturer(company).build();
-                    list.add(computer);
-                    LOGGER.debug(computer.toString());
                 }
                 currentId += 1;
             }
@@ -203,7 +174,7 @@ public enum ComputerDAO {
             result.close();
         } catch (SQLException e) {
             LOGGER.error(e.getMessage());
-        }        
+        }
         return list;
     }
 
@@ -225,44 +196,7 @@ public enum ComputerDAO {
                     maxId = result.getInt("MAX(id)");
                 }
                 String sql = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ?  WHERE id = ?";
-                try (java.sql.PreparedStatement statement = connection
-                        .prepareStatement(sql);) {
-                    statement.setString(1, computer.getName());
-                    if (computer.getIntroduceDate() != null) {
-                        statement.setDate(2, java.sql.Date
-                                .valueOf(computer.getIntroduceDate()));
-                    } else {
-                        statement.setDate(2, null);
-                    }
-                    if (computer.getDiscontinuedDate() != null) {
-                        if (computer.getIntroduceDate() == null
-                                || computer.getIntroduceDate().isBefore(
-                                        computer.getDiscontinuedDate())) {
-                            statement.setDate(3, java.sql.Date
-                                    .valueOf(computer.getDiscontinuedDate()));
-                        } else {
-                            statement.setDate(3, null);
-                        }
-                    } else {
-                        statement.setDate(3, null);
-                    }
-                    if (computer.getManufacturer() != null) {
-                        if (computer.getManufacturer().getId() > 0 && computer
-                                .getManufacturer().getId() <= maxId) {
-                            statement.setLong(4,
-                                    computer.getManufacturer().getId());
-                            LOGGER.debug("manufacturer ajouté");
-                        } else {
-                            statement.setNull(4, Types.INTEGER);
-                            LOGGER.debug("manufacturer invalide");
-                        }
-                    } else {
-                        statement.setNull(4, Types.INTEGER);
-                        LOGGER.debug("pas de manufacturer valide");
-                    }
-                    statement.setLong(5, computer.getId());
-                    statement.executeUpdate();
-                }
+                prepare(connection, computer, maxId, sql, computer.getId());
                 update = true;
                 LOGGER.debug("mise à jour réussie");
             }
@@ -346,5 +280,54 @@ public enum ComputerDAO {
             LOGGER.error(e.getMessage());
         }
         return nbPages;
+    }
+
+    private long prepare(Connection connection, Computer computer, long maxId,
+            String sql, long idUpdate) {
+        long id = 0;
+        try (PreparedStatement statement = connection.prepareStatement(sql);) {
+            statement.setString(1, computer.getName());
+            if (computer.getIntroduceDate() != null) {
+                statement.setDate(2,
+                        java.sql.Date.valueOf(computer.getIntroduceDate()));
+            } else {
+                statement.setDate(2, null);
+            }
+            if (computer.getDiscontinuedDate() != null) {
+                if (computer.getIntroduceDate() == null
+                        || computer.getIntroduceDate()
+                                .isBefore(computer.getDiscontinuedDate())) {
+                    statement.setDate(3, java.sql.Date
+                            .valueOf(computer.getDiscontinuedDate()));
+                } else {
+                    statement.setDate(3, null);
+                }
+            } else {
+                statement.setDate(3, null);
+            }
+            if (computer.getManufacturer() != null) {
+                if (computer.getManufacturer().getId() > 0
+                        && computer.getManufacturer().getId() <= maxId) {
+                    statement.setLong(4, computer.getManufacturer().getId());
+                    LOGGER.debug("manufacturer ajouté");
+                } else {
+                    statement.setNull(4, Types.INTEGER);
+                    LOGGER.debug("pas de manufacturer valide");
+                }
+            } else {
+                statement.setNull(4, Types.INTEGER);
+            }
+            if (idUpdate != 0) {
+                statement.setLong(5, idUpdate);
+            }
+            statement.executeUpdate();
+            ResultSet generatedKeys = statement.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                id = generatedKeys.getLong(1);
+            }
+        } catch (SQLException e) {
+            LOGGER.error(e.getMessage());
+        }
+        return id;
     }
 }
