@@ -24,7 +24,7 @@ public class EditComputer extends HttpServlet {
      * @see EditComputer#doPost(HttpServletRequest, HttpServletResponse)
      */
     public static final String VUE = "/WEB-INF/views/editComputer.jsp";
-    
+
     /**
      * valeur de notre champ formulaire.
      * @see AddComputer#doPost(HttpServletRequest, HttpServletResponse)
@@ -35,7 +35,7 @@ public class EditComputer extends HttpServlet {
      * @see AddComputer#doPost(HttpServletRequest, HttpServletResponse)
      */
     public static final String COMPUTER = "computer";
-    
+
     /**
      * Récupération de la jsp pour l'affichage.
      * @see EditComputer#VUE
@@ -56,7 +56,18 @@ public class EditComputer extends HttpServlet {
         }
       this.getServletContext().getRequestDispatcher(VUE).forward(request, response);
     }
-    
+
+    /**
+     * Récupération du formulaire envoyé en post.
+     * @param request
+     *              La requête de notre servlet
+     * @param response
+     *              la réponse de notre servlet
+     * @throws ServletException
+     *                         Exception
+     * @throws  IOException
+     *                      Eception
+     */
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         ComputerForm form = new ComputerForm();

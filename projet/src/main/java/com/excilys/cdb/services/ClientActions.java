@@ -32,6 +32,10 @@ public class ClientActions {
      *              le premier id à afficher
      * @param nbItems
      *              le nombre d'items à afficher
+     * @param champ
+     *              le champ pour le tri
+     * @param search
+     *              les caractères à rechercher dans le nom
      * @return liste
      *              la liste des ordinateurs
      */
@@ -66,6 +70,8 @@ public class ClientActions {
      * @see ComputerDAO#read(int)
      * @param id
      *            l'id de l'ordinateur à détailler
+     * @return computer
+     *          l'ordinateur à afficher
      */
     public static Computer showComputerDetails(long id) {
 
@@ -167,9 +173,13 @@ public class ClientActions {
         int nbPages = compDAO.countPages(nbId);
             return nbPages;
     };
-    
+
     /**
      * Permet de supprimer des compagnies et les ordinateurs associés.
+     * @return fait
+     *              boolean indiquant si l'action a été effectuée
+     * @param id
+     *              l'id de la compagnie à supprimer
      */
     public static boolean deleteCompany(long id) {
         CompanyDAO compDAO = CompanyDAO.INSTANCE;

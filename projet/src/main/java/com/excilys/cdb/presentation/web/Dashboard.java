@@ -20,21 +20,18 @@ public class Dashboard extends HttpServlet {
 
     /**
      * L'adresse de notre jsp.
-     * 
      * @see Dashboard.jsp
      * @see Dashboard#doGet(HttpServletRequest, HttpServletResponse)
      */
     public static final String VUE = "/WEB-INF/views/dashboard.jsp";
     /**
      * Le premier id d'ordinateur à afficher.
-     * 
      * @see Dashboard.jsp
      * @see Dashboard#doGet(HttpServletRequest, HttpServletResponse)
      */
     private long debut = 1;
     /**
      * Le nombre d'ordinateurs à afficher.
-     * 
      * @see Dashboard.jsp
      * @see Dashboard#doGet(HttpServletRequest, HttpServletResponse)
      */
@@ -63,7 +60,6 @@ public class Dashboard extends HttpServlet {
 
     /**
      * Récupération de la jsp pour l'affichage.
-     * 
      * @see Dashboard#VUE
      * @param request
      *            La requête de notre servlet
@@ -92,7 +88,7 @@ public class Dashboard extends HttpServlet {
                 break;
             case "introduce":
                 request.setAttribute("computerList", ClientActions
-                        .listComputers(getDebut(), getNbId(), "computer.introduced","'%'"));
+                        .listComputers(getDebut(), getNbId(), "computer.introduced", "'%'"));
                 break;
             case "discontinued":
                 request.setAttribute("computerList", ClientActions
@@ -100,19 +96,19 @@ public class Dashboard extends HttpServlet {
                 break;
             case "company":
                 request.setAttribute("computerList", ClientActions
-                        .listComputers(getDebut(), getNbId(), "computer.company_id","'%'"));
+                        .listComputers(getDebut(), getNbId(), "computer.company_id", "'%'"));
                 break;
             default:
                 request.setAttribute("computerList", ClientActions
-                        .listComputers(getDebut(), getNbId(), "computer.id","'%'"));
+                        .listComputers(getDebut(), getNbId(), "computer.id", "'%'"));
                 break;
             }
         } else {
             request.setAttribute("computerList",
-                    ClientActions.listComputers(debut, nbId, "computer.id","'%'"));
+                    ClientActions.listComputers(debut, nbId, "computer.id", "'%'"));
         }
         if (request.getParameter("search") != null) {
-            request.setAttribute("computerList", ClientActions.listComputers(getDebut(), getNbId(), "computer.name", String.format("'%%"+request.getParameter("search")+"%%'")));
+            request.setAttribute("computerList", ClientActions.listComputers(getDebut(), getNbId(), "computer.name", String.format("'%%" + request.getParameter("search") + "%%'")));
         }
         request.setAttribute("nbComputer", ClientActions.countComputer());
         request.setAttribute("sort", request.getParameter("sort"));
@@ -129,7 +125,6 @@ public class Dashboard extends HttpServlet {
 
     /**
      * Envoi de notre formulaire.
-     * 
      * @see AddComputer#FORM
      * @see AddComputer#COMPUTER
      * @see AddComputer#VUE

@@ -6,7 +6,6 @@ import com.excilys.cdb.services.ClientActions;
 /**
  * Cette classe est notre application à proprement parler, qui gère l'interface
  * en ligne de commande (entrées/sorties).
- * 
  * @author bertrand
  */
 

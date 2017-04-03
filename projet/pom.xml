@@ -24,7 +24,7 @@
 		<dbUnitVersion>2.4.9</dbUnitVersion>
 		<commonsConfVersion>2.0</commonsConfVersion>
 		<commonsBeanutilsVersion>1.9.3</commonsBeanutilsVersion>
-		<seleniumVersion>1.0.1</seleniumVersion>
+		<seleniumVersion>2.27.0</seleniumVersion>
 		<javax.servletVersion>1.2</javax.servletVersion>
 		<jsp-apiVersion>3.0.1</jsp-apiVersion>
 		<powermockVersion>1.6.1</powermockVersion>
@@ -33,6 +33,14 @@
 	</properties>
 
 	<dependencies>
+		<!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-chrome-driver -->
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-chrome-driver</artifactId>
+			<version>3.3.1</version>
+			<scope>test</scope>
+		</dependency>
+
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
@@ -80,12 +88,6 @@
 			<artifactId>commons-beanutils</artifactId>
 			<version>${commonsBeanutilsVersion}</version>
 		</dependency>
-		<dependency>
-			<groupId>org.seleniumhq.selenium.client-drivers</groupId>
-			<artifactId>selenium-java-client-driver</artifactId>
-			<version>${seleniumVersion}</version>
-			<scope>test</scope>
-		</dependency>
 		<!-- https://mvnrepository.com/artifact/javax.servlet/jstl -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -125,6 +127,13 @@
 			<artifactId>HikariCP</artifactId>
 			<version>${hikariVersion}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>${seleniumVersion}</version>
+			<scope>test</scope>
+		</dependency>
+
 
 	</dependencies>
 	<reporting>

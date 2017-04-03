@@ -20,7 +20,6 @@ import com.excilys.cdb.model.Computer;
  * Cette classe de DAO implémente les méthodes nécessaires à l'accès aux données
  * de la table computer. Le client demande ici un accès total, toutes les
  * méthodes du CRUD sont donc implémentées
- * 
  * @author bertrand
  */
 
@@ -34,7 +33,6 @@ public enum ComputerDAO {
 
     /**
      * Méthode create d'un ordinateur.
-     * 
      * @param computer
      *            l'ordinateur à créer
      * @return boolean create true si tout s'est bien passé, false autrement
@@ -62,7 +60,6 @@ public enum ComputerDAO {
 
     /**
      * Méthode d'affichage d'un ordinateur.
-     * 
      * @param id
      *            l'ordinateur à afficher
      * @return computer l'ordinateur sélectionné
@@ -110,12 +107,15 @@ public enum ComputerDAO {
 
     /**
      * Méthode d'affichage de tous les ordinateurs.
-     * 
      * @return List une arraylist contenant l'ensemble de nos ordinateurs
      * @param debut
      *            le premier id à afficher
      * @param nbItems
      *            le nombre d'items à afficher
+     * @param champ
+     *             le champb pour trier les ordinateurs
+     * @param match
+     *             les caractères recherchés.
      */
     public List<Computer> readAll(long debut, int nbItems, String champ,
             String match) {
@@ -180,7 +180,6 @@ public enum ComputerDAO {
 
     /**
      * Méthode de mise à jour d'un ordinateur.
-     * 
      * @param computer
      *            l'ordinateur à mettre à jour
      * @return boolean update true si tout s'est bien passé, false autrement
@@ -208,7 +207,6 @@ public enum ComputerDAO {
 
     /**
      * Méthode delete d'un ordinateur.
-     * 
      * @param id
      *            l'id de l'ordinateur à supprimer
      * @return boolean delete true si tout s'est bien passé, false autrement
@@ -236,7 +234,6 @@ public enum ComputerDAO {
 
     /**
      * Méthode count pour les ordinateurs.
-     * 
      * @return nbEntrees le nombre d'entrées dans la BDD.
      */
     public int countComputer() {
@@ -255,7 +252,6 @@ public enum ComputerDAO {
 
     /**
      * Méthode count pour les pages selon le nombre d'affichages.
-     * 
      * @return nbPages le nombre de pages dans la BDD.
      * @param nbId
      *            le nombre d'ids affichés par pages
@@ -282,6 +278,20 @@ public enum ComputerDAO {
         return nbPages;
     }
 
+    /**
+     * Méthode prepare utilisée pour créer et mettre à jour un ordinateur.
+     * @return id l'id de l'ordinateur.
+     * @param connection
+     *            la connection
+     * @param computer
+     *              l'ordinateur en question
+     * @param maxId
+     *              l'Id maximal de la compagnie
+     * @param sql
+     *              la requête d'insertion ou de mise à jour
+     * @param idUpdate
+     *              l'Id de l'ordinateur à mettre à jour en cas d'update
+     */
     private long prepare(Connection connection, Computer computer, long maxId,
             String sql, long idUpdate) {
         long id = 0;

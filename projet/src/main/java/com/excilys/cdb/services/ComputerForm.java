@@ -26,12 +26,12 @@ public class ComputerForm {
      * le champ nom de notre ordinateur, défini dans la JSP.
      */
     public static final String CHAMP_NOM = "computerName";
-    
+
     /**
      * le champ id de notre ordinateur, défini dans la JSP.
      */
     public static final String CHAMP_ID = "id";
-    
+
     /**
      * le champ company de notre ordinateur, défini dans la JSP.
      */
@@ -140,7 +140,7 @@ public class ComputerForm {
         }
         return computer;
     }
-    
+
     /**
      * Mise à jour de notre ordinateur dans la BDD en vérifiant les champs entrés par l'utilisateur.
      * Si un champ n'est pas valide, l'erreur est renvoyée et l'ordinateur n'est pas créé.
@@ -185,7 +185,7 @@ public class ComputerForm {
             checkName(name);
             checkIntroduceDate(request.getParameter(CHAMP_INTRODUCE_DATE));
             checkDiscontinuedDate(request.getParameter(CHAMP_DISCONTINUED_DATE), introduceDate);
-        } catch (NameException | IntroduceDateException | DiscontinuedDateException e ) {
+        } catch (NameException | IntroduceDateException | DiscontinuedDateException e) {
             setErreur(e.getChamp(), e.getMessage());
         }
         if (erreurs.isEmpty()) {
@@ -242,7 +242,7 @@ public class ComputerForm {
      *              la date à vérifier
      * @param introduceDate
      *               la date d'introduction à vérifier
-     * @throws Exception
+     * @throws DiscontinuedDateException
      *              l'erreur à retourner
      */
     private void checkDiscontinuedDate(String discontinuedDate,
