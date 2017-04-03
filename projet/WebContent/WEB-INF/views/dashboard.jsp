@@ -57,17 +57,17 @@
 
 						<th class="editMode" style="width: 60px; height: 22px;"><input
 							type="checkbox" id="selectall" /> <span
-							style="vertical-align: top;"> - <a href="#"
+							style="vertical-align: top;"> - <a href="dashboard"
 								id="deleteSelected" onclick="$.fn.deleteSelected();"> <i
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
 						</span></th>
-						<th>Computer name</th>
-						<th>Introduced date</th>
+						<th><a href="dashboard?sort=name">Computer name</a></th>
+						<th><a href="dashboard?sort=introduce">Introduced Date</a></th>
 						<!-- Table header for Discontinued Date -->
-						<th>Discontinued date</th>
+						<th><a href="dashboard?sort=discontinued">Discontinued Date</a></th>
 						<!-- Table header for Company -->
-						<th>Company</th>
+						<th><a href="dashboard?sort=company">Company</a></th>
 
 					</tr>
 				</thead>
@@ -91,7 +91,7 @@
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
 			<!-- <ul class="pagination">-->
-		 	<c:url var="searchUri" value="/dashboard?page=##" />
+		 	<c:url var="searchUri" value="/dashboard?sort=${sort}&page=##" />
              <pagination:display  maxLinks="5" currentPage="${currentPage}" maxPages="${maxPage}" uri="${searchUri}" />
 			<div class="btn-group btn-group-sm pull-right" role="group">
 				<form action="dashboard" method="get">

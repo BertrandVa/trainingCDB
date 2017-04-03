@@ -55,7 +55,7 @@ public class ConsoleApplication {
                         .println("Parfait ! entrez le nombre d'éléments à afficher");
                 int nbElements = SecureInput.secureInt(sc);
                 List<Computer> list = ClientActions.listComputers(idComputer,
-                        nbElements);
+                        nbElements, "computer.id");
                 for (int i = 0; i < list.size(); i++) {
                     System.out.println(list.get(i).getId() + " "
                             + list.get(i).getName());

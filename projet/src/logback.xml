@@ -10,6 +10,7 @@
 	</appender>
 	<property name="moduleName" value="dbunit-core" />
 	<logger name="org.dbunit" level="INFO" />
+	<logger name="com.zaxxer.hikari" level="error"/>
 
 	<root level="INFO">
 		<appender-ref ref="STDOUT" />

@@ -13,6 +13,9 @@ import org.slf4j.LoggerFactory;
 
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.services.exceptions.DiscontinuedDateException;
+import com.excilys.cdb.services.exceptions.IntroduceDateException;
+import com.excilys.cdb.services.exceptions.NameException;
 
 /**
  * Cette classe est une classe de service permettant l'ajout d'un ordinateur dans la base de données.
@@ -23,6 +26,12 @@ public class ComputerForm {
      * le champ nom de notre ordinateur, défini dans la JSP.
      */
     public static final String CHAMP_NOM = "computerName";
+    
+    /**
+     * le champ id de notre ordinateur, défini dans la JSP.
+     */
+    public static final String CHAMP_ID = "id";
+    
     /**
      * le champ company de notre ordinateur, défini dans la JSP.
      */
@@ -113,20 +122,10 @@ public class ComputerForm {
 
         try {
             checkName(name);
-
-        } catch (Exception e) {
-            setErreur(CHAMP_NOM, e.getMessage());
-        }
-        try {
             checkIntroduceDate(request.getParameter(CHAMP_INTRODUCE_DATE));
-        } catch (Exception e) {
-            setErreur(CHAMP_INTRODUCE_DATE, e.getMessage());
-        }
-        try {
             checkDiscontinuedDate(request.getParameter(CHAMP_DISCONTINUED_DATE), introduceDate);
-
-        } catch (Exception e) {
-            setErreur(CHAMP_DISCONTINUED_DATE, e.getMessage());
+        } catch (NameException | IntroduceDateException | DiscontinuedDateException  e) {
+            setErreur(e.getChamp(), e.getMessage());
         }
         if (erreurs.isEmpty()) {
             boolean fait = false;
@@ -178,25 +177,16 @@ public class ComputerForm {
         }
 
         Computer computer = new Computer.ComputerBuilder(name)
+                .id(Long.parseLong(request.getParameter(CHAMP_ID)))
                 .introduceDate(introduceDate).discontinuedDate(discontinuedDate)
                 .manufacturer(manufacturer).build();
 
         try {
             checkName(name);
-
-        } catch (Exception e) {
-            setErreur(CHAMP_NOM, e.getMessage());
-        }
-        try {
             checkIntroduceDate(request.getParameter(CHAMP_INTRODUCE_DATE));
-        } catch (Exception e) {
-            setErreur(CHAMP_INTRODUCE_DATE, e.getMessage());
-        }
-        try {
             checkDiscontinuedDate(request.getParameter(CHAMP_DISCONTINUED_DATE), introduceDate);
-
-        } catch (Exception e) {
-            setErreur(CHAMP_DISCONTINUED_DATE, e.getMessage());
+        } catch (NameException | IntroduceDateException | DiscontinuedDateException e ) {
+            setErreur(e.getChamp(), e.getMessage());
         }
         if (erreurs.isEmpty()) {
             boolean fait = false;
@@ -217,16 +207,12 @@ public class ComputerForm {
      * @see ComputerForm#createComputer(HttpServletRequest)
      * @param name
      *              le nom de l'ordinateur à vérifier
-     * @throws Exception
+     * @throws NameException
      *              l'erreur à retourner
      */
-    private void checkName(String name) throws Exception {
-        if (name == null || (name != null && name.trim().length() < 3)) {
-            throw new Exception(
-                    "Le nom d'utilisateur doit contenir au moins 3 caractères.");
-        }
-      if (name != null && name.contains("<")) {
-            throw new Exception("Merci d'utiliser un nom valide");
+    private void checkName(String name) throws NameException {
+        if (name == null || name.contains("<") || (name != null && name.trim().length() < 3)) {
+            throw new NameException();
         }
     }
 
@@ -235,16 +221,15 @@ public class ComputerForm {
      * @see ComputerForm#createComputer(HttpServletRequest)
      * @param introduceDate
      *              la date à vérifier
-     * @throws Exception
+     * @throws IntroduceDateException
      *              l'erreur à retourner
      */
-    private void checkIntroduceDate(String introduceDate) throws Exception {
+    private void checkIntroduceDate(String introduceDate) throws IntroduceDateException {
         if (introduceDate != null && introduceDate != "") {
             try {
                 toDate(introduceDate);
-            } catch (Exception e) {
-                throw new Exception(
-                        "La date d'introduction doit être une date");
+            } catch (DateTimeParseException e) {
+                throw new IntroduceDateException();
             }
         }
     }
@@ -261,16 +246,15 @@ public class ComputerForm {
      *              l'erreur à retourner
      */
     private void checkDiscontinuedDate(String discontinuedDate,
-         LocalDate introduceDate) throws Exception {
+         LocalDate introduceDate) throws DiscontinuedDateException {
         if (discontinuedDate != null && discontinuedDate != "") {
             try {
                 toDate(discontinuedDate);
                 if (introduceDate != null && toDate(discontinuedDate).isBefore(introduceDate)) {
-                    throw new Exception("La date de départ ne peut-être antérieure à la date d'introduction");
+                    throw new DiscontinuedDateException();
                 }
             } catch (DateTimeParseException e) {
-                throw new Exception(
-                        "La date de départ doit être une date");
+                throw new DiscontinuedDateException();
             }
         }
     }

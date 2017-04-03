@@ -30,14 +30,14 @@
 					<h1>Edit Computer</h1>
 
 					<form action="editComputer" method="POST">
-						<input type="hidden" value="0" id="${computer.getId()}" />
+						<input type="hidden" value="${computer.getId()}" name="id" id="${computer.getId()}" />
 						<!-- TODO: Change this value with the computer id -->
 						<fieldset>
 							<div class="form-group">
 								<label for="computerName">Computer name</label> <input
 									type="text" class="form-control" id="computerName"
-									placeholder="Computer name" onblur="verifName(this)" required name="computerName"
-									value="${computer.getName()}"> <span class="erreur">${form.erreurs['computerName']}</span>
+									placeholder="Computer name" name="computerName" onblur="verifName(this)"
+									value="${computer.getName()}" required> <span class="erreur">${form.erreurs['computerName']}</span>
 							</div>
 							<div class="form-group">
 								<label for="introduced">Introduced date</label> <input

@@ -19,6 +19,7 @@ import com.excilys.cdb.model.Computer;
  * Cette classe de DAO implémente les méthodes nécessaires à l'accès aux données
  * de la table computer. Le client demande ici un accès total, toutes les
  * méthodes du CRUD sont donc implémentées
+ * 
  * @author bertrand
  */
 
@@ -32,6 +33,7 @@ public enum ComputerDAO {
 
     /**
      * Méthode create d'un ordinateur.
+     * 
      * @param computer
      *            l'ordinateur à créer
      * @return boolean create true si tout s'est bien passé, false autrement
@@ -98,6 +100,7 @@ public enum ComputerDAO {
 
     /**
      * Méthode d'affichage d'un ordinateur.
+     * 
      * @param id
      *            l'ordinateur à afficher
      * @return computer l'ordinateur sélectionné
@@ -145,67 +148,69 @@ public enum ComputerDAO {
 
     /**
      * Méthode d'affichage de tous les ordinateurs.
+     * 
      * @return List une arraylist contenant l'ensemble de nos ordinateurs
      * @param debut
      *            le premier id à afficher
      * @param nbItems
      *            le nombre d'items à afficher
      */
-    public List<Computer> readAll(long debut, int nbItems) {
+    public List<Computer> readAll(long debut, int nbItems, String champ ) {
         List<Computer> list = new ArrayList<Computer>();
         try (Connection connection = HikariConnectionFactory.getConnection();) {
             ResultSet result = connection.createStatement()
                     .executeQuery("SELECT MAX(id) FROM computer");
             result.next();
             long maxId = result.getInt("MAX(id)");
+            long currentId = debut;
             result.close();
-            for (int i = 0; i < nbItems; i++) {
-                long id = debut + i;
-                if (id <= maxId) {
-                    String sql = "SELECT * FROM `computer` LEFT JOIN company ON computer.company_id = company.id WHERE computer.id = ?";
-                    java.sql.PreparedStatement statement = null;
-                    statement = connection.prepareStatement(sql);
-                    statement.setLong(1, id);
-                    System.out.println(statement);
-                    result = statement.executeQuery();
-                    if (result.first()) {
-                        Timestamp timestamp1 = result
-                                .getTimestamp("computer.introduced");
-                        Timestamp timestamp2 = result
-                                .getTimestamp("computer.discontinued");
-                        LocalDate date1 = null;
-                        LocalDate date2 = null;
-                        if (timestamp1 != null) {
-                            date1 = timestamp1.toLocalDateTime().toLocalDate();
-                        }
-                        if (timestamp2 != null) {
-                            date2 = timestamp2.toLocalDateTime().toLocalDate();
-                        }
-                        LOGGER.debug(result.getString("computer.name"));
-                        Company company = new Company.CompanyBuilder(
-                                result.getString("company.name")).id(
-                                        result.getLong("computer.company_id"))
-                                        .build();
-                        Computer computer = new Computer.ComputerBuilder(
-                                result.getString("computer.name")).id(id)
-                                        .introduceDate(date1)
-                                        .discontinuedDate(date2)
-                                        .manufacturer(company).build();
-                        list.add(computer);
-                        LOGGER.debug(computer.toString());
+            String sql = "SELECT * FROM `computer` LEFT JOIN company ON computer.id = company.id ORDER BY %s";
+            sql=String.format(sql, champ);
+            LOGGER.error(sql);
+            java.sql.PreparedStatement statement = null;
+            statement = connection.prepareStatement(sql);
+            LOGGER.debug(statement.toString());
+            result = statement.executeQuery();
+            while (list.size() <= nbItems && currentId <= maxId) {
+                if (result.next()) {
+                    Timestamp timestamp1 = result
+                            .getTimestamp("computer.introduced");
+                    Timestamp timestamp2 = result
+                            .getTimestamp("computer.discontinued");
+                    LocalDate date1 = null;
+                    LocalDate date2 = null;
+                    if (timestamp1 != null) {
+                        date1 = timestamp1.toLocalDateTime().toLocalDate();
                     }
+                    if (timestamp2 != null) {
+                        date2 = timestamp2.toLocalDateTime().toLocalDate();
+                    }
+                    LOGGER.debug(result.getString("computer.name"));
+                    Company company = new Company.CompanyBuilder(
+                            result.getString("company.name"))
+                                    .id(result.getLong("computer.company_id"))
+                                    .build();
+                    Computer computer = new Computer.ComputerBuilder(
+                            result.getString("computer.name")).id(result.getLong("computer.id"))
+                                    .introduceDate(date1)
+                                    .discontinuedDate(date2)
+                                    .manufacturer(company).build();
+                    list.add(computer);
+                    LOGGER.debug(computer.toString());
                 }
-                result.close();
+                currentId += 1;
             }
             LOGGER.debug("liste de fabriquants terminée");
+            result.close();
         } catch (SQLException e) {
             LOGGER.error(e.getMessage());
-        }
+        }        
         return list;
     }
 
     /**
      * Méthode de mise à jour d'un ordinateur.
+     * 
      * @param computer
      *            l'ordinateur à mettre à jour
      * @return boolean update true si tout s'est bien passé, false autrement
@@ -270,6 +275,7 @@ public enum ComputerDAO {
 
     /**
      * Méthode delete d'un ordinateur.
+     * 
      * @param id
      *            l'id de l'ordinateur à supprimer
      * @return boolean delete true si tout s'est bien passé, false autrement
@@ -292,12 +298,12 @@ public enum ComputerDAO {
         } catch (SQLException e) {
             LOGGER.error(e.getMessage());
         }
-
         return delete;
     }
 
     /**
      * Méthode count pour les ordinateurs.
+     * 
      * @return nbEntrees le nombre d'entrées dans la BDD.
      */
     public int countComputer() {
@@ -316,6 +322,7 @@ public enum ComputerDAO {
 
     /**
      * Méthode count pour les pages selon le nombre d'affichages.
+     * 
      * @return nbPages le nombre de pages dans la BDD.
      * @param nbId
      *            le nombre d'ids affichés par pages
