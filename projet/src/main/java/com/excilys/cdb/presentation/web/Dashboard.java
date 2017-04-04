@@ -88,23 +88,23 @@ public class Dashboard extends HttpServlet {
             switch (request.getParameter("sort")) {
             case "name":
                 request.setAttribute("computerList", ClientActions
-                        .listComputers(getDebut() -1, getNbId(), "'%'", "computer.name"));
+                        .listComputers(getDebut() - 1, getNbId(), "'%'", "computer.name"));
                 break;
             case "introduce":
                 request.setAttribute("computerList", ClientActions
-                        .listComputers(getDebut() -1, getNbId(), "'%'", "computer.introduced"));
+                        .listComputers(getDebut() - 1, getNbId(), "'%'", "computer.introduced"));
                 break;
             case "discontinued":
                 request.setAttribute("computerList", ClientActions
-                        .listComputers(getDebut() -1, getNbId(), "'%'", "computer.discontinued"));
+                        .listComputers(getDebut() - 1, getNbId(), "'%'", "computer.discontinued"));
                 break;
             case "company":
                 request.setAttribute("computerList", ClientActions
-                        .listComputers(getDebut() -1, getNbId(), "'%'", "computer.company_id"));
+                        .listComputers(getDebut() - 1, getNbId(), "'%'", "computer.company_id"));
                 break;
             default:
                 request.setAttribute("computerList", ClientActions
-                        .listComputers(getDebut() -1, getNbId(), "'%'", "computer.id"));
+                        .listComputers(getDebut() - 1, getNbId(), "'%'", "computer.id"));
                 break;
             }
         } else {
@@ -113,10 +113,10 @@ public class Dashboard extends HttpServlet {
         }
         if (request.getParameter("search") != null) {
             List<Computer> list = new ArrayList<Computer>();
-            list = ClientActions.listComputers(getDebut() -1, getNbId(), String.format("'%%" + request.getParameter("search") + "%%'"), "computer.id");
+            list = ClientActions.listComputers(getDebut() - 1, getNbId(), String.format("'%%" + request.getParameter("search") + "%%'"), "computer.id");
             request.setAttribute("computerList", list);
         }
-        String search = request.getParameter("search") == null ? "'%'" :request.getParameter("search");
+        String search = request.getParameter("search") == null ? "'%'" : request.getParameter("search");
         request.setAttribute("nbComputer", ClientActions.countComputer(search));
         request.setAttribute("sort", request.getParameter("sort"));
         request.setAttribute("search", request.getParameter("search"));

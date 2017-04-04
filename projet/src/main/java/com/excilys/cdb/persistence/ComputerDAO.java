@@ -120,7 +120,7 @@ public enum ComputerDAO {
     public List<Computer> readAll(long debut, int nbItems, String match, String order) {
         List<Computer> list = new ArrayList<Computer>();
         try (Connection connection = HikariConnectionFactory.getConnection();) {
-            String sql = "SELECT * FROM `computer` LEFT JOIN company ON computer.company_id = company.id WHERE computer.name COLLATE latin1_GENERAL_CI like %s OR company.name COLLATE latin1_GENERAL_CI like %s ORDER BY %s LIMIT " + nbItems + " OFFSET " + debut ;
+            String sql = "SELECT * FROM `computer` LEFT JOIN company ON computer.company_id = company.id WHERE computer.name COLLATE latin1_GENERAL_CI like %s OR company.name COLLATE latin1_GENERAL_CI like %s ORDER BY %s LIMIT " + nbItems + " OFFSET " + debut;
             sql = String.format(sql, match, match, order);
             LOGGER.debug(sql);
             java.sql.PreparedStatement statement = connection
@@ -153,7 +153,7 @@ public enum ComputerDAO {
                                         .manufacturer(company).build();
                         list.add(computer);
                         LOGGER.debug(computer.toString());
-                    }           
+                    }
             LOGGER.debug("liste de fabriquants terminée");
             result.close();
         } catch (SQLException e) {
@@ -219,12 +219,14 @@ public enum ComputerDAO {
     /**
      * Méthode count pour les ordinateurs.
      * @return nbEntrees le nombre d'entrées dans la BDD.
+     * @param match
+     *              la chaine de caractères à matcher
      */
     public int countComputer(String match) {
         int maxId = 0;
         try (Connection connection = HikariConnectionFactory.getConnection();) {
             try (ResultSet result = connection.createStatement()
-                    .executeQuery("SELECT COUNT(*) AS count FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.name COLLATE latin1_GENERAL_CI like " + match + " OR company.name COLLATE latin1_GENERAL_CI like "+match);) {
+                    .executeQuery("SELECT COUNT(*) AS count FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.name COLLATE latin1_GENERAL_CI like " + match + " OR company.name COLLATE latin1_GENERAL_CI like " + match)) {
                 result.next();
                 maxId = result.getInt("count");
             }
@@ -239,13 +241,15 @@ public enum ComputerDAO {
      * @return nbPages le nombre de pages dans la BDD.
      * @param nbId
      *            le nombre d'ids affichés par pages
+     * @param match
+     *             la chaine de caractères à matcher
      */
     public int countPages(int nbId, String match) {
         int maxId = 0;
         int nbPages = 0;
         try (Connection connection = HikariConnectionFactory.getConnection();) {
             try (ResultSet result = connection.createStatement()
-                    .executeQuery("SELECT COUNT(*) AS count FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.name COLLATE latin1_GENERAL_CI like " + match + " OR company.name COLLATE latin1_GENERAL_CI like "+match)) {
+                    .executeQuery("SELECT COUNT(*) AS count FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.name COLLATE latin1_GENERAL_CI like " + match + " OR company.name COLLATE latin1_GENERAL_CI like " + match)) {
                 result.next();
                 maxId = result.getInt("count");
             }
@@ -253,7 +257,7 @@ public enum ComputerDAO {
                 if (maxId % nbId == 0) {
                     nbPages = maxId / nbId;
                 } else {
-                    nbPages = maxId / nbId +1;
+                    nbPages = maxId / nbId + 1;
                 }
             }
         } catch (SQLException e) {

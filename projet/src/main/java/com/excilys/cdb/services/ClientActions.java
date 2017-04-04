@@ -32,7 +32,7 @@ public class ClientActions {
      *              le premier id à afficher
      * @param nbItems
      *              le nombre d'items à afficher
-     * @param champ
+     * @param order
      *              le champ pour le tri
      * @param search
      *              les caractères à rechercher dans le nom
@@ -142,6 +142,8 @@ public class ClientActions {
      * @see ComputerDAO#update(Computer)
      * @return nbComputer
      *             le nombre d'ordinateurs dans la BDD
+     * @param match
+     *              la chaine de caractères à matcher
      */
     public static int countComputer(String match) {
         ComputerDAO compDAO = ComputerDAO.INSTANCE;
@@ -167,6 +169,8 @@ public class ClientActions {
      *             le nombre d'ordinateurs dans la BDD
      * @param nbId
      *              le nombre d'ordinateurs par page
+     * @param match
+     *              la chaine de caractères à match
      */
     public static int maxPages(int nbId, String match) {
         ComputerDAO compDAO = ComputerDAO.INSTANCE;

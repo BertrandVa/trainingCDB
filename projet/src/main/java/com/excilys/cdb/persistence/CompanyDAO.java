@@ -107,11 +107,11 @@ public enum CompanyDAO {
                     statement2.executeUpdate();
                 }
                 connection.commit();
-                connection.setAutoCommit(true);
                 fait = true;
             } catch (SQLException e) {
                 logger.error(e.getMessage());
                 connection.rollback();
+            } finally {
                 connection.setAutoCommit(true);
             }
         } catch (SQLException e) {
