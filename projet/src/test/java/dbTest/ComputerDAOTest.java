@@ -234,7 +234,7 @@ public class ComputerDAOTest {
         List<Computer> list = new ArrayList<Computer>();
         Computer computer = new Computer.ComputerBuilder(null).build();
         ComputerDAO compDAO = ComputerDAO.INSTANCE;
-        list = compDAO.readAll(574, 1, "computer.id", "'%'", "computer.id");
+        list = compDAO.readAll(14, 1, "'%'", "computer.id");
         computer = list.get(0);
         assertEquals(computer.getId(), 574);
         assertEquals(computer.getName(), ("iPhone 4S"));
@@ -251,7 +251,7 @@ public class ComputerDAOTest {
         Computer computer2 = new Computer.ComputerBuilder(null).build();
         Computer computer3 = new Computer.ComputerBuilder(null).build();
         ComputerDAO compDAO = ComputerDAO.INSTANCE;
-        list = compDAO.readAll(572, 3, "computer.id", "'%'", "computer.id");
+        list = compDAO.readAll(12, 3, "'%'", "computer.id");
         computer1 = list.get(0);
         computer2 = list.get(1);
         computer3 = list.get(2);
@@ -285,7 +285,7 @@ public class ComputerDAOTest {
         Computer computer2 = new Computer.ComputerBuilder(null).build();
         Computer computer3 = new Computer.ComputerBuilder(null).build();
         ComputerDAO compDAO = ComputerDAO.INSTANCE;
-        list = compDAO.readAll(5000, 3, "computer.id", "'%'", "computer.id");
+        list = compDAO.readAll(5000, 3, "'%'", "computer.id");
         if (list.size() != 0) {
             computer1 = list.get(0);
             computer2 = list.get(1);
@@ -316,7 +316,7 @@ public class ComputerDAOTest {
         Computer computer2 = new Computer.ComputerBuilder(null).build();
         Computer computer3 = new Computer.ComputerBuilder(null).build();
         ComputerDAO compDAO = ComputerDAO.INSTANCE;
-        list = compDAO.readAll(573, 3, "computer.id", "'%'", "computer.id");
+        list = compDAO.readAll(13, 3, "'%'", "computer.id");
         if (list.size() > 0) {
             computer1 = list.get(0);
         }
@@ -478,9 +478,9 @@ public class ComputerDAOTest {
     @Test
     public void TestCountComputers() throws Exception {
         ComputerDAO compDAO = ComputerDAO.INSTANCE;
-        int count1 = compDAO.countComputer();
+        int count1 = compDAO.countComputer("'%'");
         boolean delete = compDAO.delete(561);
-        int count2 = compDAO.countComputer();
+        int count2 = compDAO.countComputer("'%'");
         assertEquals(count1, 15);
         assertEquals(count2, 14);
         assertTrue(delete);
@@ -493,9 +493,9 @@ public class ComputerDAOTest {
     @Test
     public void TestCountPages() throws Exception {
         ComputerDAO compDAO = ComputerDAO.INSTANCE;
-        int count1 = compDAO.countPages(3);
-        int count2 = compDAO.countPages(5);
-        int count3 = compDAO.countPages(0);
+        int count1 = compDAO.countPages(3, "'%'");
+        int count2 = compDAO.countPages(5, "'%'");
+        int count3 = compDAO.countPages(0, "'%'");
         assertEquals(count1, 5);
         assertEquals(count2, 3);
         assertEquals(count3, 0);

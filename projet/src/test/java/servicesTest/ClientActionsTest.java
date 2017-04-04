@@ -47,8 +47,8 @@ public class ClientActionsTest {
         liste.add(computer1);
         ComputerDAO compDAO = mock(ComputerDAO.class);
         Whitebox.setInternalState(ComputerDAO.class,"INSTANCE", compDAO);
-        when(compDAO.readAll(574, 1, "computer.id","'%'", "computer.id")).thenReturn(liste);
-        list = ClientActions.listComputers(574, 1, "computer.id", "'%'", "computer.id");
+        when(compDAO.readAll(574, 1, "'%'", "computer.id")).thenReturn(liste);
+        list = ClientActions.listComputers(574, 1, "'%'", "computer.id");
         computer = list.get(0);
         assertEquals(computer.getId(), 574);
         assertEquals(computer.getName(), ("iPhone 4S"));
@@ -74,8 +74,8 @@ public class ClientActionsTest {
         liste.add(computer6);
         ComputerDAO compDAO = mock(ComputerDAO.class);
         Whitebox.setInternalState(ComputerDAO.class,"INSTANCE", compDAO);
-        when(compDAO.readAll(572, 3, "computer.id","'%'" , "computer.id")).thenReturn(liste);
-        list = compDAO.readAll(572, 3, "computer.id","'%'", "computer.id");
+        when(compDAO.readAll(572, 3, "'%'" , "computer.id")).thenReturn(liste);
+        list = compDAO.readAll(572, 3, "'%'", "computer.id");
         computer1 = list.get(0);
         computer2 = list.get(1);
         computer3 = list.get(2);
@@ -108,8 +108,8 @@ public class ClientActionsTest {
         ComputerDAO compDAO = mock(ComputerDAO.class);
         List<Computer> liste = new ArrayList<Computer>();
         Whitebox.setInternalState(ComputerDAO.class,"INSTANCE", compDAO);
-        when(compDAO.readAll(5000, 3, "computer.id","'%'", "computer.id")).thenReturn(liste);
-        list = compDAO.readAll(5000, 3, "computer.id","'%'", "computer.id");
+        when(compDAO.readAll(5000, 3, "'%'", "computer.id")).thenReturn(liste);
+        list = compDAO.readAll(5000, 3, "'%'", "computer.id");
         if (list.size() != 0) {
             computer1 = list.get(0);
             computer2 = list.get(1);
@@ -149,8 +149,8 @@ public class ClientActionsTest {
         liste.add(computer6);
         ComputerDAO compDAO = mock(ComputerDAO.class);
         Whitebox.setInternalState(ComputerDAO.class,"INSTANCE", compDAO);
-        when(compDAO.readAll(573, 3, "computer.id","'%'", "computer.id")).thenReturn(liste);
-        list = compDAO.readAll(573, 3, "computer.id","'%'", "computer.id");
+        when(compDAO.readAll(573, 3, "'%'", "computer.id")).thenReturn(liste);
+        list = compDAO.readAll(573, 3, "'%'", "computer.id");
         if (list.size() > 0) {
             computer1 = liste.get(0);
         }
@@ -668,12 +668,12 @@ public class ClientActionsTest {
     public void TestCountComputers() throws Exception {
         ComputerDAO compDAO = mock(ComputerDAO.class);
         Whitebox.setInternalState(ComputerDAO.class,"INSTANCE", compDAO);        
-        when(compDAO.countComputer()).thenReturn(15);
+        when(compDAO.countComputer("'%'")).thenReturn(15);
         when(compDAO.delete(561)).thenReturn(true);
-        int count1 = compDAO.countComputer();
-        when(compDAO.countComputer()).thenReturn(14);
+        int count1 = compDAO.countComputer("'%'");
+        when(compDAO.countComputer("'%'")).thenReturn(14);
         boolean delete = compDAO.delete(561);
-        int count2 = compDAO.countComputer();
+        int count2 = compDAO.countComputer("'%'");
         assertEquals(count1, 15);
         assertEquals(count2, 14);
         assertTrue(delete);
@@ -701,12 +701,12 @@ public class ClientActionsTest {
     public void TestCountPages() throws Exception {
         ComputerDAO compDAO = mock(ComputerDAO.class);
         Whitebox.setInternalState(ComputerDAO.class,"INSTANCE", compDAO);        
-        when(compDAO.countPages(3)).thenReturn(5);
-        when(compDAO.countPages(5)).thenReturn(3);
-        when(compDAO.countPages(0)).thenReturn(0);
-        int count1 = compDAO.countPages(3);
-        int count2 = compDAO.countPages(5);
-        int count3 = compDAO.countPages(0);
+        when(compDAO.countPages(3, "'%'")).thenReturn(5);
+        when(compDAO.countPages(5, "'%'")).thenReturn(3);
+        when(compDAO.countPages(0, "'%'")).thenReturn(0);
+        int count1 = compDAO.countPages(3, "'%'");
+        int count2 = compDAO.countPages(5, "'%'");
+        int count3 = compDAO.countPages(0, "'%'");
         assertEquals(count1, 5);
         assertEquals(count2, 3);
         assertEquals(count3, 0);

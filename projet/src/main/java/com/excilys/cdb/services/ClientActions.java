@@ -39,10 +39,10 @@ public class ClientActions {
      * @return liste
      *              la liste des ordinateurs
      */
-    public static List<Computer> listComputers(long debut, int nbItems, String champ, String search, String order) {
+    public static List<Computer> listComputers(long debut, int nbItems, String search, String order) {
         List<Computer> liste = new ArrayList<Computer>();
         ComputerDAO compDAO = ComputerDAO.INSTANCE;
-        liste = compDAO.readAll(debut, nbItems, champ, search, order);
+        liste = compDAO.readAll(debut, nbItems, search, order);
         return liste;
     }
 
@@ -143,9 +143,9 @@ public class ClientActions {
      * @return nbComputer
      *             le nombre d'ordinateurs dans la BDD
      */
-    public static int countComputer() {
+    public static int countComputer(String match) {
         ComputerDAO compDAO = ComputerDAO.INSTANCE;
-        int nbComputer = compDAO.countComputer();
+        int nbComputer = compDAO.countComputer(match);
             return nbComputer;
     };
 
@@ -168,9 +168,9 @@ public class ClientActions {
      * @param nbId
      *              le nombre d'ordinateurs par page
      */
-    public static int maxPages(int nbId) {
+    public static int maxPages(int nbId, String match) {
         ComputerDAO compDAO = ComputerDAO.INSTANCE;
-        int nbPages = compDAO.countPages(nbId);
+        int nbPages = compDAO.countPages(nbId, match);
             return nbPages;
     };
 

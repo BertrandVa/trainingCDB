@@ -33,7 +33,7 @@ public class Dashboard extends HttpServlet {
      * @see Dashboard.jsp
      * @see Dashboard#doGet(HttpServletRequest, HttpServletResponse)
      */
-    private long debut = 1;
+    private long debut = 0;
     /**
      * Le nombre d'ordinateurs à afficher.
      * @see Dashboard.jsp
@@ -88,36 +88,36 @@ public class Dashboard extends HttpServlet {
             switch (request.getParameter("sort")) {
             case "name":
                 request.setAttribute("computerList", ClientActions
-                        .listComputers(getDebut(), getNbId(), "computer.name", "'%'", "computer.name"));
+                        .listComputers(getDebut() -1, getNbId(), "'%'", "computer.name"));
                 break;
             case "introduce":
                 request.setAttribute("computerList", ClientActions
-                        .listComputers(getDebut(), getNbId(), "computer.introduced", "'%'", "computer.introduced"));
+                        .listComputers(getDebut() -1, getNbId(), "'%'", "computer.introduced"));
                 break;
             case "discontinued":
                 request.setAttribute("computerList", ClientActions
-                        .listComputers(getDebut(), getNbId(), "computer.discontinued", "'%'", "computer.discontinued"));
+                        .listComputers(getDebut() -1, getNbId(), "'%'", "computer.discontinued"));
                 break;
             case "company":
                 request.setAttribute("computerList", ClientActions
-                        .listComputers(getDebut(), getNbId(), "computer.company_id", "'%'", "computer.company_id"));
+                        .listComputers(getDebut() -1, getNbId(), "'%'", "computer.company_id"));
                 break;
             default:
                 request.setAttribute("computerList", ClientActions
-                        .listComputers(getDebut(), getNbId(), "computer.id", "'%'", "computer.id"));
+                        .listComputers(getDebut() -1, getNbId(), "'%'", "computer.id"));
                 break;
             }
         } else {
             request.setAttribute("computerList",
-                    ClientActions.listComputers(debut, nbId, "computer.id", "'%'", "computer.id"));
+                    ClientActions.listComputers(debut, nbId, "'%'", "computer.id"));
         }
         if (request.getParameter("search") != null) {
             List<Computer> list = new ArrayList<Computer>();
-            list = ClientActions.listComputers(getDebut(), getNbId(), "computer.name", String.format("'%%" + request.getParameter("search") + "%%'"), "computer.id");
-            list.addAll(ClientActions.listComputers(getDebut(), getNbId(), "company.name", String.format("'%%" + request.getParameter("search") + "%%'"), "computer.id"));
+            list = ClientActions.listComputers(getDebut() -1, getNbId(), String.format("'%%" + request.getParameter("search") + "%%'"), "computer.id");
             request.setAttribute("computerList", list);
         }
-        request.setAttribute("nbComputer", ClientActions.countComputer());
+        String search = request.getParameter("search") == null ? "'%'" :request.getParameter("search");
+        request.setAttribute("nbComputer", ClientActions.countComputer(search));
         request.setAttribute("sort", request.getParameter("sort"));
         request.setAttribute("search", request.getParameter("search"));
         if (request.getParameter("page") != null) {
@@ -125,7 +125,8 @@ public class Dashboard extends HttpServlet {
         } else {
             request.setAttribute("currentPage", 1);
         }
-        request.setAttribute("maxPage", ClientActions.maxPages(nbId));
+        request.setAttribute("maxPage", ClientActions.maxPages(nbId, search));
+        LOGGER.debug(String.valueOf(ClientActions.maxPages(nbId, search)));
         this.getServletContext().getRequestDispatcher(VUE).forward(request,
                 response);
     }
