@@ -39,10 +39,10 @@ public class ClientActions {
      * @return liste
      *              la liste des ordinateurs
      */
-    public static List<Computer> listComputers(long debut, int nbItems, String champ, String search) {
+    public static List<Computer> listComputers(long debut, int nbItems, String champ, String search, String order) {
         List<Computer> liste = new ArrayList<Computer>();
         ComputerDAO compDAO = ComputerDAO.INSTANCE;
-        liste = compDAO.readAll(debut, nbItems, champ, search);
+        liste = compDAO.readAll(debut, nbItems, champ, search, order);
         return liste;
     }
 

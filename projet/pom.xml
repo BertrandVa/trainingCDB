@@ -16,6 +16,7 @@
 			</snapshots>
 		</repository>
 	</repositories>
+
 	<properties>
 		<slf4jVersion>1.7.24</slf4jVersion>
 		<mysql-connectorVersion>5.0.8</mysql-connectorVersion>
@@ -29,6 +30,7 @@
 		<jsp-apiVersion>3.0.1</jsp-apiVersion>
 		<powermockVersion>1.6.1</powermockVersion>
 		<hikariVersion>2.4.5</hikariVersion>
+		<seleniumChromeVersion>3.3.1</seleniumChromeVersion>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
@@ -37,7 +39,7 @@
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-chrome-driver</artifactId>
-			<version>3.3.1</version>
+			<version>${seleniumChromeVersion}</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -105,6 +107,7 @@
 			<groupId>javax.servlet.jsp</groupId>
 			<artifactId>jsp-api</artifactId>
 			<version>2.2.1-b03</version>
+			<scope>provided</scope>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.powermock/powermock-module-junit4 -->
 		<dependency>

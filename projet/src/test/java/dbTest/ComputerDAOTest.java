@@ -234,7 +234,7 @@ public class ComputerDAOTest {
         List<Computer> list = new ArrayList<Computer>();
         Computer computer = new Computer.ComputerBuilder(null).build();
         ComputerDAO compDAO = ComputerDAO.INSTANCE;
-        list = compDAO.readAll(574, 1, "computer.id", "'%'");
+        list = compDAO.readAll(574, 1, "computer.id", "'%'", "computer.id");
         computer = list.get(0);
         assertEquals(computer.getId(), 574);
         assertEquals(computer.getName(), ("iPhone 4S"));
@@ -251,7 +251,7 @@ public class ComputerDAOTest {
         Computer computer2 = new Computer.ComputerBuilder(null).build();
         Computer computer3 = new Computer.ComputerBuilder(null).build();
         ComputerDAO compDAO = ComputerDAO.INSTANCE;
-        list = compDAO.readAll(572, 3, "computer.id", "'%'");
+        list = compDAO.readAll(572, 3, "computer.id", "'%'", "computer.id");
         computer1 = list.get(0);
         computer2 = list.get(1);
         computer3 = list.get(2);
@@ -285,7 +285,7 @@ public class ComputerDAOTest {
         Computer computer2 = new Computer.ComputerBuilder(null).build();
         Computer computer3 = new Computer.ComputerBuilder(null).build();
         ComputerDAO compDAO = ComputerDAO.INSTANCE;
-        list = compDAO.readAll(5000, 3, "computer.id", "");
+        list = compDAO.readAll(5000, 3, "computer.id", "'%'", "computer.id");
         if (list.size() != 0) {
             computer1 = list.get(0);
             computer2 = list.get(1);
@@ -316,7 +316,7 @@ public class ComputerDAOTest {
         Computer computer2 = new Computer.ComputerBuilder(null).build();
         Computer computer3 = new Computer.ComputerBuilder(null).build();
         ComputerDAO compDAO = ComputerDAO.INSTANCE;
-        list = compDAO.readAll(573, 3, "computer.id", "'%'");
+        list = compDAO.readAll(573, 3, "computer.id", "'%'", "computer.id");
         if (list.size() > 0) {
             computer1 = list.get(0);
         }

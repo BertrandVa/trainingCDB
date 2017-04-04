@@ -47,8 +47,8 @@ public class ClientActionsTest {
         liste.add(computer1);
         ComputerDAO compDAO = mock(ComputerDAO.class);
         Whitebox.setInternalState(ComputerDAO.class,"INSTANCE", compDAO);
-        when(compDAO.readAll(574, 1, "computer.id","")).thenReturn(liste);
-        list = ClientActions.listComputers(574, 1, "computer.id", "'%'");
+        when(compDAO.readAll(574, 1, "computer.id","'%'", "computer.id")).thenReturn(liste);
+        list = ClientActions.listComputers(574, 1, "computer.id", "'%'", "computer.id");
         computer = list.get(0);
         assertEquals(computer.getId(), 574);
         assertEquals(computer.getName(), ("iPhone 4S"));
@@ -74,8 +74,8 @@ public class ClientActionsTest {
         liste.add(computer6);
         ComputerDAO compDAO = mock(ComputerDAO.class);
         Whitebox.setInternalState(ComputerDAO.class,"INSTANCE", compDAO);
-        when(compDAO.readAll(572, 3, "computer.id","")).thenReturn(liste);
-        list = compDAO.readAll(572, 3, "computer.id","");
+        when(compDAO.readAll(572, 3, "computer.id","'%'" , "computer.id")).thenReturn(liste);
+        list = compDAO.readAll(572, 3, "computer.id","'%'", "computer.id");
         computer1 = list.get(0);
         computer2 = list.get(1);
         computer3 = list.get(2);
@@ -108,8 +108,8 @@ public class ClientActionsTest {
         ComputerDAO compDAO = mock(ComputerDAO.class);
         List<Computer> liste = new ArrayList<Computer>();
         Whitebox.setInternalState(ComputerDAO.class,"INSTANCE", compDAO);
-        when(compDAO.readAll(5000, 3, "computer.id","")).thenReturn(liste);
-        list = compDAO.readAll(5000, 3, "computer.id","");
+        when(compDAO.readAll(5000, 3, "computer.id","'%'", "computer.id")).thenReturn(liste);
+        list = compDAO.readAll(5000, 3, "computer.id","'%'", "computer.id");
         if (list.size() != 0) {
             computer1 = list.get(0);
             computer2 = list.get(1);
@@ -149,8 +149,8 @@ public class ClientActionsTest {
         liste.add(computer6);
         ComputerDAO compDAO = mock(ComputerDAO.class);
         Whitebox.setInternalState(ComputerDAO.class,"INSTANCE", compDAO);
-        when(compDAO.readAll(573, 3, "computer.id","")).thenReturn(liste);
-        list = compDAO.readAll(573, 3, "computer.id","");
+        when(compDAO.readAll(573, 3, "computer.id","'%'", "computer.id")).thenReturn(liste);
+        list = compDAO.readAll(573, 3, "computer.id","'%'", "computer.id");
         if (list.size() > 0) {
             computer1 = liste.get(0);
         }

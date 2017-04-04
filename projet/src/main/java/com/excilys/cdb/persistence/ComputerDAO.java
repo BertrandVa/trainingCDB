@@ -118,7 +118,7 @@ public enum ComputerDAO {
      *             les caractères recherchés.
      */
     public List<Computer> readAll(long debut, int nbItems, String champ,
-            String match) {
+            String match, String order) {
         List<Computer> list = new ArrayList<Computer>();
         try (Connection connection = HikariConnectionFactory.getConnection();) {
             ResultSet result = connection.createStatement()
@@ -127,8 +127,8 @@ public enum ComputerDAO {
             long maxId = result.getInt("MAX(id)");
             long currentId = debut;
             result.close();
-            String sql = "SELECT * FROM `computer` LEFT JOIN company ON computer.id = company.id WHERE %s COLLATE latin1_GENERAL_CI like %s ORDER BY %s";
-            sql = String.format(sql, champ, match, champ);
+            String sql = "SELECT * FROM `computer` LEFT JOIN company ON computer.company_id = company.id WHERE %s COLLATE latin1_GENERAL_CI like %s ORDER BY %s";
+            sql = String.format(sql, champ, match, order);
             LOGGER.error(sql);
             java.sql.PreparedStatement statement = connection
                     .prepareStatement(sql);

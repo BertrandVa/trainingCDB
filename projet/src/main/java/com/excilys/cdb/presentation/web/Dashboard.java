@@ -1,6 +1,8 @@
 package com.excilys.cdb.presentation.web;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -9,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.services.ClientActions;
 
 public class Dashboard extends HttpServlet {
@@ -84,31 +88,34 @@ public class Dashboard extends HttpServlet {
             switch (request.getParameter("sort")) {
             case "name":
                 request.setAttribute("computerList", ClientActions
-                        .listComputers(getDebut(), getNbId(), "computer.name", "'%'"));
+                        .listComputers(getDebut(), getNbId(), "computer.name", "'%'", "computer.name"));
                 break;
             case "introduce":
                 request.setAttribute("computerList", ClientActions
-                        .listComputers(getDebut(), getNbId(), "computer.introduced", "'%'"));
+                        .listComputers(getDebut(), getNbId(), "computer.introduced", "'%'", "computer.introduced"));
                 break;
             case "discontinued":
                 request.setAttribute("computerList", ClientActions
-                        .listComputers(getDebut(), getNbId(), "computer.discontinued", "'%'"));
+                        .listComputers(getDebut(), getNbId(), "computer.discontinued", "'%'", "computer.discontinued"));
                 break;
             case "company":
                 request.setAttribute("computerList", ClientActions
-                        .listComputers(getDebut(), getNbId(), "computer.company_id", "'%'"));
+                        .listComputers(getDebut(), getNbId(), "computer.company_id", "'%'", "computer.company_id"));
                 break;
             default:
                 request.setAttribute("computerList", ClientActions
-                        .listComputers(getDebut(), getNbId(), "computer.id", "'%'"));
+                        .listComputers(getDebut(), getNbId(), "computer.id", "'%'", "computer.id"));
                 break;
             }
         } else {
             request.setAttribute("computerList",
-                    ClientActions.listComputers(debut, nbId, "computer.id", "'%'"));
+                    ClientActions.listComputers(debut, nbId, "computer.id", "'%'", "computer.id"));
         }
         if (request.getParameter("search") != null) {
-            request.setAttribute("computerList", ClientActions.listComputers(getDebut(), getNbId(), "computer.name", String.format("'%%" + request.getParameter("search") + "%%'")));
+            List<Computer> list = new ArrayList<Computer>();
+            list = ClientActions.listComputers(getDebut(), getNbId(), "computer.name", String.format("'%%" + request.getParameter("search") + "%%'"), "computer.id");
+            list.addAll(ClientActions.listComputers(getDebut(), getNbId(), "company.name", String.format("'%%" + request.getParameter("search") + "%%'"), "computer.id"));
+            request.setAttribute("computerList", list);
         }
         request.setAttribute("nbComputer", ClientActions.countComputer());
         request.setAttribute("sort", request.getParameter("sort"));
