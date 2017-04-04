@@ -36,7 +36,7 @@ public enum CompanyDAO {
      */
     public List<Company> readAll(long debut, int nbItems) {
         List<Company> list = new ArrayList<Company>();
-        try (Connection connection = HikariConnectionFactory.getConnection();) {
+        try (Connection connection = HikariConnectionFactory.INSTANCE.getConnection();) {
             for (int i = 0; i < nbItems; i++) {
                 long id = debut + i;
                 ResultSet result = connection.createStatement()
@@ -62,7 +62,7 @@ public enum CompanyDAO {
             logger.debug("liste de fabriquants terminée");
         } catch (SQLException e) {
             logger.error(e.getMessage());
-        }
+        } 
         return list;
     }
 
@@ -72,7 +72,7 @@ public enum CompanyDAO {
      */
     public int countCompanies() {
         int maxId = 0;
-        try (Connection connection = HikariConnectionFactory.getConnection();) {
+        try (Connection connection = HikariConnectionFactory.INSTANCE.getConnection();) {
             try (ResultSet result = connection.createStatement()
                     .executeQuery("SELECT COUNT(*) AS count FROM company");) {
                 result.next();
@@ -93,7 +93,7 @@ public enum CompanyDAO {
      */
     public boolean deleteCompanyAndRelatedComputers(long id) {
         boolean fait = false;
-        try (Connection connection = HikariConnectionFactory.getConnection();) {
+        try (Connection connection = HikariConnectionFactory.INSTANCE.getConnection();) {
             connection.setAutoCommit(false);
             String sql = "DELETE FROM computer WHERE company_id = ?";
             try (PreparedStatement statement = connection

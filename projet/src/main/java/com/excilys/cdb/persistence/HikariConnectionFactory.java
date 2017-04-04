@@ -21,19 +21,54 @@ public enum HikariConnectionFactory {
     /**
      * logger.
      */
-    static final Logger LOGGER = LoggerFactory.getLogger(HikariConnectionFactory.class);
+    static final Logger LOGGER = LoggerFactory
+            .getLogger(HikariConnectionFactory.class);
+
+    private static final ThreadLocal<Connection> THREAD_LOCAL = new ThreadLocal<Connection>();
+    HikariDataSource ds;
 
     /**
      * Connexion à la base de données.
+     * 
      * @return connection à la BDD
      * @see ConnectionFactory#getInstance()
      */
     private Connection createConnection() {
         Connection conn = null;
+        try {
+            conn = ds.getConnection();
+        } catch (SQLException e) {
+            LOGGER.debug(e.getMessage());
+        }
+        return conn;
+    }
+
+    /**
+     * Renvoie la seule instance existante de notre connexion.
+     * 
+     * @return instance de ConnectionFactory
+     * @see ConnectionFactory#getConnection()
+     */
+    public Connection getConnection() {
+        try {
+            if (THREAD_LOCAL.get() == null
+                    || THREAD_LOCAL.get().isClosed()) {
+                Connection connection = createConnection();
+                THREAD_LOCAL.set(connection);
+            }
+        } catch (SQLException e) {
+            LOGGER.error(e.getMessage());
+        }
+        return THREAD_LOCAL.get();
+    }
+
+    HikariConnectionFactory() {
+        final Logger LOGGER1 = LoggerFactory
+                .getLogger(HikariConnectionFactory.class);
         Parameters params = new Parameters();
         FileBasedConfigurationBuilder<FileBasedConfiguration> builder = new FileBasedConfigurationBuilder<FileBasedConfiguration>(
-                PropertiesConfiguration.class).configure(params.properties()
-                .setFileName("hikari.properties"));
+                PropertiesConfiguration.class).configure(
+                        params.properties().setFileName("hikari.properties"));
         try {
             Configuration config = builder.getConfiguration();
             config = builder.getConfiguration();
@@ -50,21 +85,9 @@ public enum HikariConnectionFactory {
             cfg.addDataSourceProperty("prepStmtCacheSize", "250");
             cfg.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
             cfg.setConnectionTestQuery("show tables");
-            cfg.setMaximumPoolSize(1);
-            HikariDataSource ds = new HikariDataSource(cfg);
-            conn = ds.getConnection();
-        } catch (ConfigurationException | SQLException | ClassNotFoundException e) {
-             LOGGER.error(e.getMessage());
+            ds = new HikariDataSource(cfg);
+        } catch (ConfigurationException | ClassNotFoundException e) {
+            LOGGER1.error(e.getMessage());
         }
-        return conn;
-    }
-
-    /**
-     * Renvoie la seule instance existante de notre connexion.
-     * @return instance de ConnectionFactory
-     * @see ConnectionFactory#getConnection()
-     */
-    public static Connection getConnection() {
-        return INSTANCE.createConnection();
     }
 }

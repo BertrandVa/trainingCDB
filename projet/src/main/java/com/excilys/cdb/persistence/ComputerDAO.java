@@ -41,7 +41,7 @@ public enum ComputerDAO {
         long id = 0;
         long maxId = 0;
         if (computer.getName() != null && computer.getName() != "") {
-            try (Connection connection = HikariConnectionFactory
+            try (Connection connection = HikariConnectionFactory.INSTANCE
                     .getConnection();) {
                 try (ResultSet result = connection.createStatement()
                         .executeQuery("SELECT MAX(id) FROM company");) {
@@ -66,7 +66,7 @@ public enum ComputerDAO {
      */
     public Computer read(long id) {
         Computer computer = new Computer.ComputerBuilder(null).build();
-        try (Connection connection = HikariConnectionFactory.getConnection();) {
+        try (Connection connection = HikariConnectionFactory.INSTANCE.getConnection();) {
             String sql = "SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id  WHERE computer.id = ?";
             try (java.sql.PreparedStatement statement = connection
                     .prepareStatement(sql);) {
@@ -119,7 +119,7 @@ public enum ComputerDAO {
      */
     public List<Computer> readAll(long debut, int nbItems, String match, String order) {
         List<Computer> list = new ArrayList<Computer>();
-        try (Connection connection = HikariConnectionFactory.getConnection();) {
+        try (Connection connection = HikariConnectionFactory.INSTANCE.getConnection();) {
             String sql = "SELECT * FROM `computer` LEFT JOIN company ON computer.company_id = company.id WHERE computer.name COLLATE latin1_GENERAL_CI like %s OR company.name COLLATE latin1_GENERAL_CI like %s ORDER BY %s LIMIT " + nbItems + " OFFSET " + debut;
             sql = String.format(sql, match, match, order);
             LOGGER.debug(sql);
@@ -171,7 +171,7 @@ public enum ComputerDAO {
     public boolean update(Computer computer) {
         boolean update = false;
         int maxId = 0;
-        try (Connection connection = HikariConnectionFactory.getConnection();) {
+        try (Connection connection = HikariConnectionFactory.INSTANCE.getConnection();) {
             if (computer.getName() != null) {
                 try (ResultSet result = connection.createStatement()
                         .executeQuery("SELECT MAX(id) FROM company");) {
@@ -197,7 +197,7 @@ public enum ComputerDAO {
      */
     public boolean delete(long id) {
         boolean delete = false;
-        try (Connection connection = HikariConnectionFactory.getConnection();) {
+        try (Connection connection = HikariConnectionFactory.INSTANCE.getConnection();) {
             int maxId = 0;
             try (ResultSet result = connection.createStatement()
                     .executeQuery("SELECT MAX(id) FROM computer");) {
@@ -224,7 +224,7 @@ public enum ComputerDAO {
      */
     public int countComputer(String match) {
         int maxId = 0;
-        try (Connection connection = HikariConnectionFactory.getConnection();) {
+        try (Connection connection = HikariConnectionFactory.INSTANCE.getConnection();) {
             try (ResultSet result = connection.createStatement()
                     .executeQuery("SELECT COUNT(*) AS count FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.name COLLATE latin1_GENERAL_CI like " + match + " OR company.name COLLATE latin1_GENERAL_CI like " + match)) {
                 result.next();
@@ -247,7 +247,7 @@ public enum ComputerDAO {
     public int countPages(int nbId, String match) {
         int maxId = 0;
         int nbPages = 0;
-        try (Connection connection = HikariConnectionFactory.getConnection();) {
+        try (Connection connection = HikariConnectionFactory.INSTANCE.getConnection();) {
             try (ResultSet result = connection.createStatement()
                     .executeQuery("SELECT COUNT(*) AS count FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.name COLLATE latin1_GENERAL_CI like " + match + " OR company.name COLLATE latin1_GENERAL_CI like " + match)) {
                 result.next();
