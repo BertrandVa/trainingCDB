@@ -43,6 +43,7 @@ public enum ComputerDAO {
         if (computer.getName() != null && computer.getName() != "") {
             try (Connection connection = HikariConnectionFactory.INSTANCE
                     .getConnection();) {
+                connection.setReadOnly(false);
                 try (ResultSet result = connection.createStatement()
                         .executeQuery("SELECT MAX(id) FROM company");) {
                     result.next();
@@ -67,6 +68,7 @@ public enum ComputerDAO {
     public Computer read(long id) {
         Computer computer = new Computer.ComputerBuilder(null).build();
         try (Connection connection = HikariConnectionFactory.INSTANCE.getConnection();) {
+            connection.setReadOnly(true);
             String sql = "SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id  WHERE computer.id = ?";
             try (java.sql.PreparedStatement statement = connection
                     .prepareStatement(sql);) {
@@ -120,9 +122,9 @@ public enum ComputerDAO {
     public List<Computer> readAll(long debut, int nbItems, String match, String order) {
         List<Computer> list = new ArrayList<Computer>();
         try (Connection connection = HikariConnectionFactory.INSTANCE.getConnection();) {
-            String sql = "SELECT * FROM `computer` LEFT JOIN company ON computer.company_id = company.id WHERE computer.name COLLATE latin1_GENERAL_CI like %s OR company.name COLLATE latin1_GENERAL_CI like %s ORDER BY %s LIMIT " + nbItems + " OFFSET " + debut;
+            connection.setReadOnly(true);
+            String sql = "SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.name like %s OR company.name like %s ORDER BY %s LIMIT " + nbItems + " OFFSET " + debut;
             sql = String.format(sql, match, match, order);
-            LOGGER.debug(sql);
             java.sql.PreparedStatement statement = connection
                     .prepareStatement(sql);
             LOGGER.debug(statement.toString());
@@ -154,7 +156,7 @@ public enum ComputerDAO {
                         list.add(computer);
                         LOGGER.debug(computer.toString());
                     }
-            LOGGER.debug("liste de fabriquants terminée");
+                LOGGER.debug("liste de fabriquants terminée");
             result.close();
         } catch (SQLException e) {
             LOGGER.error(e.getMessage());
@@ -172,6 +174,7 @@ public enum ComputerDAO {
         boolean update = false;
         int maxId = 0;
         try (Connection connection = HikariConnectionFactory.INSTANCE.getConnection();) {
+            connection.setReadOnly(false);
             if (computer.getName() != null) {
                 try (ResultSet result = connection.createStatement()
                         .executeQuery("SELECT MAX(id) FROM company");) {
@@ -198,18 +201,11 @@ public enum ComputerDAO {
     public boolean delete(long id) {
         boolean delete = false;
         try (Connection connection = HikariConnectionFactory.INSTANCE.getConnection();) {
-            int maxId = 0;
-            try (ResultSet result = connection.createStatement()
-                    .executeQuery("SELECT MAX(id) FROM computer");) {
-                result.next();
-                maxId = result.getInt("MAX(id)");
-            }
-            if (id < maxId) {
+            connection.setReadOnly(false);
                 connection.createStatement()
                         .executeUpdate("DELETE FROM computer WHERE id =" + id);
                 LOGGER.debug("suppression réussie");
                 delete = true;
-            }
         } catch (SQLException e) {
             LOGGER.error(e.getMessage());
         }
@@ -225,8 +221,9 @@ public enum ComputerDAO {
     public int countComputer(String match) {
         int maxId = 0;
         try (Connection connection = HikariConnectionFactory.INSTANCE.getConnection();) {
+            connection.setReadOnly(true);
             try (ResultSet result = connection.createStatement()
-                    .executeQuery("SELECT COUNT(*) AS count FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.name COLLATE latin1_GENERAL_CI like " + match + " OR company.name COLLATE latin1_GENERAL_CI like " + match)) {
+                    .executeQuery("SELECT COUNT(*) AS count FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.name like " + match + " OR company.name like " + match)) {
                 result.next();
                 maxId = result.getInt("count");
             }
@@ -248,8 +245,9 @@ public enum ComputerDAO {
         int maxId = 0;
         int nbPages = 0;
         try (Connection connection = HikariConnectionFactory.INSTANCE.getConnection();) {
+            connection.setReadOnly(true);
             try (ResultSet result = connection.createStatement()
-                    .executeQuery("SELECT COUNT(*) AS count FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.name COLLATE latin1_GENERAL_CI like " + match + " OR company.name COLLATE latin1_GENERAL_CI like " + match)) {
+                    .executeQuery("SELECT COUNT(*) AS count FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.name like " + match + " OR company.name like " + match )) {
                 result.next();
                 maxId = result.getInt("count");
             }

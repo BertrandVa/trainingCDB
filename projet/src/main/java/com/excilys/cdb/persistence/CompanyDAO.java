@@ -37,19 +37,10 @@ public enum CompanyDAO {
     public List<Company> readAll(long debut, int nbItems) {
         List<Company> list = new ArrayList<Company>();
         try (Connection connection = HikariConnectionFactory.INSTANCE.getConnection();) {
-            for (int i = 0; i < nbItems; i++) {
-                long id = debut + i;
-                ResultSet result = connection.createStatement()
-                        .executeQuery("SELECT MAX(id) FROM company");
-                result.next();
-                long maxId = result.getInt("MAX(id)");
-                logger.debug("liste de fabriquants terminée");
-                result.close();
-                if (id <= maxId) {
-                    result = connection.createStatement().executeQuery(
-                            "SELECT * FROM company WHERE id =" + id);
-
-                    if (result.first()) {
+      //      debut -=1 ;
+            ResultSet result = connection.createStatement().executeQuery(
+                    "SELECT * FROM company  LIMIT " + nbItems + " OFFSET " + debut);
+                        while(result.next()){
                         Company company = new Company.CompanyBuilder(
                                 result.getString("company.name"))
                                         .id(result.getLong("company.id"))
@@ -57,12 +48,9 @@ public enum CompanyDAO {
                         list.add(company);
                     }
                     result.close();
-                }
-            }
-            logger.debug("liste de fabriquants terminée");
-        } catch (SQLException e) {
-            logger.error(e.getMessage());
-        } 
+            } catch (SQLException e) {
+                logger.error(e.getMessage());            }
+           logger.debug("liste de fabriquants terminée");
         return list;
     }
 
@@ -73,6 +61,7 @@ public enum CompanyDAO {
     public int countCompanies() {
         int maxId = 0;
         try (Connection connection = HikariConnectionFactory.INSTANCE.getConnection();) {
+            connection.setReadOnly(true);
             try (ResultSet result = connection.createStatement()
                     .executeQuery("SELECT COUNT(*) AS count FROM company");) {
                 result.next();
@@ -94,6 +83,7 @@ public enum CompanyDAO {
     public boolean deleteCompanyAndRelatedComputers(long id) {
         boolean fait = false;
         try (Connection connection = HikariConnectionFactory.INSTANCE.getConnection();) {
+            connection.setReadOnly(false);
             connection.setAutoCommit(false);
             String sql = "DELETE FROM computer WHERE company_id = ?";
             try (PreparedStatement statement = connection

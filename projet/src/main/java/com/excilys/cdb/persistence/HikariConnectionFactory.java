@@ -82,9 +82,10 @@ public enum HikariConnectionFactory {
             cfg.setUsername(username);
             cfg.setPassword(password);
             cfg.addDataSourceProperty("cachePrepStmts", "true");
-            cfg.addDataSourceProperty("prepStmtCacheSize", "250");
-            cfg.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+            cfg.addDataSourceProperty("prepStmtCacheSize", "500");
+            cfg.addDataSourceProperty("prepStmtCacheSqlLimit", "4096");
             cfg.setConnectionTestQuery("show tables");
+            cfg.setMaximumPoolSize(80);
             ds = new HikariDataSource(cfg);
         } catch (ConfigurationException | ClassNotFoundException e) {
             LOGGER1.error(e.getMessage());

@@ -30,7 +30,7 @@
 					<h1>Edit Computer</h1>
 
 					<form action="editComputer" method="POST">
-						<input type="hidden" value="${computer.getId()}" name="id" id="${computer.getId()}" />
+						<input type="hidden" value="${computer.getId()}" name="id" id="id" />
 						<!-- TODO: Change this value with the computer id -->
 						<fieldset>
 							<div class="form-group">

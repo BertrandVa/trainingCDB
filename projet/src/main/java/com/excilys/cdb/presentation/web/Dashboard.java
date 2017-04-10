@@ -24,18 +24,21 @@ public class Dashboard extends HttpServlet {
 
     /**
      * L'adresse de notre jsp.
+     * 
      * @see Dashboard.jsp
      * @see Dashboard#doGet(HttpServletRequest, HttpServletResponse)
      */
     public static final String VUE = "/WEB-INF/views/dashboard.jsp";
     /**
      * Le premier id d'ordinateur à afficher.
+     * 
      * @see Dashboard.jsp
      * @see Dashboard#doGet(HttpServletRequest, HttpServletResponse)
      */
     private long debut = 0;
     /**
      * Le nombre d'ordinateurs à afficher.
+     * 
      * @see Dashboard.jsp
      * @see Dashboard#doGet(HttpServletRequest, HttpServletResponse)
      */
@@ -64,6 +67,7 @@ public class Dashboard extends HttpServlet {
 
     /**
      * Récupération de la jsp pour l'affichage.
+     * 
      * @see Dashboard#VUE
      * @param request
      *            La requête de notre servlet
@@ -82,57 +86,67 @@ public class Dashboard extends HttpServlet {
         }
         if (request.getParameter("page") != null) {
             Long nbPage = (Long.parseLong(request.getParameter("page")));
-            setDebut((nbPage - 1) * nbId + 1);
+            setDebut((nbPage - 1) * nbId);
         }
         if (request.getParameter("sort") != null) {
             switch (request.getParameter("sort")) {
             case "name":
-                request.setAttribute("computerList", ClientActions
-                        .listComputers(getDebut() - 1, getNbId(), "'%'", "computer.name"));
+                request.setAttribute("computerList",
+                        ClientActions.listComputers(getDebut(), getNbId(),
+                                "'%'", "computer.name"));
                 break;
             case "introduce":
-                request.setAttribute("computerList", ClientActions
-                        .listComputers(getDebut() - 1, getNbId(), "'%'", "computer.introduced"));
+                request.setAttribute("computerList",
+                        ClientActions.listComputers(getDebut(), getNbId(),
+                                "'%'", "computer.introduced"));
                 break;
             case "discontinued":
-                request.setAttribute("computerList", ClientActions
-                        .listComputers(getDebut() - 1, getNbId(), "'%'", "computer.discontinued"));
+                request.setAttribute("computerList",
+                        ClientActions.listComputers(getDebut(), getNbId(),
+                                "'%'", "computer.discontinued"));
                 break;
             case "company":
-                request.setAttribute("computerList", ClientActions
-                        .listComputers(getDebut() - 1, getNbId(), "'%'", "computer.company_id"));
+                request.setAttribute("computerList",
+                        ClientActions.listComputers(getDebut(), getNbId(),
+                                "'%'", "computer.company_id"));
                 break;
             default:
-                request.setAttribute("computerList", ClientActions
-                        .listComputers(getDebut() - 1, getNbId(), "'%'", "computer.id"));
+                request.setAttribute("computerList",
+                        ClientActions.listComputers(getDebut(), getNbId(),
+                                "'%'", "computer.id"));
                 break;
             }
         } else {
-            request.setAttribute("computerList",
-                    ClientActions.listComputers(debut, nbId, "'%'", "computer.id"));
+            request.setAttribute("computerList", ClientActions
+                    .listComputers(debut, nbId, "'%'", "computer.id"));
         }
-        if (request.getParameter("search") != null) {
+        String search = "%";
+        if (request.getParameter("search") != null && request.getParameter("search") != "" ) {
             List<Computer> list = new ArrayList<Computer>();
-            list = ClientActions.listComputers(getDebut() - 1, getNbId(), String.format("'%%" + request.getParameter("search") + "%%'"), "computer.id");
+            list = ClientActions.listComputers(getDebut(), getNbId(),
+                    String.format(
+                            "'" + request.getParameter("search") + "%%'"),
+                    "computer.id");
             request.setAttribute("computerList", list);
+            search = request.getParameter("search");
         }
-        String search = request.getParameter("search") == null ? "'%'" : request.getParameter("search");
-        request.setAttribute("nbComputer", ClientActions.countComputer(search));
+        request.setAttribute("nbComputer", ClientActions.countComputer("'"+search+"%%'"));
         request.setAttribute("sort", request.getParameter("sort"));
-        request.setAttribute("search", request.getParameter("search"));
+        request.setAttribute("search", search);
         if (request.getParameter("page") != null) {
             request.setAttribute("currentPage", request.getParameter("page"));
         } else {
             request.setAttribute("currentPage", 1);
         }
-        request.setAttribute("maxPage", ClientActions.maxPages(nbId, search));
-        LOGGER.debug(String.valueOf(ClientActions.maxPages(nbId, search)));
+        request.setAttribute("maxPage", ClientActions.maxPages(nbId, "'"+search+"%%'"));
+        LOGGER.debug(String.valueOf(ClientActions.maxPages(nbId, "'"+search+"%%'")));
         this.getServletContext().getRequestDispatcher(VUE).forward(request,
                 response);
     }
 
     /**
      * Envoi de notre formulaire.
+     * 
      * @see AddComputer#FORM
      * @see AddComputer#COMPUTER
      * @see AddComputer#VUE
