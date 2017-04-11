@@ -12,7 +12,7 @@
 			<layout>default</layout>
 			<url>http://repo1.maven.org/maven2</url>
 			<snapshots>
-				<enabled>false</enabled>
+				<enabled>true</enabled>
 			</snapshots>
 		</repository>
 	</repositories>
@@ -32,6 +32,7 @@
 		<hikariVersion>2.4.5</hikariVersion>
 		<seleniumChromeVersion>3.3.1</seleniumChromeVersion>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<junitVersion>4.12</junitVersion>
 	</properties>
 
 	<dependencies>
@@ -42,7 +43,13 @@
 			<version>${seleniumChromeVersion}</version>
 			<scope>test</scope>
 		</dependency>
-
+		<!-- https://mvnrepository.com/artifact/junit/junit -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junitVersion}</version>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
