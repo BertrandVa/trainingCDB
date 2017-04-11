@@ -56,7 +56,7 @@ public enum HikariConnectionFactory {
                 Connection connection = createConnection();
                 THREAD_LOCAL.set(connection);
             }
-        } catch (SQLException e) {
+        } catch (SQLException | NoClassDefFoundError e) {
             LOGGER.error(e.getMessage());
         }
         return THREAD_LOCAL.get();

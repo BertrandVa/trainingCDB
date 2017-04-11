@@ -19,7 +19,8 @@ public class SeleniumTest {
     private WebDriverBackedSelenium selenium;
     
     
-    @Ignore //test
+    @Ignore
+    @Before
     public void setUp() throws Exception {
         String baseUrl = "http://localhost:8080/computer-database";
         System.setProperty("webdriver.chrome.driver", "/home/excilys/workspace/drivers/chromedriver");
@@ -27,7 +28,8 @@ public class SeleniumTest {
         selenium = new WebDriverBackedSelenium(driver, baseUrl);
     }
 
-    @Ignore //test
+    @Ignore
+    @Test
     public void testSelenium() throws Exception {
         
         /*
@@ -45,7 +47,8 @@ public class SeleniumTest {
         selenium.click("id=cancel");
     }
     
-    @Ignore //test
+    @Ignore 
+    @Test
     private void checkPageAddComputer() {
         checkElement("computerName", null);
         checkElement("introduce", null);
@@ -53,7 +56,8 @@ public class SeleniumTest {
         checkElement("company", "0");        
     }
     
-    @Ignore //test
+    @Ignore
+    @Test
     private void checkPageEditComputer(long id) {
         Computer computer = ClientActions.showComputerDetails(id);
         checkElement("computerName", computer.getName());
@@ -62,7 +66,8 @@ public class SeleniumTest {
         checkElement("company", computer.getManufacturer().getName());        
     }
     
-    @Ignore //test
+    @Ignore
+    @Test
     private void checkElement(String elementId, String expected) {
         System.setProperty("webdriver.chrome.driver", "/home/excilys/workspace/drivers/chromedriver");
         WebDriver driver = new ChromeDriver();
@@ -70,7 +75,8 @@ public class SeleniumTest {
     }
 
 
-    @Ignore //after
+    @Ignore
+    @After
     public void tearDown() throws Exception {
         selenium.stop();
     }
