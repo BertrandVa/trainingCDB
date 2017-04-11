@@ -25,7 +25,7 @@
 		<dbUnitVersion>2.4.9</dbUnitVersion>
 		<commonsConfVersion>2.0</commonsConfVersion>
 		<commonsBeanutilsVersion>1.9.3</commonsBeanutilsVersion>
-		<seleniumVersion>2.27.0</seleniumVersion>
+		<seleniumVersion>3.3.1</seleniumVersion>
 		<javax.servletVersion>1.2</javax.servletVersion>
 		<jsp-apiVersion>3.0.1</jsp-apiVersion>
 		<powermockVersion>1.6.1</powermockVersion>
@@ -42,6 +42,12 @@
 			<artifactId>selenium-chrome-driver</artifactId>
 			<version>${seleniumChromeVersion}</version>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.openqa.selenium.server</groupId>
+			<artifactId>selenium-server-coreless</artifactId>
+			<version>1.0-20081010.060147</version>
+			<scope>>test</scope>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/junit/junit -->
 		<dependency>
@@ -143,6 +149,12 @@
 			<version>${seleniumVersion}</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.seleniumhq.webdriver</groupId>
+			<artifactId>webdriver-selenium</artifactId>
+			<version>0.9.7089</version>
+		</dependency>
+
 
 
 	</dependencies>
