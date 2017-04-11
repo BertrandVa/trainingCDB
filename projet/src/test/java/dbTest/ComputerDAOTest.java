@@ -460,15 +460,13 @@ public class ComputerDAOTest {
     public void DeleteUnexistingComputer() throws Exception {
         Computer computer = new Computer.ComputerBuilder(null).id(2000).build();
         ComputerDAO compDAO = ComputerDAO.INSTANCE;
-        boolean delete = false;
-        delete = compDAO.delete(computer.getId());
+        compDAO.delete(computer.getId());
         Computer computer2 = compDAO.read(computer.getId());
         assertNull(computer2.getName());
         assertNull(computer2.getManufacturer());
         assertNull(computer2.getIntroduceDate());
         assertNull(computer2.getDiscontinuedDate());
         assertEquals(computer2.getId(), 0);
-        assertEquals(delete, false);
     }
 
     /*

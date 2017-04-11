@@ -16,11 +16,13 @@ import com.excilys.cdb.services.ClientActions;
 public class SeleniumTest {
 
     private WebDriverBackedSelenium selenium;
-    WebDriver driver = new ChromeDriver();
-
+    
+    
     @Before
     public void setUp() throws Exception {
         String baseUrl = "http://localhost:8080/computer-database";
+        System.setProperty("webdriver.chrome.driver", "/home/excilys/workspace/drivers/chromedriver");
+        WebDriver driver = new ChromeDriver();
         selenium = new WebDriverBackedSelenium(driver, baseUrl);
     }
 
@@ -58,6 +60,8 @@ public class SeleniumTest {
     }
     
     private void checkElement(String elementId, String expected) {
+        System.setProperty("webdriver.chrome.driver", "/home/excilys/workspace/drivers/chromedriver");
+        WebDriver driver = new ChromeDriver();
         assertEquals(driver.findElement(By.id(elementId)).getText(), expected );
     }
 
