@@ -154,9 +154,6 @@
 			<artifactId>webdriver-selenium</artifactId>
 			<version>0.9.7089</version>
 		</dependency>
-
-
-
 	</dependencies>
 	<reporting>
 		<plugins>
@@ -209,6 +206,13 @@
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>selenium-maven-plugin</artifactId>
 				<version>1.0.1</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<configuration>
+					<webXml>src\main\webapp\WEB-INF\web.xml</webXml>
+				</configuration>
 			</plugin>
 
 		</plugins>
