@@ -1,0 +1,2 @@
+docker run -it --net=myNetwork  --rm  --name=tomcat -v prod:/usr/local/tomcat/webapps --ip=172.18.0.5 tomcat
+
