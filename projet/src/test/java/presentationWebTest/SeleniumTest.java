@@ -68,7 +68,7 @@ public class SeleniumTest {
     
     @Ignore
     @Test
-    private void checkElement(String elementId, String expected) {
+    public void checkElement(String elementId, String expected) {
         System.setProperty("webdriver.chrome.driver", "/home/excilys/workspace/drivers/chromedriver");
         WebDriver driver = new ChromeDriver();
         assertEquals(driver.findElement(By.id(elementId)).getText(), expected );
