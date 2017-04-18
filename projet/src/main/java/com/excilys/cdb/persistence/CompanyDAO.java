@@ -37,10 +37,9 @@ public enum CompanyDAO {
     public List<Company> readAll(long debut, int nbItems) {
         List<Company> list = new ArrayList<Company>();
         try (Connection connection = HikariConnectionFactory.INSTANCE.getConnection();) {
-      //      debut -=1 ;
             ResultSet result = connection.createStatement().executeQuery(
                     "SELECT * FROM company  LIMIT " + nbItems + " OFFSET " + debut);
-                        while(result.next()){
+                        while (result.next()) {
                         Company company = new Company.CompanyBuilder(
                                 result.getString("company.name"))
                                         .id(result.getLong("company.id"))
@@ -49,7 +48,8 @@ public enum CompanyDAO {
                     }
                     result.close();
             } catch (SQLException e) {
-                logger.error(e.getMessage());            }
+                logger.error(e.getMessage());
+            }
            logger.debug("liste de fabriquants terminée");
         return list;
     }

@@ -20,8 +20,8 @@ import com.excilys.cdb.persistence.CompanyDAO;
 
 public class CompanyDAOTest {
     private static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-    private static final String JDBC_URL = "jdbc:mysql://172.18.0.3/computer-database-db-unit?zeroDateTimeBehavior=convertToNull";
-    private static final String USER = "admincdb";
+    private static final String JDBC_URL = "jdbc:mysql://localhost/dbUnit?zeroDateTimeBehavior=convertToNull";
+    private static final String USER = "admindb";
     private static final String PASSWORD = "qwerty1234";
 
     @Before

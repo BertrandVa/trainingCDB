@@ -4,7 +4,6 @@ import static org.junit.Assert.*;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -19,7 +18,6 @@ public class SeleniumTest {
     private WebDriverBackedSelenium selenium;
     
     
-    @Ignore
     @Before
     public void setUp() throws Exception {
         String baseUrl = "http://localhost:8080/computer-database";
@@ -28,7 +26,6 @@ public class SeleniumTest {
         selenium = new WebDriverBackedSelenium(driver, baseUrl);
     }
 
-    @Ignore
     @Test
     public void testSelenium() throws Exception {
         
@@ -47,7 +44,6 @@ public class SeleniumTest {
         selenium.click("id=cancel");
     }
     
-    @Ignore 
     @Test
     private void checkPageAddComputer() {
         checkElement("computerName", null);
@@ -56,7 +52,6 @@ public class SeleniumTest {
         checkElement("company", "0");        
     }
     
-    @Ignore
     @Test
     private void checkPageEditComputer(long id) {
         Computer computer = ClientActions.showComputerDetails(id);
@@ -66,7 +61,6 @@ public class SeleniumTest {
         checkElement("company", computer.getManufacturer().getName());        
     }
     
-    @Ignore
     @Test
     public void checkElement(String elementId, String expected) {
         System.setProperty("webdriver.chrome.driver", "/home/excilys/workspace/drivers/chromedriver");
@@ -75,7 +69,6 @@ public class SeleniumTest {
     }
 
 
-    @Ignore
     @After
     public void tearDown() throws Exception {
         selenium.stop();

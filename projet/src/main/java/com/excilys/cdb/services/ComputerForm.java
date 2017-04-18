@@ -9,6 +9,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.LoggerFactory;
 
 import com.excilys.cdb.model.Company;
@@ -106,14 +107,11 @@ public class ComputerForm {
         LOGGER.debug(request.getParameter(CHAMP_INTRODUCE_DATE));
         LOGGER.debug(request.getParameter(CHAMP_DISCONTINUED_DATE));
 
-        if (request.getParameter(CHAMP_INTRODUCE_DATE) != null
-                && request.getParameter(CHAMP_INTRODUCE_DATE) != "") {
+        if (StringUtils.isNotEmpty(request.getParameter(CHAMP_INTRODUCE_DATE))) {
             introduceDate = toDate(request.getParameter(CHAMP_INTRODUCE_DATE));
         }
-        if (request.getParameter(CHAMP_DISCONTINUED_DATE) != null
-                && request.getParameter(CHAMP_DISCONTINUED_DATE) != "") {
-            discontinuedDate = toDate(
-                    request.getParameter(CHAMP_DISCONTINUED_DATE));
+        if (StringUtils.isNotEmpty(request.getParameter(CHAMP_DISCONTINUED_DATE))) {
+            discontinuedDate = toDate(request.getParameter(CHAMP_DISCONTINUED_DATE));
         }
 
         Computer computer = new Computer.ComputerBuilder(name)
@@ -166,14 +164,11 @@ public class ComputerForm {
         LOGGER.debug(request.getParameter(CHAMP_INTRODUCE_DATE));
         LOGGER.debug(request.getParameter(CHAMP_DISCONTINUED_DATE));
 
-        if (request.getParameter(CHAMP_INTRODUCE_DATE) != null
-                && request.getParameter(CHAMP_INTRODUCE_DATE) != "") {
+        if (StringUtils.isNotEmpty(request.getParameter(CHAMP_INTRODUCE_DATE))) {
             introduceDate = toDate(request.getParameter(CHAMP_INTRODUCE_DATE));
         }
-        if (request.getParameter(CHAMP_DISCONTINUED_DATE) != null
-                && request.getParameter(CHAMP_DISCONTINUED_DATE) != "") {
-            discontinuedDate = toDate(
-                    request.getParameter(CHAMP_DISCONTINUED_DATE));
+        if (StringUtils.isNotEmpty(request.getParameter(CHAMP_DISCONTINUED_DATE))) {
+            discontinuedDate = toDate(request.getParameter(CHAMP_DISCONTINUED_DATE));
         }
 
         Computer computer = new Computer.ComputerBuilder(name)
@@ -225,7 +220,7 @@ public class ComputerForm {
      *              l'erreur à retourner
      */
     private void checkIntroduceDate(String introduceDate) throws IntroduceDateException {
-        if (introduceDate != null && introduceDate != "") {
+        if (StringUtils.isNotEmpty(introduceDate)) {
             try {
                 toDate(introduceDate);
             } catch (DateTimeParseException e) {
@@ -247,7 +242,7 @@ public class ComputerForm {
      */
     private void checkDiscontinuedDate(String discontinuedDate,
          LocalDate introduceDate) throws DiscontinuedDateException {
-        if (discontinuedDate != null && discontinuedDate != "") {
+        if (StringUtils.isNotEmpty(discontinuedDate)) {
             try {
                 toDate(discontinuedDate);
                 if (introduceDate != null && toDate(discontinuedDate).isBefore(introduceDate)) {

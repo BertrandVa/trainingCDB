@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,7 +41,7 @@ public enum ComputerDAO {
     public long create(Computer computer) {
         long id = 0;
         long maxId = 0;
-        if (computer.getName() != null && computer.getName() != "") {
+        if (StringUtils.isNotEmpty(computer.getName())) {
             try (Connection connection = HikariConnectionFactory.INSTANCE
                     .getConnection();) {
                 connection.setReadOnly(false);
@@ -247,7 +248,7 @@ public enum ComputerDAO {
         try (Connection connection = HikariConnectionFactory.INSTANCE.getConnection();) {
             connection.setReadOnly(true);
             try (ResultSet result = connection.createStatement()
-                    .executeQuery("SELECT COUNT(*) AS count FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.name like " + match + " OR company.name like " + match )) {
+                    .executeQuery("SELECT COUNT(*) AS count FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.name like " + match + " OR company.name like " + match)) {
                 result.next();
                 maxId = result.getInt("count");
             }

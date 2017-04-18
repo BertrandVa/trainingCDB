@@ -2,6 +2,8 @@ package com.excilys.cdb.services;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.excilys.cdb.model.Company;
@@ -93,7 +95,7 @@ public class ClientActions {
     public static boolean createComputer(Computer computer) {
         boolean fait = false;
         ComputerDAO compDAO = ComputerDAO.INSTANCE;
-        if (computer.getName() != null && computer.getName() != "") {
+        if (StringUtils.isNotEmpty(computer.getName())) {
             compDAO.create(computer);
             fait = true;
         }

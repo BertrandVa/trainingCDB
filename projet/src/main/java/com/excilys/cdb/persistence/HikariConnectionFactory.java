@@ -29,7 +29,6 @@ public enum HikariConnectionFactory {
 
     /**
      * Connexion à la base de données.
-     * 
      * @return connection à la BDD
      * @see ConnectionFactory#getInstance()
      */
@@ -45,7 +44,6 @@ public enum HikariConnectionFactory {
 
     /**
      * Renvoie la seule instance existante de notre connexion.
-     * 
      * @return instance de ConnectionFactory
      * @see ConnectionFactory#getConnection()
      */
@@ -62,8 +60,11 @@ public enum HikariConnectionFactory {
         return THREAD_LOCAL.get();
     }
 
+    /**
+     * Constructeur de notre connexion Hikari.
+     */
     HikariConnectionFactory() {
-        final Logger LOGGER1 = LoggerFactory
+        final Logger lOGGER1 = LoggerFactory
                 .getLogger(HikariConnectionFactory.class);
         Parameters params = new Parameters();
         FileBasedConfigurationBuilder<FileBasedConfiguration> builder = new FileBasedConfigurationBuilder<FileBasedConfiguration>(
@@ -88,7 +89,7 @@ public enum HikariConnectionFactory {
             cfg.setMaximumPoolSize(80);
             ds = new HikariDataSource(cfg);
         } catch (ConfigurationException | ClassNotFoundException e) {
-            LOGGER1.error(e.getMessage());
+            lOGGER1.error(e.getMessage());
         }
     }
 }
