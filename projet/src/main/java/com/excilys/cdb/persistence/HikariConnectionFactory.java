@@ -64,32 +64,39 @@ public enum HikariConnectionFactory {
      * Constructeur de notre connexion Hikari.
      */
     HikariConnectionFactory() {
-        final Logger lOGGER1 = LoggerFactory
-                .getLogger(HikariConnectionFactory.class);
-        Parameters params = new Parameters();
-        FileBasedConfigurationBuilder<FileBasedConfiguration> builder = new FileBasedConfigurationBuilder<FileBasedConfiguration>(
-                PropertiesConfiguration.class).configure(
-                        params.properties().setFileName("hikari.properties"));
-        try {
-            Configuration config = builder.getConfiguration();
-            config = builder.getConfiguration();
-            String driver = config.getString("dataSource.driverClass");
-            Class.forName(driver);
-            String url = config.getString("jdbcUrl");
-            String username = config.getString("dataSource.user");
-            String password = config.getString("dataSource.password");
+      //  final Logger lOGGER1 = LoggerFactory
+       //         .getLogger(HikariConnectionFactory.class);
+       // Parameters params = new Parameters();
+       // FileBasedConfigurationBuilder<FileBasedConfiguration> builder = new FileBasedConfigurationBuilder<FileBasedConfiguration>(
+        //        PropertiesConfiguration.class).configure(
+         //               params.properties().setFileName("hikari.properties"));
+       // try {
+         //   Configuration config = builder.getConfiguration();
+          //  config = builder.getConfiguration();
+          //  String driver = config.getString("dataSource.driverClass");
+          //  Class.forName(driver);
+           // String url = config.getString("jdbcUrl");
+           // String username = config.getString("dataSource.user");
+           // String password = config.getString("dataSource.password");
             HikariConfig cfg = new HikariConfig();
-            cfg.setJdbcUrl(url);
-            cfg.setUsername(username);
-            cfg.setPassword(password);
+          //  cfg.setJdbcUrl(url);
+           // cfg.setUsername(username);
+           // cfg.setPassword(password);
             cfg.addDataSourceProperty("cachePrepStmts", "true");
-            cfg.addDataSourceProperty("prepStmtCacheSize", "500");
-            cfg.addDataSourceProperty("prepStmtCacheSqlLimit", "4096");
+            //cfg.addDataSourceProperty("prepStmtCacheSize", "500");
+            //cfg.addDataSourceProperty("prepStmtCacheSqlLimit", "4096");
             cfg.setConnectionTestQuery("show tables");
             cfg.setMaximumPoolSize(80);
-            ds = new HikariDataSource(cfg);
-        } catch (ConfigurationException | ClassNotFoundException e) {
-            lOGGER1.error(e.getMessage());
-        }
+            setDataSource(new HikariDataSource(cfg));
+       // } catch (ConfigurationException | ClassNotFoundException e) {
+        //    lOGGER1.error(e.getMessage());
+      //  }
+    }
+    
+    /**
+     * Setter de notre datasource.
+     */
+    private void setDataSource(HikariDataSource dataSource) {
+        this.ds = dataSource;
     }
 }

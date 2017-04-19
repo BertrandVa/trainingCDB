@@ -7,10 +7,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.stereotype.Controller;
+
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.services.ComputerForm;
 import com.excilys.cdb.services.ClientActions;
 
+@Controller
 public class EditComputer extends HttpServlet {
 
     /**

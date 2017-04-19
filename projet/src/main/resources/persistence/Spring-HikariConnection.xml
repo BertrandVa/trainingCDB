@@ -1,0 +1,24 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+	<bean id="hikariConnectionFactory" class="com.excilys.cdb.persistence.HikariConnectionFactory">
+		<property name="hikariDataSource" ref="hikariDataSource" />
+	</bean>
+
+	<bean
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location">
+			<value>hikari.properties</value>
+		</property>
+	</bean>
+
+	<bean id="hikariDataSource" class="com.zaxxer.hikari.HikariDataSource">
+		<property name="dataSource.driverClass" value="${dataSource.driverClass}" />
+		<property name="jdbcUrl" value="${jdbcUrl}" />
+		<property name="dataSource.user" value="${dataSource.user}" />
+		<property name="dataSource.password" value="${dataSource.password}" />
+		<property name="dataSource.prepStmtCacheSize" value="${dataSource.prepStmtCacheSize}" />
+		<property name="dataSource.prepStmtCacheSqlLimit" value="${dataSource.prepStmtCacheSqlLimit}" />
+	</bean>
+</beans>
