@@ -18,8 +18,7 @@ import com.excilys.cdb.model.Company;
  * @author bertrand
  */
 
-public enum CompanyDAO {
-    INSTANCE;
+public class CompanyDAO {
 
     /**
      * logger.
@@ -36,7 +35,7 @@ public enum CompanyDAO {
      */
     public List<Company> readAll(long debut, int nbItems) {
         List<Company> list = new ArrayList<Company>();
-        try (Connection connection = HikariConnectionFactory.INSTANCE.getConnection();) {
+        try (Connection connection = HikariConnectionFactory.getConnection();) {
             ResultSet result = connection.createStatement().executeQuery(
                     "SELECT * FROM company  LIMIT " + nbItems + " OFFSET " + debut);
                         while (result.next()) {
@@ -60,7 +59,7 @@ public enum CompanyDAO {
      */
     public int countCompanies() {
         int maxId = 0;
-        try (Connection connection = HikariConnectionFactory.INSTANCE.getConnection();) {
+        try (Connection connection = HikariConnectionFactory.getConnection();) {
             connection.setReadOnly(true);
             try (ResultSet result = connection.createStatement()
                     .executeQuery("SELECT COUNT(*) AS count FROM company");) {
@@ -82,7 +81,7 @@ public enum CompanyDAO {
      */
     public boolean deleteCompanyAndRelatedComputers(long id) {
         boolean fait = false;
-        try (Connection connection = HikariConnectionFactory.INSTANCE.getConnection();) {
+        try (Connection connection = HikariConnectionFactory.getConnection();) {
             connection.setReadOnly(false);
             connection.setAutoCommit(false);
             String sql = "DELETE FROM computer WHERE company_id = ?";

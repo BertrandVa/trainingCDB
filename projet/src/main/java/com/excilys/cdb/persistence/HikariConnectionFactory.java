@@ -2,42 +2,41 @@ package com.excilys.cdb.persistence;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-
-import org.apache.commons.configuration2.Configuration;
-import org.apache.commons.configuration2.FileBasedConfiguration;
-import org.apache.commons.configuration2.PropertiesConfiguration;
-import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
-import org.apache.commons.configuration2.builder.fluent.Parameters;
-import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.zaxxer.hikari.HikariConfig;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import com.zaxxer.hikari.HikariDataSource;
 
-public enum HikariConnectionFactory {
-    INSTANCE;
+public class HikariConnectionFactory {
+    
 
     /**
      * logger.
      */
     static final Logger LOGGER = LoggerFactory
             .getLogger(HikariConnectionFactory.class);
+    
+    static ApplicationContext context =
+            new ClassPathXmlApplicationContext("/Spring-Modules.xml");
+    static HikariDataSource ds;
 
     private static final ThreadLocal<Connection> THREAD_LOCAL = new ThreadLocal<Connection>();
-    HikariDataSource ds;
+    
 
     /**
      * Connexion à la base de données.
      * @return connection à la BDD
      * @see ConnectionFactory#getInstance()
      */
-    private Connection createConnection() {
+    private static Connection createConnection() {
         Connection conn = null;
         try {
+            setDataSource();
             conn = ds.getConnection();
-        } catch (SQLException e) {
+        } catch (SQLException | NullPointerException e) {
             LOGGER.debug(e.getMessage());
+            e.printStackTrace();
         }
         return conn;
     }
@@ -47,7 +46,7 @@ public enum HikariConnectionFactory {
      * @return instance de ConnectionFactory
      * @see ConnectionFactory#getConnection()
      */
-    public Connection getConnection() {
+    public static Connection getConnection() {
         try {
             if (THREAD_LOCAL.get() == null
                     || THREAD_LOCAL.get().isClosed()) {
@@ -63,40 +62,14 @@ public enum HikariConnectionFactory {
     /**
      * Constructeur de notre connexion Hikari.
      */
-    HikariConnectionFactory() {
-      //  final Logger lOGGER1 = LoggerFactory
-       //         .getLogger(HikariConnectionFactory.class);
-       // Parameters params = new Parameters();
-       // FileBasedConfigurationBuilder<FileBasedConfiguration> builder = new FileBasedConfigurationBuilder<FileBasedConfiguration>(
-        //        PropertiesConfiguration.class).configure(
-         //               params.properties().setFileName("hikari.properties"));
-       // try {
-         //   Configuration config = builder.getConfiguration();
-          //  config = builder.getConfiguration();
-          //  String driver = config.getString("dataSource.driverClass");
-          //  Class.forName(driver);
-           // String url = config.getString("jdbcUrl");
-           // String username = config.getString("dataSource.user");
-           // String password = config.getString("dataSource.password");
-            HikariConfig cfg = new HikariConfig();
-          //  cfg.setJdbcUrl(url);
-           // cfg.setUsername(username);
-           // cfg.setPassword(password);
-            cfg.addDataSourceProperty("cachePrepStmts", "true");
-            //cfg.addDataSourceProperty("prepStmtCacheSize", "500");
-            //cfg.addDataSourceProperty("prepStmtCacheSqlLimit", "4096");
-            cfg.setConnectionTestQuery("show tables");
-            cfg.setMaximumPoolSize(80);
-            setDataSource(new HikariDataSource(cfg));
-       // } catch (ConfigurationException | ClassNotFoundException e) {
-        //    lOGGER1.error(e.getMessage());
-      //  }
+    public HikariConnectionFactory() {
+     
     }
     
     /**
      * Setter de notre datasource.
      */
-    private void setDataSource(HikariDataSource dataSource) {
-        this.ds = dataSource;
+    private static void setDataSource() {
+       HikariConnectionFactory.ds = (HikariDataSource) context.getBean("dataSource");
     }
 }

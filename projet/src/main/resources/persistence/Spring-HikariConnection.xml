@@ -1,24 +1,30 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
-	http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
-	<bean id="hikariConnectionFactory" class="com.excilys.cdb.persistence.HikariConnectionFactory">
-		<property name="hikariDataSource" ref="hikariDataSource" />
-	</bean>
+	http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+	http://www.springframework.org/schema/context 
+    http://www.springframework.org/schema/context/spring-context-4.2.xsd">
 
-	<bean
-		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="location">
-			<value>hikari.properties</value>
+	<context:property-placeholder location="classpath:hikari.properties" />
+
+	<bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
+		<property name="poolName" value="springHikariCP" />
+		<property name="dataSourceClassName" value="${driverClass}" />
+		<property name="maximumPoolSize" value="${maximumPoolSize}" />
+		<property name="connectionTestQuery" value="SHOW TABLES" />
+		<property name="dataSourceProperties">
+			<props>
+				<prop key="url">${jdbcUrl}</prop>
+				<prop key="user">${user}</prop>
+				<prop key="password">${password}</prop>
+			</props>
 		</property>
 	</bean>
 
-	<bean id="hikariDataSource" class="com.zaxxer.hikari.HikariDataSource">
-		<property name="dataSource.driverClass" value="${dataSource.driverClass}" />
-		<property name="jdbcUrl" value="${jdbcUrl}" />
-		<property name="dataSource.user" value="${dataSource.user}" />
-		<property name="dataSource.password" value="${dataSource.password}" />
-		<property name="dataSource.prepStmtCacheSize" value="${dataSource.prepStmtCacheSize}" />
-		<property name="dataSource.prepStmtCacheSqlLimit" value="${dataSource.prepStmtCacheSqlLimit}" />
+	<!-- HikariCP configuration -->
+	<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource"
+		destroy-method="close">
+		<constructor-arg ref="hikariConfig" />
 	</bean>
 </beans>

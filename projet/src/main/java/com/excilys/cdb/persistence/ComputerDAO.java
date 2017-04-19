@@ -24,8 +24,7 @@ import com.excilys.cdb.model.Computer;
  * @author bertrand
  */
 
-public enum ComputerDAO {
-    INSTANCE;
+public class ComputerDAO {
 
     /**
      * logger.
@@ -42,8 +41,7 @@ public enum ComputerDAO {
         long id = 0;
         long maxId = 0;
         if (StringUtils.isNotEmpty(computer.getName())) {
-            try (Connection connection = HikariConnectionFactory.INSTANCE
-                    .getConnection();) {
+            try (Connection connection = HikariConnectionFactory.getConnection();) {
                 connection.setReadOnly(false);
                 try (ResultSet result = connection.createStatement()
                         .executeQuery("SELECT MAX(id) FROM company");) {
@@ -68,7 +66,7 @@ public enum ComputerDAO {
      */
     public Computer read(long id) {
         Computer computer = new Computer.ComputerBuilder(null).build();
-        try (Connection connection = HikariConnectionFactory.INSTANCE.getConnection();) {
+        try (Connection connection = HikariConnectionFactory.getConnection();) {
             connection.setReadOnly(true);
             String sql = "SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id  WHERE computer.id = ?";
             try (java.sql.PreparedStatement statement = connection
@@ -122,7 +120,7 @@ public enum ComputerDAO {
      */
     public List<Computer> readAll(long debut, int nbItems, String match, String order) {
         List<Computer> list = new ArrayList<Computer>();
-        try (Connection connection = HikariConnectionFactory.INSTANCE.getConnection();) {
+        try (Connection connection = HikariConnectionFactory.getConnection();) {
             connection.setReadOnly(true);
             String sql = "SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.name like %s OR company.name like %s ORDER BY %s LIMIT " + nbItems + " OFFSET " + debut;
             sql = String.format(sql, match, match, order);
@@ -174,7 +172,7 @@ public enum ComputerDAO {
     public boolean update(Computer computer) {
         boolean update = false;
         int maxId = 0;
-        try (Connection connection = HikariConnectionFactory.INSTANCE.getConnection();) {
+        try (Connection connection = HikariConnectionFactory.getConnection();) {
             connection.setReadOnly(false);
             if (computer.getName() != null) {
                 try (ResultSet result = connection.createStatement()
@@ -201,7 +199,7 @@ public enum ComputerDAO {
      */
     public boolean delete(long id) {
         boolean delete = false;
-        try (Connection connection = HikariConnectionFactory.INSTANCE.getConnection();) {
+        try (Connection connection = HikariConnectionFactory.getConnection();) {
             connection.setReadOnly(false);
                 connection.createStatement()
                         .executeUpdate("DELETE FROM computer WHERE id =" + id);
@@ -221,7 +219,7 @@ public enum ComputerDAO {
      */
     public int countComputer(String match) {
         int maxId = 0;
-        try (Connection connection = HikariConnectionFactory.INSTANCE.getConnection();) {
+        try (Connection connection = HikariConnectionFactory.getConnection();) {
             connection.setReadOnly(true);
             try (ResultSet result = connection.createStatement()
                     .executeQuery("SELECT COUNT(*) AS count FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.name like " + match + " OR company.name like " + match)) {
@@ -245,7 +243,7 @@ public enum ComputerDAO {
     public int countPages(int nbId, String match) {
         int maxId = 0;
         int nbPages = 0;
-        try (Connection connection = HikariConnectionFactory.INSTANCE.getConnection();) {
+        try (Connection connection = HikariConnectionFactory.getConnection();) {
             connection.setReadOnly(true);
             try (ResultSet result = connection.createStatement()
                     .executeQuery("SELECT COUNT(*) AS count FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.name like " + match + " OR company.name like " + match)) {

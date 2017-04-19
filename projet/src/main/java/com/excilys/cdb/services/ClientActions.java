@@ -6,6 +6,9 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.persistence.CompanyDAO;
@@ -24,6 +27,10 @@ public class ClientActions {
      * logger.
      */
     static final Logger LOGGER = LoggerFactory.getLogger(ClientActions.class);
+    static ApplicationContext context =
+            new ClassPathXmlApplicationContext("Spring-Modules.xml");
+    static ComputerDAO computerDAO = (ComputerDAO) context.getBean("computerDAO");     
+    static CompanyDAO companyDAO = (CompanyDAO) context.getBean("companyDAO"); 
 
     /**
      * Liste les ordinateurs en affichant leur nom et leur ID Par souci de
@@ -43,8 +50,7 @@ public class ClientActions {
      */
     public static List<Computer> listComputers(long debut, int nbItems, String search, String order) {
         List<Computer> liste = new ArrayList<Computer>();
-        ComputerDAO compDAO = ComputerDAO.INSTANCE;
-        liste = compDAO.readAll(debut, nbItems, search, order);
+        liste = computerDAO.readAll(debut, nbItems, search, order);
         return liste;
     }
 
@@ -61,8 +67,7 @@ public class ClientActions {
      */
     public static List<Company> listCompanies(long debut, int nbItems) {
         List<Company> liste = new ArrayList<Company>();
-        CompanyDAO compDAO = CompanyDAO.INSTANCE;
-        liste = compDAO.readAll(debut, nbItems);
+        liste = companyDAO.readAll(debut, nbItems);
         return liste;
     };
 
@@ -78,8 +83,7 @@ public class ClientActions {
     public static Computer showComputerDetails(long id) {
 
         Computer computer = new Computer.ComputerBuilder(null).build();
-        ComputerDAO compDAO = ComputerDAO.INSTANCE;
-        computer = compDAO.read(id);
+        computer = computerDAO.read(id);
         return computer;
     }
 
@@ -94,9 +98,8 @@ public class ClientActions {
      */
     public static boolean createComputer(Computer computer) {
         boolean fait = false;
-        ComputerDAO compDAO = ComputerDAO.INSTANCE;
         if (StringUtils.isNotEmpty(computer.getName())) {
-            compDAO.create(computer);
+            computerDAO.create(computer);
             fait = true;
         }
         return fait;
@@ -113,9 +116,8 @@ public class ClientActions {
      */
     public static boolean updateComputer(Computer computer) {
         boolean fait = false;
-        ComputerDAO compDAO = ComputerDAO.INSTANCE;
         if (computer.getId() >= 0) {
-            compDAO.update(computer);
+            computerDAO.update(computer);
             fait = true;
         }
         return fait;
@@ -131,9 +133,8 @@ public class ClientActions {
      */
     public static boolean deleteComputer(int id) {
         boolean fait = false;
-        ComputerDAO compDAO = ComputerDAO.INSTANCE;
         if (id >= 0) {
-            compDAO.delete(id);
+            computerDAO.delete(id);
             fait = true;
         }
         return fait;
@@ -148,8 +149,7 @@ public class ClientActions {
      *              la chaine de caractères à matcher
      */
     public static int countComputer(String match) {
-        ComputerDAO compDAO = ComputerDAO.INSTANCE;
-        int nbComputer = compDAO.countComputer(match);
+        int nbComputer = computerDAO.countComputer(match);
             return nbComputer;
     };
 
@@ -159,8 +159,7 @@ public class ClientActions {
      *             le nombre de fabriquants dans la BDD
      */
     public static int countCompanies() {
-        CompanyDAO compDAO = CompanyDAO.INSTANCE;
-        int nbCompanies = compDAO.countCompanies();
+        int nbCompanies = companyDAO.countCompanies();
             return nbCompanies;
     };
 
@@ -175,8 +174,7 @@ public class ClientActions {
      *              la chaine de caractères à match
      */
     public static int maxPages(int nbId, String match) {
-        ComputerDAO compDAO = ComputerDAO.INSTANCE;
-        int nbPages = compDAO.countPages(nbId, match);
+        int nbPages = computerDAO.countPages(nbId, match);
             return nbPages;
     };
 
@@ -188,8 +186,7 @@ public class ClientActions {
      *              l'id de la compagnie à supprimer
      */
     public static boolean deleteCompany(long id) {
-        CompanyDAO compDAO = CompanyDAO.INSTANCE;
-        boolean fait = compDAO.deleteCompanyAndRelatedComputers(id);
+        boolean fait = companyDAO.deleteCompanyAndRelatedComputers(id);
             return fait;
     };
 }

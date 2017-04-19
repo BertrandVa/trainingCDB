@@ -14,8 +14,12 @@ import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.operation.DatabaseOperation;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.persistence.CompanyDAO;
+import com.excilys.cdb.persistence.ComputerDAO;
 
 
 public class CompanyDAOTest {
@@ -23,6 +27,10 @@ public class CompanyDAOTest {
     private static final String JDBC_URL = "jdbc:mysql://localhost/dbUnit?zeroDateTimeBehavior=convertToNull";
     private static final String USER = "admindb";
     private static final String PASSWORD = "qwerty1234";
+    static ApplicationContext context =
+            new ClassPathXmlApplicationContext("Spring-Modules.xml");
+    ComputerDAO computerDAO = (ComputerDAO) context.getBean("computerDAO");     
+    CompanyDAO companyDAO = (CompanyDAO) context.getBean("companyDAO"); 
 
     @Before
     public void importDataSet() throws Exception {
@@ -67,8 +75,7 @@ public class CompanyDAOTest {
     public void findsAndReadsExistingCompanyByPage() throws Exception {
         List<Company> list = new ArrayList<Company>();
         Company company = new Company.CompanyBuilder(null).build();
-        CompanyDAO compDAO = CompanyDAO.INSTANCE;
-        list = compDAO.readAll(0, 1);
+        list = companyDAO.readAll(0, 1);
         company = list.get(0);
         assertEquals(company.getId(), 1);
         assertEquals(company.getName(), ("Apple Inc."));
@@ -80,8 +87,7 @@ public class CompanyDAOTest {
         Company company1 = new Company.CompanyBuilder(null).build();
         Company company2 = new Company.CompanyBuilder(null).build();
         Company company3 = new Company.CompanyBuilder(null).build();
-        CompanyDAO compDAO = CompanyDAO.INSTANCE;
-        list = compDAO.readAll(0, 3);
+        list = companyDAO.readAll(0, 3);
         company1 = list.get(0);
         company2 = list.get(1);
         company3 = list.get(2);
@@ -100,8 +106,7 @@ public class CompanyDAOTest {
         Company company1 = new Company.CompanyBuilder(null).build();
         Company company2 = new Company.CompanyBuilder(null).build();
         Company company3 = new Company.CompanyBuilder(null).build();
-        CompanyDAO compDAO = CompanyDAO.INSTANCE;
-        list = compDAO.readAll(5000, 3);
+        list = companyDAO.readAll(5000, 3);
         if (list.size() != 0) {
             company1 = list.get(0);
             company2 = list.get(1);
@@ -122,8 +127,7 @@ public class CompanyDAOTest {
         Company company1 = new Company.CompanyBuilder(null).build();
         Company company2 = new Company.CompanyBuilder(null).build();
         Company company3 = new Company.CompanyBuilder(null).build();
-        CompanyDAO compDAO = CompanyDAO.INSTANCE;
-        list = compDAO.readAll(1, 3);
+        list = companyDAO.readAll(1, 3);
         if (list.size() > 0) {
             company1 = list.get(0);
         }
@@ -148,8 +152,7 @@ public class CompanyDAOTest {
     
     @Test
     public void TestCountCompanies() throws Exception {
-        CompanyDAO compDAO = CompanyDAO.INSTANCE;
-        int count1 = compDAO.countCompanies();
+        int count1 = companyDAO.countCompanies();
         assertEquals(count1, 3);
     }
     

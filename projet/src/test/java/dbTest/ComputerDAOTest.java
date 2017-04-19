@@ -14,9 +14,12 @@ import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.operation.DatabaseOperation;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.persistence.CompanyDAO;
 import com.excilys.cdb.persistence.ComputerDAO;
 
 public class ComputerDAOTest {
@@ -25,6 +28,10 @@ public class ComputerDAOTest {
     private static final String JDBC_URL = "jdbc:mysql://localhost/dbUnit?zeroDateTimeBehavior=convertToNull";
     private static final String USER = "admindb";
     private static final String PASSWORD = "qwerty1234";
+    static ApplicationContext context =
+            new ClassPathXmlApplicationContext("Spring-Modules.xml");
+    ComputerDAO computerDAO = (ComputerDAO) context.getBean("computerDAO");     
+    CompanyDAO companyDAO = (CompanyDAO) context.getBean("companyDAO"); 
 
     @Before
     public void importDataSet() throws Exception {
@@ -66,8 +73,7 @@ public class ComputerDAOTest {
     public void findsAndReadsExistingComputerByIdWithOnlyMandatoryParameters()
             throws Exception {
         Computer computer = new Computer.ComputerBuilder(null).build();
-        ComputerDAO compDAO = ComputerDAO.INSTANCE;
-        computer = compDAO.read(574);
+        computer = computerDAO.read(574);
         assertEquals(computer.getId(), 574);
         assertEquals(computer.getName(), ("iPhone 4S"));
         // si on ne précise pas l'id, celui-ci ne doit pas correspondre à un
@@ -85,8 +91,7 @@ public class ComputerDAOTest {
     public void findsAndReadsExistingComputerByIdWithAllParameters()
             throws Exception {
         Computer computer = new Computer.ComputerBuilder(null).build();
-        ComputerDAO compDAO = ComputerDAO.INSTANCE;
-        computer = compDAO.read(573);
+        computer = computerDAO.read(573);
         assertEquals(computer.getId(), 573);
         assertEquals(computer.getName(), ("Gateway LT3103U"));
         assertEquals(computer.getManufacturer().getId(), 1);
@@ -98,8 +103,7 @@ public class ComputerDAOTest {
     @Test
     public void findsAndReadsUnexistingComputer() throws Exception {
         Computer computer = new Computer.ComputerBuilder(null).build();
-        ComputerDAO compDAO = ComputerDAO.INSTANCE;
-        computer = compDAO.read(580);
+        computer = computerDAO.read(580);
         assertEquals(computer.getId(), 0);
         assertNull(computer.getName());
         assertNull(computer.getManufacturer());
@@ -131,10 +135,9 @@ public class ComputerDAOTest {
     @Test
     public void createComputerWithoutName() throws Exception {
         Computer computer = new Computer.ComputerBuilder(null).build();
-        ComputerDAO compDAO = ComputerDAO.INSTANCE;
         long create = 0;
-        create = compDAO.create(computer);
-        Computer computer2 = compDAO.read(create);
+        create = computerDAO.create(computer);
+        Computer computer2 = computerDAO.read(create);
         assertNull(computer2.getName());
         assertNull(computer2.getManufacturer());
         assertNull(computer2.getIntroduceDate());
@@ -146,9 +149,8 @@ public class ComputerDAOTest {
     public void createComputerWithOnlyName() throws Exception {
         Computer computer = new Computer.ComputerBuilder("monOrdinateur")
                 .build();
-        ComputerDAO compDAO = ComputerDAO.INSTANCE;
-        long create = compDAO.create(computer);
-        Computer computer2 = compDAO.read(create);
+        long create = computerDAO.create(computer);
+        Computer computer2 = computerDAO.read(create);
         assertEquals(computer2.getName(), "monOrdinateur");
         assertNull(computer2.getManufacturer().getName());
         assertNull(computer2.getIntroduceDate());
@@ -164,9 +166,8 @@ public class ComputerDAOTest {
                 .manufacturer(
                         new Company.CompanyBuilder("Apple Inc.").id(1).build())
                 .build();
-        ComputerDAO compDAO = ComputerDAO.INSTANCE;
-        long create = compDAO.create(computer);
-        Computer computer2 = compDAO.read(create);
+        long create = computerDAO.create(computer);
+        Computer computer2 = computerDAO.read(create);
         assertEquals(computer2.getName(), "monOrdinateur");
         assertEquals(computer2.getManufacturer().getName(), "Apple Inc.");
         assertEquals(computer2.getManufacturer().getId(), 1);
@@ -185,9 +186,8 @@ public class ComputerDAOTest {
                 .manufacturer(
                         new Company.CompanyBuilder("Apple Inc.").id(1).build())
                 .build();
-        ComputerDAO compDAO = ComputerDAO.INSTANCE;
-        long create = compDAO.create(computer);
-        Computer computer2 = compDAO.read(create);
+        long create = computerDAO.create(computer);
+        Computer computer2 = computerDAO.read(create);
         assertEquals(computer2.getName(), "monOrdinateur");
         assertEquals(computer2.getManufacturer().getName(), "Apple Inc.");
         assertEquals(computer2.getManufacturer().getId(), 1);
@@ -205,9 +205,8 @@ public class ComputerDAOTest {
                 .manufacturer(
                         new Company.CompanyBuilder("Apple Inc.").id(1).build())
                 .build();
-        ComputerDAO compDAO = ComputerDAO.INSTANCE;
-        long create = compDAO.create(computer);
-        Computer computer2 = compDAO.read(create);
+        long create = computerDAO.create(computer);
+        Computer computer2 = computerDAO.read(create);
         assertEquals(computer2.getName(), "monOrdinateur");
         assertEquals(computer2.getManufacturer().getName(), "Apple Inc.");
         assertEquals(computer2.getManufacturer().getId(), 1);
@@ -233,8 +232,7 @@ public class ComputerDAOTest {
     public void findsAndReadsExistingComputerByPage() throws Exception {
         List<Computer> list = new ArrayList<Computer>();
         Computer computer = new Computer.ComputerBuilder(null).build();
-        ComputerDAO compDAO = ComputerDAO.INSTANCE;
-        list = compDAO.readAll(14, 1, "'%'", "computer.id");
+        list = computerDAO.readAll(14, 1, "'%'", "computer.id");
         computer = list.get(0);
         assertEquals(computer.getId(), 574);
         assertEquals(computer.getName(), ("iPhone 4S"));
@@ -250,8 +248,7 @@ public class ComputerDAOTest {
         Computer computer1 = new Computer.ComputerBuilder(null).build();
         Computer computer2 = new Computer.ComputerBuilder(null).build();
         Computer computer3 = new Computer.ComputerBuilder(null).build();
-        ComputerDAO compDAO = ComputerDAO.INSTANCE;
-        list = compDAO.readAll(12, 3, "'%'", "computer.id");
+        list = computerDAO.readAll(12, 3, "'%'", "computer.id");
         computer1 = list.get(0);
         computer2 = list.get(1);
         computer3 = list.get(2);
@@ -284,8 +281,7 @@ public class ComputerDAOTest {
         Computer computer1 = new Computer.ComputerBuilder(null).build();
         Computer computer2 = new Computer.ComputerBuilder(null).build();
         Computer computer3 = new Computer.ComputerBuilder(null).build();
-        ComputerDAO compDAO = ComputerDAO.INSTANCE;
-        list = compDAO.readAll(5000, 3, "'%'", "computer.id");
+        list = computerDAO.readAll(5000, 3, "'%'", "computer.id");
         if (list.size() != 0) {
             computer1 = list.get(0);
             computer2 = list.get(1);
@@ -315,8 +311,7 @@ public class ComputerDAOTest {
         Computer computer1 = new Computer.ComputerBuilder(null).build();
         Computer computer2 = new Computer.ComputerBuilder(null).build();
         Computer computer3 = new Computer.ComputerBuilder(null).build();
-        ComputerDAO compDAO = ComputerDAO.INSTANCE;
-        list = compDAO.readAll(13, 3, "'%'", "computer.id");
+        list = computerDAO.readAll(13, 3, "'%'", "computer.id");
         if (list.size() > 0) {
             computer1 = list.get(0);
         }
@@ -363,10 +358,9 @@ public class ComputerDAOTest {
     @Test
     public void updateComputerWithoutName() throws Exception {
         Computer computer = new Computer.ComputerBuilder(null).id(563).build();
-        ComputerDAO compDAO = ComputerDAO.INSTANCE;
         boolean update = false;
-        update = compDAO.update(computer);
-        Computer computer2 = compDAO.read(computer.getId());
+        update = computerDAO.update(computer);
+        Computer computer2 = computerDAO.read(computer.getId());
         assertNotNull(computer2.getName());
         assertNotNull(computer2.getManufacturer());
         assertNotNull(computer2.getIntroduceDate());
@@ -380,10 +374,9 @@ public class ComputerDAOTest {
         Computer computer = new Computer.ComputerBuilder("Jean").id(563)
                 .introduceDate(LocalDate.of(2011, 11, 04))
                 .discontinuedDate(LocalDate.of(2010, 12, 03)).build();
-        ComputerDAO compDAO = ComputerDAO.INSTANCE;
         boolean update = false;
-        update = compDAO.update(computer);
-        Computer computer2 = compDAO.read(563);
+        update = computerDAO.update(computer);
+        Computer computer2 = computerDAO.read(563);
         assertEquals(computer2.getName(),"Jean");
         assertEquals(computer2.getManufacturer().getId(),0);
         assertEquals(computer2.getIntroduceDate(),LocalDate.of(2011, 11, 04));
@@ -395,10 +388,9 @@ public class ComputerDAOTest {
     @Test
     public void updateComputerWithExistingParameters() throws Exception {
         Computer computer = new Computer.ComputerBuilder("jean").id(563).build();
-        ComputerDAO compDAO = ComputerDAO.INSTANCE;
         boolean update = false;
-        update = compDAO.update(computer);
-        Computer computer2 = compDAO.read(563);
+        update = computerDAO.update(computer);
+        Computer computer2 = computerDAO.read(563);
         assertEquals(computer2.getName(),"jean");
         assertNull(computer2.getManufacturer().getName());
         assertEquals(computer2.getManufacturer().getId(), 0);
@@ -419,10 +411,9 @@ public class ComputerDAOTest {
                 .discontinuedDate(LocalDate.of(2016, 12, 28))
                 .manufacturer(company)
                 .build();
-        ComputerDAO compDAO = ComputerDAO.INSTANCE;
         boolean update = false;
-        update = compDAO.update(computer);
-        Computer computer2 = compDAO.read(563);
+        update = computerDAO.update(computer);
+        Computer computer2 = computerDAO.read(563);
         assertEquals(computer2.getName(),"jean");
         assertEquals(computer2.getManufacturer().getName(), "Thinking Machines"); //en effet, la compagnie Apple de Terre n'existe pas dans la BDD ;)
         assertEquals(computer2.getManufacturer().getId(), 2);
@@ -444,10 +435,9 @@ public class ComputerDAOTest {
     @Test
     public void DeleteExistingComputer() throws Exception {
         Computer computer = new Computer.ComputerBuilder(null).id(561).build();
-        ComputerDAO compDAO = ComputerDAO.INSTANCE;
         boolean delete = false;
-        delete = compDAO.delete(computer.getId());
-        Computer computer2 = compDAO.read(computer.getId());
+        delete = computerDAO.delete(computer.getId());
+        Computer computer2 = computerDAO.read(computer.getId());
         assertNull(computer2.getName());
         assertNull(computer2.getManufacturer());
         assertNull(computer2.getIntroduceDate());
@@ -459,9 +449,8 @@ public class ComputerDAOTest {
     @Test
     public void DeleteUnexistingComputer() throws Exception {
         Computer computer = new Computer.ComputerBuilder(null).id(2000).build();
-        ComputerDAO compDAO = ComputerDAO.INSTANCE;
-        compDAO.delete(computer.getId());
-        Computer computer2 = compDAO.read(computer.getId());
+        computerDAO.delete(computer.getId());
+        Computer computer2 = computerDAO.read(computer.getId());
         assertNull(computer2.getName());
         assertNull(computer2.getManufacturer());
         assertNull(computer2.getIntroduceDate());
@@ -475,10 +464,9 @@ public class ComputerDAOTest {
     
     @Test
     public void TestCountComputers() throws Exception {
-        ComputerDAO compDAO = ComputerDAO.INSTANCE;
-        int count1 = compDAO.countComputer("'%'");
-        boolean delete = compDAO.delete(561);
-        int count2 = compDAO.countComputer("'%'");
+        int count1 = computerDAO.countComputer("'%'");
+        boolean delete = computerDAO.delete(561);
+        int count2 = computerDAO.countComputer("'%'");
         assertEquals(count1, 15);
         assertEquals(count2, 14);
         assertTrue(delete);
@@ -490,10 +478,9 @@ public class ComputerDAOTest {
     
     @Test
     public void TestCountPages() throws Exception {
-        ComputerDAO compDAO = ComputerDAO.INSTANCE;
-        int count1 = compDAO.countPages(3, "'%'");
-        int count2 = compDAO.countPages(5, "'%'");
-        int count3 = compDAO.countPages(0, "'%'");
+        int count1 = computerDAO.countPages(3, "'%'");
+        int count2 = computerDAO.countPages(5, "'%'");
+        int count3 = computerDAO.countPages(0, "'%'");
         assertEquals(count1, 5);
         assertEquals(count2, 3);
         assertEquals(count3, 0);
