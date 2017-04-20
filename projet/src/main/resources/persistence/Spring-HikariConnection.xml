@@ -2,9 +2,9 @@
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
-	http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+	http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
 	http://www.springframework.org/schema/context 
-    http://www.springframework.org/schema/context/spring-context-4.2.xsd">
+    http://www.springframework.org/schema/context/spring-context-4.3.xsd">
 
 	<context:property-placeholder location="classpath:hikari.properties" />
 
@@ -16,7 +16,7 @@
 		<property name="dataSourceProperties">
 			<props>
 				<prop key="url">${jdbcUrl}</prop>
-				<prop key="user">${user}</prop>
+				<prop key="user">${user1}</prop>
 				<prop key="password">${password}</prop>
 			</props>
 		</property>

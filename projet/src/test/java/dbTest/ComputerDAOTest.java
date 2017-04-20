@@ -19,7 +19,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
-import com.excilys.cdb.persistence.CompanyDAO;
 import com.excilys.cdb.persistence.ComputerDAO;
 
 public class ComputerDAOTest {
@@ -31,7 +30,6 @@ public class ComputerDAOTest {
     static ApplicationContext context =
             new ClassPathXmlApplicationContext("Spring-Modules.xml");
     ComputerDAO computerDAO = (ComputerDAO) context.getBean("computerDAO");     
-    CompanyDAO companyDAO = (CompanyDAO) context.getBean("companyDAO"); 
 
     @Before
     public void importDataSet() throws Exception {

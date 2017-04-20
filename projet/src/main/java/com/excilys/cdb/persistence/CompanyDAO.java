@@ -23,7 +23,7 @@ public class CompanyDAO {
     /**
      * logger.
      */
-    final Logger logger = LoggerFactory.getLogger(CompanyDAO.class);
+    private final Logger logger = LoggerFactory.getLogger(CompanyDAO.class);
 
     /**
      * Méthode d'affichage de tous les fabriquants.
@@ -36,20 +36,20 @@ public class CompanyDAO {
     public List<Company> readAll(long debut, int nbItems) {
         List<Company> list = new ArrayList<Company>();
         try (Connection connection = HikariConnectionFactory.getConnection();) {
-            ResultSet result = connection.createStatement().executeQuery(
-                    "SELECT * FROM company  LIMIT " + nbItems + " OFFSET " + debut);
-                        while (result.next()) {
-                        Company company = new Company.CompanyBuilder(
-                                result.getString("company.name"))
-                                        .id(result.getLong("company.id"))
-                                        .build();
-                        list.add(company);
-                    }
-                    result.close();
-            } catch (SQLException e) {
-                logger.error(e.getMessage());
+            try (ResultSet result = connection.createStatement()
+                    .executeQuery("SELECT * FROM company  LIMIT " + nbItems
+                            + " OFFSET " + debut);) {
+                while (result.next()) {
+                    Company company = new Company.CompanyBuilder(
+                            result.getString("company.name"))
+                                    .id(result.getLong("company.id")).build();
+                    list.add(company);
+                }
             }
-           logger.debug("liste de fabriquants terminée");
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+        }
+        logger.debug("liste de fabriquants terminée");
         return list;
     }
 
@@ -75,9 +75,8 @@ public class CompanyDAO {
     /**
      * Méthode delete pour les compagnies, supprime les ordinateurs associés.
      * @param id
-     *          l'id de la compagnie à supprimer
-     * @return fait
-     *          un boolean setté à true si l'action a été effectuée
+     *            l'id de la compagnie à supprimer
+     * @return fait un boolean setté à true si l'action a été effectuée
      */
     public boolean deleteCompanyAndRelatedComputers(long id) {
         boolean fait = false;

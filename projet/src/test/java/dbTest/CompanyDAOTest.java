@@ -34,7 +34,8 @@ public class CompanyDAOTest {
 
     @Before
     public void importDataSet() throws Exception {
-        IDataSet dataSet = readDataSet();
+        IDataSet dataSet = null;
+        dataSet = readDataSet();
         ReplacementDataSet dataSetter = new ReplacementDataSet(dataSet);
         dataSetter.addReplacementObject("[NULL]", null);
         cleanlyInsert(dataSetter);

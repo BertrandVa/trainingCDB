@@ -9,20 +9,17 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import com.zaxxer.hikari.HikariDataSource;
 
 public class HikariConnectionFactory {
-    
 
     /**
      * logger.
      */
-    static final Logger LOGGER = LoggerFactory
+    private static final Logger LOGGER = LoggerFactory
             .getLogger(HikariConnectionFactory.class);
-    
-    static ApplicationContext context =
+    private static ApplicationContext context =
             new ClassPathXmlApplicationContext("/Spring-Modules.xml");
-    static HikariDataSource ds;
+    private static HikariDataSource ds;
 
     private static final ThreadLocal<Connection> THREAD_LOCAL = new ThreadLocal<Connection>();
-    
 
     /**
      * Connexion à la base de données.
@@ -63,9 +60,8 @@ public class HikariConnectionFactory {
      * Constructeur de notre connexion Hikari.
      */
     public HikariConnectionFactory() {
-     
     }
-    
+
     /**
      * Setter de notre datasource.
      */

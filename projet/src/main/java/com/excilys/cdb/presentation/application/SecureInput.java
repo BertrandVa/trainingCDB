@@ -13,7 +13,7 @@ public class SecureInput {
     /**
      * Logger.
      */
-    static final Logger LOGGER = LoggerFactory.getLogger(SecureInput.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SecureInput.class);
 
     /**
      * Retourne un entier et rien d'autre.

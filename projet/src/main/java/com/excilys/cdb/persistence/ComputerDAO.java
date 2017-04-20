@@ -29,7 +29,8 @@ public class ComputerDAO {
     /**
      * logger.
      */
-    static final Logger LOGGER = LoggerFactory.getLogger(ComputerDAO.class);
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(ComputerDAO.class);
 
     /**
      * Méthode create d'un ordinateur.
@@ -41,7 +42,8 @@ public class ComputerDAO {
         long id = 0;
         long maxId = 0;
         if (StringUtils.isNotEmpty(computer.getName())) {
-            try (Connection connection = HikariConnectionFactory.getConnection();) {
+            try (Connection connection = HikariConnectionFactory
+                    .getConnection();) {
                 connection.setReadOnly(false);
                 try (ResultSet result = connection.createStatement()
                         .executeQuery("SELECT MAX(id) FROM company");) {
@@ -114,49 +116,51 @@ public class ComputerDAO {
      * @param nbItems
      *            le nombre d'items à afficher
      * @param order
-     *             le champ pour trier les ordinateurs
+     *            le champ pour trier les ordinateurs
      * @param match
-     *             les caractères recherchés.
+     *            les caractères recherchés.
      */
-    public List<Computer> readAll(long debut, int nbItems, String match, String order) {
+    public List<Computer> readAll(long debut, int nbItems, String match,
+            String order) {
         List<Computer> list = new ArrayList<Computer>();
         try (Connection connection = HikariConnectionFactory.getConnection();) {
             connection.setReadOnly(true);
-            String sql = "SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.name like %s OR company.name like %s ORDER BY %s LIMIT " + nbItems + " OFFSET " + debut;
+            String sql = "SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.name like %s OR company.name like %s ORDER BY %s LIMIT "
+                    + nbItems + " OFFSET " + debut;
             sql = String.format(sql, match, match, order);
             java.sql.PreparedStatement statement = connection
                     .prepareStatement(sql);
             LOGGER.debug(statement.toString());
-            ResultSet result = statement.executeQuery();
+            try (ResultSet result = statement.executeQuery();) {
                 while (result.next()) {
-                        Timestamp timestamp1 = result
-                                .getTimestamp("computer.introduced");
-                        Timestamp timestamp2 = result
-                                .getTimestamp("computer.discontinued");
-                        LocalDate date1 = null;
-                        LocalDate date2 = null;
-                        if (timestamp1 != null) {
-                            date1 = timestamp1.toLocalDateTime().toLocalDate();
-                        }
-                        if (timestamp2 != null) {
-                            date2 = timestamp2.toLocalDateTime().toLocalDate();
-                        }
-                        Company company = new Company.CompanyBuilder(
-                                result.getString("company.name")).id(
-                                        result.getLong("computer.company_id"))
-                                        .build();
-                        LOGGER.debug(company.toString());
-                        Computer computer = new Computer.ComputerBuilder(
-                                result.getString("computer.name"))
-                                        .id(result.getLong("computer.id"))
-                                        .introduceDate(date1)
-                                        .discontinuedDate(date2)
-                                        .manufacturer(company).build();
-                        list.add(computer);
-                        LOGGER.debug(computer.toString());
+                    Timestamp timestamp1 = result
+                            .getTimestamp("computer.introduced");
+                    Timestamp timestamp2 = result
+                            .getTimestamp("computer.discontinued");
+                    LocalDate date1 = null;
+                    LocalDate date2 = null;
+                    if (timestamp1 != null) {
+                        date1 = timestamp1.toLocalDateTime().toLocalDate();
                     }
+                    if (timestamp2 != null) {
+                        date2 = timestamp2.toLocalDateTime().toLocalDate();
+                    }
+                    Company company = new Company.CompanyBuilder(
+                            result.getString("company.name"))
+                                    .id(result.getLong("computer.company_id"))
+                                    .build();
+                    LOGGER.debug(company.toString());
+                    Computer computer = new Computer.ComputerBuilder(
+                            result.getString("computer.name"))
+                                    .id(result.getLong("computer.id"))
+                                    .introduceDate(date1)
+                                    .discontinuedDate(date2)
+                                    .manufacturer(company).build();
+                    list.add(computer);
+                    LOGGER.debug(computer.toString());
+                }
                 LOGGER.debug("liste de fabriquants terminée");
-            result.close();
+            }
         } catch (SQLException e) {
             LOGGER.error(e.getMessage());
         }
@@ -201,10 +205,10 @@ public class ComputerDAO {
         boolean delete = false;
         try (Connection connection = HikariConnectionFactory.getConnection();) {
             connection.setReadOnly(false);
-                connection.createStatement()
-                        .executeUpdate("DELETE FROM computer WHERE id =" + id);
-                LOGGER.debug("suppression réussie");
-                delete = true;
+            connection.createStatement()
+                    .executeUpdate("DELETE FROM computer WHERE id =" + id);
+            LOGGER.debug("suppression réussie");
+            delete = true;
         } catch (SQLException e) {
             LOGGER.error(e.getMessage());
         }
@@ -215,14 +219,15 @@ public class ComputerDAO {
      * Méthode count pour les ordinateurs.
      * @return nbEntrees le nombre d'entrées dans la BDD.
      * @param match
-     *              la chaine de caractères à matcher
+     *            la chaine de caractères à matcher
      */
     public int countComputer(String match) {
         int maxId = 0;
         try (Connection connection = HikariConnectionFactory.getConnection();) {
             connection.setReadOnly(true);
-            try (ResultSet result = connection.createStatement()
-                    .executeQuery("SELECT COUNT(*) AS count FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.name like " + match + " OR company.name like " + match)) {
+            try (ResultSet result = connection.createStatement().executeQuery(
+                    "SELECT COUNT(*) AS count FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.name like "
+                            + match + " OR company.name like " + match)) {
                 result.next();
                 maxId = result.getInt("count");
             }
@@ -238,15 +243,16 @@ public class ComputerDAO {
      * @param nbId
      *            le nombre d'ids affichés par pages
      * @param match
-     *             la chaine de caractères à matcher
+     *            la chaine de caractères à matcher
      */
     public int countPages(int nbId, String match) {
         int maxId = 0;
         int nbPages = 0;
         try (Connection connection = HikariConnectionFactory.getConnection();) {
             connection.setReadOnly(true);
-            try (ResultSet result = connection.createStatement()
-                    .executeQuery("SELECT COUNT(*) AS count FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.name like " + match + " OR company.name like " + match)) {
+            try (ResultSet result = connection.createStatement().executeQuery(
+                    "SELECT COUNT(*) AS count FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.name like "
+                            + match + " OR company.name like " + match)) {
                 result.next();
                 maxId = result.getInt("count");
             }
@@ -269,13 +275,13 @@ public class ComputerDAO {
      * @param connection
      *            la connection
      * @param computer
-     *              l'ordinateur en question
+     *            l'ordinateur en question
      * @param maxId
-     *              l'Id maximal de la compagnie
+     *            l'Id maximal de la compagnie
      * @param sql
-     *              la requête d'insertion ou de mise à jour
+     *            la requête d'insertion ou de mise à jour
      * @param idUpdate
-     *              l'Id de l'ordinateur à mettre à jour en cas d'update
+     *            l'Id de l'ordinateur à mettre à jour en cas d'update
      */
     private long prepare(Connection connection, Computer computer, long maxId,
             String sql, long idUpdate) {

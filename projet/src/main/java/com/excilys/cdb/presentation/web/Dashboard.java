@@ -47,7 +47,7 @@ public class Dashboard extends HttpServlet {
     /**
      * logger.
      */
-    static final Logger LOGGER = LoggerFactory.getLogger(ClientActions.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ClientActions.class);
 
     public long getDebut() {
         return debut;

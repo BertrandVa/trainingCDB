@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -23,14 +21,11 @@ import com.excilys.cdb.persistence.ComputerDAO;
 
 public class ClientActions {
 
-    /**
-     * logger.
-     */
-    static final Logger LOGGER = LoggerFactory.getLogger(ClientActions.class);
-    static ApplicationContext context =
+
+    private static ApplicationContext context =
             new ClassPathXmlApplicationContext("Spring-Modules.xml");
-    static ComputerDAO computerDAO = (ComputerDAO) context.getBean("computerDAO");     
-    static CompanyDAO companyDAO = (CompanyDAO) context.getBean("companyDAO"); 
+    private static ComputerDAO computerDAO = (ComputerDAO) context.getBean("computerDAO");
+    private static CompanyDAO companyDAO = (CompanyDAO) context.getBean("companyDAO");
 
     /**
      * Liste les ordinateurs en affichant leur nom et leur ID Par souci de

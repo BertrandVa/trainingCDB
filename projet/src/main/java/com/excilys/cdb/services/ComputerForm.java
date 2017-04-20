@@ -59,7 +59,7 @@ public class ComputerForm {
     /**
      * logger.
      */
-    static final org.slf4j.Logger LOGGER = LoggerFactory
+    private static final org.slf4j.Logger LOGGER = LoggerFactory
             .getLogger(ClientActions.class);
 
     /**
