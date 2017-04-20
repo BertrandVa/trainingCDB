@@ -78,7 +78,7 @@ public class ComputerDTO {
      *            Le builder de l'ordinateur
      * @see ComputerBuilder
      */
-    private ComputerDTO(String name, String manufacturerId, String manufacturerName, String introduce, String discontinued, String id) {
+    public ComputerDTO(String name, String manufacturerId, String manufacturerName, String introduce, String discontinued, String id) {
         this.name = name;
         this.manufacturerId = manufacturerId;
         this.manufacturerName = manufacturerName;
