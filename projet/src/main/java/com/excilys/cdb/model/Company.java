@@ -1,10 +1,9 @@
 package com.excilys.cdb.model;
 
 /**
- * On définit ici un fçournisseur, par son id et son nom.
+ * On définit ici un fournisseur, par son id et son nom.
  * @author bertrand
  */
-
 public class Company {
 
     /**
