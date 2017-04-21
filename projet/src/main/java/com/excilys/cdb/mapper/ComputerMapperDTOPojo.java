@@ -12,7 +12,7 @@ import com.excilys.cdb.model.Computer;
 
 public class ComputerMapperDTOPojo {
 
-    public Computer mapper(ComputerDTO computerDto) {
+    public static Computer mapper(ComputerDTO computerDto) {
         String name = computerDto.getName();
         String companyName = computerDto.getManufacturerName();
         Long companyId = Long.parseLong(computerDto.getManufacturerId());

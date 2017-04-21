@@ -14,7 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 
-import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.dto.ComputerDTO;
 import com.excilys.cdb.services.ClientActions;
 
 @Controller
@@ -27,18 +27,21 @@ public class Dashboard extends HttpServlet {
 
     /**
      * L'adresse de notre jsp.
+     * 
      * @see Dashboard.jsp
      * @see Dashboard#doGet(HttpServletRequest, HttpServletResponse)
      */
     public static final String VUE = "/WEB-INF/views/dashboard.jsp";
     /**
      * Le premier id d'ordinateur à afficher.
+     * 
      * @see Dashboard.jsp
      * @see Dashboard#doGet(HttpServletRequest, HttpServletResponse)
      */
     private long debut = 0;
     /**
      * Le nombre d'ordinateurs à afficher.
+     * 
      * @see Dashboard.jsp
      * @see Dashboard#doGet(HttpServletRequest, HttpServletResponse)
      */
@@ -47,7 +50,8 @@ public class Dashboard extends HttpServlet {
     /**
      * logger.
      */
-    private static final Logger LOGGER = LoggerFactory.getLogger(ClientActions.class);
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(ClientActions.class);
 
     public long getDebut() {
         return debut;
@@ -67,6 +71,7 @@ public class Dashboard extends HttpServlet {
 
     /**
      * Récupération de la jsp pour l'affichage.
+     * 
      * @see Dashboard#VUE
      * @param request
      *            La requête de notre servlet
@@ -79,15 +84,16 @@ public class Dashboard extends HttpServlet {
      */
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-      getParams(request);
-      String search = search(request);
-      pagination(request, search);
+        getParams(request);
+        String search = search(request);
+        pagination(request, search);
         this.getServletContext().getRequestDispatcher(VUE).forward(request,
                 response);
     }
 
     /**
      * Envoi de notre formulaire.
+     * 
      * @see AddComputer#FORM
      * @see AddComputer#COMPUTER
      * @see AddComputer#VUE
@@ -100,9 +106,9 @@ public class Dashboard extends HttpServlet {
      * @throws IOException
      *             Exception
      */
-    public void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    public void doPost(HttpServletRequest request, HttpServletResponse response) {
         String ids = request.getParameter("selection");
+        LOGGER.error(ids);
         if (ids.contains(",")) {
             String[] strs = ids.split("[,]");
             for (int i = 0; i < strs.length; i++) {
@@ -111,12 +117,18 @@ public class Dashboard extends HttpServlet {
         } else {
             ClientActions.deleteComputer(Integer.parseInt(ids));
         }
-        this.getServletContext().getRequestDispatcher(VUE).forward(request,
-                response);
+        try {
+            this.getServletContext().getRequestDispatcher(VUE).forward(request,
+                    response);
+        } catch (ServletException | IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     /**
      * Récupération des paramètres envoyés.
+     * 
      * @param request
      *            La requête de notre servlet
      */
@@ -165,23 +177,23 @@ public class Dashboard extends HttpServlet {
 
     /**
      * Gestion de la recherche.
+     * 
      * @param request
      *            La requête de notre servlet
-     * @return search
-     *            La séquence recherchée. % par défaut.
+     * @return search La séquence recherchée. % par défaut.
      */
     private String search(HttpServletRequest request) {
         String search = "%";
         if (StringUtils.isNotEmpty(request.getParameter("search"))) {
-            List<Computer> list = new ArrayList<Computer>();
+            List<ComputerDTO> list = new ArrayList<ComputerDTO>();
             list = ClientActions.listComputers(getDebut(), getNbId(),
-                    String.format(
-                            "'" + request.getParameter("search") + "%%'"),
+                    String.format("'" + request.getParameter("search") + "%%'"),
                     "computer.id");
             request.setAttribute("computerList", list);
             search = request.getParameter("search");
         }
-        request.setAttribute("nbComputer", ClientActions.countComputer("'" + search + "%%'"));
+        request.setAttribute("nbComputer",
+                ClientActions.countComputer("'" + search + "%%'"));
         request.setAttribute("sort", request.getParameter("sort"));
         request.setAttribute("search", search);
         return search;
@@ -189,10 +201,11 @@ public class Dashboard extends HttpServlet {
 
     /**
      * Récupération des paramètres pour la mise en place de la pagination.
+     * 
      * @param request
      *            La requête de notre servlet
      * @param search
-     *             La recherche
+     *            La recherche
      */
     private void pagination(HttpServletRequest request, String search) {
         if (request.getParameter("page") != null) {
@@ -200,7 +213,9 @@ public class Dashboard extends HttpServlet {
         } else {
             request.setAttribute("currentPage", 1);
         }
-        request.setAttribute("maxPage", ClientActions.maxPages(nbId, "'" + search + "%%'"));
-        LOGGER.debug(String.valueOf(ClientActions.maxPages(nbId, "'" + search + "%%'")));
+        request.setAttribute("maxPage",
+                ClientActions.maxPages(nbId, "'" + search + "%%'"));
+        LOGGER.debug(String
+                .valueOf(ClientActions.maxPages(nbId, "'" + search + "%%'")));
     }
 }

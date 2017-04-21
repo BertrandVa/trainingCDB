@@ -5,7 +5,7 @@ import com.excilys.cdb.model.Company;
 
 public class CompanyMapperPojoDTO {
     
-    public CompanyDTO mapper(Company company){
+    public static CompanyDTO mapper(Company company){
         String id = String.valueOf(company.getId());
         String name = company.getName();
         CompanyDTO compdto = new CompanyDTO(name, id);       

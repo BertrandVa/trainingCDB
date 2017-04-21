@@ -7,6 +7,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.excilys.cdb.dto.CompanyDTO;
+import com.excilys.cdb.dto.ComputerDTO;
+import com.excilys.cdb.mapper.CompanyMapperPojoDTO;
+import com.excilys.cdb.mapper.ComputerMapperDTOPojo;
+import com.excilys.cdb.mapper.ComputerMapperPojoDTO;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.persistence.CompanyDAO;
@@ -43,9 +48,14 @@ public class ClientActions {
      * @return liste
      *              la liste des ordinateurs
      */
-    public static List<Computer> listComputers(long debut, int nbItems, String search, String order) {
-        List<Computer> liste = new ArrayList<Computer>();
-        liste = computerDAO.readAll(debut, nbItems, search, order);
+    public static List<ComputerDTO> listComputers(long debut, int nbItems, String search, String order) {
+        List<ComputerDTO> liste = new ArrayList<ComputerDTO>();
+        List<Computer> list = new ArrayList<Computer>();
+        list = computerDAO.readAll(debut, nbItems, search, order);
+        for(Computer computer : list){
+            ComputerDTO comp = ComputerMapperPojoDTO.Mapper(computer);
+            liste.add(comp);
+        }
         return liste;
     }
 
@@ -60,10 +70,15 @@ public class ClientActions {
      * @return liste
      *              le nombre d'items à afficher
      */
-    public static List<Company> listCompanies(long debut, int nbItems) {
+    public static List<CompanyDTO> listCompanies(long debut, int nbItems) {
         List<Company> liste = new ArrayList<Company>();
+        List<CompanyDTO> list = new ArrayList<CompanyDTO>();
         liste = companyDAO.readAll(debut, nbItems);
-        return liste;
+        for(Company company : liste){
+            CompanyDTO comp = CompanyMapperPojoDTO.mapper(company);
+            list.add(comp);
+        }
+        return list;
     };
 
     /**
@@ -75,11 +90,11 @@ public class ClientActions {
      * @return computer
      *          l'ordinateur à afficher
      */
-    public static Computer showComputerDetails(long id) {
-
+    public static ComputerDTO showComputerDetails(long id) {
         Computer computer = new Computer.ComputerBuilder(null).build();
         computer = computerDAO.read(id);
-        return computer;
+        ComputerDTO computerDto = ComputerMapperPojoDTO.Mapper(computer);
+        return computerDto;
     }
 
     /**
@@ -91,9 +106,10 @@ public class ClientActions {
      * @return fait
      *              true si la création a eu lieu
      */
-    public static boolean createComputer(Computer computer) {
+    public static boolean createComputer(ComputerDTO computerDto) {
         boolean fait = false;
-        if (StringUtils.isNotEmpty(computer.getName())) {
+        if (StringUtils.isNotEmpty(computerDto.getName())) {
+            Computer computer = ComputerMapperDTOPojo.mapper(computerDto);
             computerDAO.create(computer);
             fait = true;
         }
@@ -109,8 +125,9 @@ public class ClientActions {
      * @return fait
      *              true si l'update a eu lieu
      */
-    public static boolean updateComputer(Computer computer) {
+    public static boolean updateComputer(ComputerDTO computerDto) {
         boolean fait = false;
+        Computer computer = ComputerMapperDTOPojo.mapper(computerDto);
         if (computer.getId() >= 0) {
             computerDAO.update(computer);
             fait = true;

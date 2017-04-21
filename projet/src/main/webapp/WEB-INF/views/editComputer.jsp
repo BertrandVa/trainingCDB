@@ -59,7 +59,7 @@
 									<option value="0">--</option>
 									<c:forEach var="elem" items="${requestScope.companyList}">
 										<option
-											<c:if test="${elem.id == computer.getManufacturer().getId()}">selected = "selected"</c:if>
+											<c:if test="${elem.id == computer.getManufacturerId()}">selected = "selected"</c:if>
 											value="${elem.id}">${elem.name}</option>
 									</c:forEach>
 								</select>

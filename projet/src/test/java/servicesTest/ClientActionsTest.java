@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 
+import com.excilys.cdb.dto.ComputerDTO;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.persistence.CompanyDAO;
@@ -16,8 +17,6 @@ import com.excilys.cdb.persistence.ComputerDAO;
 import com.excilys.cdb.services.ClientActions;
 
 import org.powermock.modules.junit4.PowerMockRunner;
-import org.powermock.reflect.Whitebox;
-
 import static org.powermock.api.mockito.PowerMockito.mock;
 import static org.powermock.api.mockito.PowerMockito.when;
 
@@ -40,19 +39,19 @@ public class ClientActionsTest {
     
     @Test
     public void findsAndReadsExistingComputerByPage() throws Exception {
-        List<Computer> list = new ArrayList<Computer>();
-        Computer computer = new Computer.ComputerBuilder(null).build();
+        List<ComputerDTO> list = new ArrayList<ComputerDTO>();
+        ComputerDTO computer = new ComputerDTO(null,null,null,null,null,null);
         List<Computer> liste = new ArrayList<Computer>();
         Computer computer1 = new Computer.ComputerBuilder("iPhone 4S").id(574).build();  
         liste.add(computer1);
         ComputerDAO compDAO = mock(ComputerDAO.class);
-        Whitebox.setInternalState(ComputerDAO.class,"INSTANCE", compDAO);
-        when(compDAO.readAll(574, 1, "'%'", "computer.id")).thenReturn(liste);
-        list = ClientActions.listComputers(574, 1, "'%'", "computer.id");
+        when(compDAO.readAll(573, 1, "'%'", "computer.id")).thenReturn(liste);
+        list = ClientActions.listComputers(573, 1, "'%'", "computer.id");
         computer = list.get(0);
         assertEquals(computer.getId(), 574);
         assertEquals(computer.getName(), ("iPhone 4S"));
-        assertNull(computer.getManufacturer());
+        assertNull(computer.getManufacturerId());
+        assertNull(computer.getManufacturerName());
         assertNull(computer.getIntroduceDate());
         assertNull(computer.getDiscontinuedDate());
     }
@@ -73,7 +72,6 @@ public class ClientActionsTest {
         liste.add(computer5);
         liste.add(computer6);
         ComputerDAO compDAO = mock(ComputerDAO.class);
-        Whitebox.setInternalState(ComputerDAO.class,"INSTANCE", compDAO);
         when(compDAO.readAll(572, 3, "'%'" , "computer.id")).thenReturn(liste);
         list = compDAO.readAll(572, 3, "'%'", "computer.id");
         computer1 = list.get(0);
@@ -107,7 +105,6 @@ public class ClientActionsTest {
         Computer computer3 = new Computer.ComputerBuilder(null).build();
         ComputerDAO compDAO = mock(ComputerDAO.class);
         List<Computer> liste = new ArrayList<Computer>();
-        Whitebox.setInternalState(ComputerDAO.class,"INSTANCE", compDAO);
         when(compDAO.readAll(5000, 3, "'%'", "computer.id")).thenReturn(liste);
         list = compDAO.readAll(5000, 3, "'%'", "computer.id");
         if (list.size() != 0) {
@@ -148,7 +145,6 @@ public class ClientActionsTest {
         liste.add(computer5);
         liste.add(computer6);
         ComputerDAO compDAO = mock(ComputerDAO.class);
-        Whitebox.setInternalState(ComputerDAO.class,"INSTANCE", compDAO);
         when(compDAO.readAll(573, 3, "'%'", "computer.id")).thenReturn(liste);
         list = compDAO.readAll(573, 3, "'%'", "computer.id");
         if (list.size() > 0) {
@@ -200,7 +196,6 @@ public class ClientActionsTest {
         Company company1 = new Company.CompanyBuilder("Apple Inc.").id(1).build();  
         liste.add(company1);
         CompanyDAO compDAO = mock(CompanyDAO.class);
-        Whitebox.setInternalState(CompanyDAO.class,"INSTANCE", compDAO);
         when(compDAO.readAll(1, 1)).thenReturn(liste);
         list = compDAO.readAll(1, 1);
         company = list.get(0);
@@ -222,7 +217,6 @@ public class ClientActionsTest {
         liste.add(company5);
         liste.add(company6);
         CompanyDAO compDAO = mock(CompanyDAO.class);
-        Whitebox.setInternalState(CompanyDAO.class,"INSTANCE", compDAO);
         when(compDAO.readAll(1, 3)).thenReturn(liste);
         list = compDAO.readAll(1, 3);
         company1 = list.get(0);
@@ -245,7 +239,6 @@ public class ClientActionsTest {
         Company company3 = new Company.CompanyBuilder(null).build();
         List<Company> liste = new ArrayList<Company>();
         CompanyDAO compDAO = mock(CompanyDAO.class);
-        Whitebox.setInternalState(CompanyDAO.class,"INSTANCE", compDAO);
         when(compDAO.readAll(5000, 3)).thenReturn(liste);
         list = compDAO.readAll(5000, 3);
         if (list.size() != 0) {
@@ -276,7 +269,6 @@ public class ClientActionsTest {
         liste.add(company5);
         liste.add(company6);
         CompanyDAO compDAO = mock(CompanyDAO.class);
-        Whitebox.setInternalState(CompanyDAO.class,"INSTANCE", compDAO);
         when(compDAO.readAll(2, 3)).thenReturn(liste);
         list = compDAO.readAll(2, 3);
         if (list.size() > 0) {
@@ -312,7 +304,6 @@ public class ClientActionsTest {
         Computer computer = new Computer.ComputerBuilder(null).build();
         Computer computer1 = new Computer.ComputerBuilder("iPhone 4S").id(574).build();
         ComputerDAO compDAO = mock(ComputerDAO.class);
-        Whitebox.setInternalState(ComputerDAO.class,"INSTANCE", compDAO);        
         when(compDAO.read(574)).thenReturn(computer1);
         computer = compDAO.read(574);
         assertEquals(computer.getId(), 574);
@@ -328,8 +319,7 @@ public class ClientActionsTest {
         Computer computer = new Computer.ComputerBuilder(null).build();        
         Company company1 = new Company.CompanyBuilder("Apple Inc.").id(1).build();
         Computer computer1 = new Computer.ComputerBuilder("Gateway LT3103U").id(573).manufacturer(company1).introduceDate(LocalDate.of(2011, 11, 04)).discontinuedDate(LocalDate.of(2013, 10, 12)).build();
-        ComputerDAO compDAO = mock(ComputerDAO.class);
-        Whitebox.setInternalState(ComputerDAO.class,"INSTANCE", compDAO);        
+        ComputerDAO compDAO = mock(ComputerDAO.class);       
         when(compDAO.read(573)).thenReturn(computer1);
         computer = compDAO.read(573);
         assertEquals(computer.getId(), 573);
@@ -345,7 +335,6 @@ public class ClientActionsTest {
         Computer computer = new Computer.ComputerBuilder(null).build();
         Computer computer1 = new Computer.ComputerBuilder(null).build();
         ComputerDAO compDAO = mock(ComputerDAO.class);
-        Whitebox.setInternalState(ComputerDAO.class,"INSTANCE", compDAO);        
         when(compDAO.read(580)).thenReturn(computer1);
         computer = compDAO.read(580);
         assertEquals(computer.getId(), 0);
@@ -381,7 +370,6 @@ public class ClientActionsTest {
         Computer computer = new Computer.ComputerBuilder(null).build();
         Computer computer1 = new Computer.ComputerBuilder(null).build();
         ComputerDAO compDAO = mock(ComputerDAO.class);
-        Whitebox.setInternalState(ComputerDAO.class,"INSTANCE", compDAO);        
         when(compDAO.create(computer)).thenReturn(30l);
         when(compDAO.read(30)).thenReturn(computer1);        
         long create = 0;
@@ -400,8 +388,7 @@ public class ClientActionsTest {
                 .build();
         Computer computer1 = new Computer.ComputerBuilder("monOrdinateur")
                 .build();
-        ComputerDAO compDAO = mock(ComputerDAO.class);
-        Whitebox.setInternalState(ComputerDAO.class,"INSTANCE", compDAO);        
+        ComputerDAO compDAO = mock(ComputerDAO.class);    
         when(compDAO.create(computer)).thenReturn(30l);
         when(compDAO.read(30)).thenReturn(computer1);        
         long create = compDAO.create(computer);
@@ -428,8 +415,7 @@ public class ClientActionsTest {
                 .manufacturer(
                         new Company.CompanyBuilder("Apple Inc.").id(1).build())
                 .build();
-        ComputerDAO compDAO = mock(ComputerDAO.class);
-        Whitebox.setInternalState(ComputerDAO.class,"INSTANCE", compDAO);        
+        ComputerDAO compDAO = mock(ComputerDAO.class);     
         when(compDAO.create(computer)).thenReturn(30l);
         when(compDAO.read(30)).thenReturn(computer1);   
         long create = compDAO.create(computer);
@@ -459,8 +445,7 @@ public class ClientActionsTest {
                 .manufacturer(
                         new Company.CompanyBuilder("Apple Inc.").id(1).build())
                 .build();
-        ComputerDAO compDAO = mock(ComputerDAO.class);
-        Whitebox.setInternalState(ComputerDAO.class,"INSTANCE", compDAO);        
+        ComputerDAO compDAO = mock(ComputerDAO.class);   
         when(compDAO.create(computer)).thenReturn(30l);
         when(compDAO.read(30)).thenReturn(computer1);   
         long create = compDAO.create(computer);
@@ -488,8 +473,7 @@ public class ClientActionsTest {
                 .manufacturer(
                         new Company.CompanyBuilder("Apple Inc.").id(1).build())
                 .build();
-        ComputerDAO compDAO = mock(ComputerDAO.class);
-        Whitebox.setInternalState(ComputerDAO.class,"INSTANCE", compDAO);        
+        ComputerDAO compDAO = mock(ComputerDAO.class);   
         when(compDAO.create(computer)).thenReturn(30l);
         when(compDAO.read(30)).thenReturn(computer1);   
         long create = compDAO.create(computer);
@@ -521,8 +505,7 @@ public class ClientActionsTest {
         Computer computer = new Computer.ComputerBuilder(null).id(563).build();
         Company company1 = new Company.CompanyBuilder(null).id(1).build();
         Computer computer1 = new Computer.ComputerBuilder("Dell Vostro").id(563).introduceDate(LocalDate.of(2011, 11, 04)).discontinuedDate(LocalDate.of(2013, 10, 12)).manufacturer(company1).build();
-        ComputerDAO compDAO = mock(ComputerDAO.class);
-        Whitebox.setInternalState(ComputerDAO.class,"INSTANCE", compDAO);        
+        ComputerDAO compDAO = mock(ComputerDAO.class);       
         when(compDAO.update(computer)).thenReturn(false);
         when(compDAO.read(computer.getId())).thenReturn(computer1);   
         boolean update = false;
@@ -543,8 +526,7 @@ public class ClientActionsTest {
                 .discontinuedDate(LocalDate.of(2010, 12, 03)).build();
         Computer computer1 = new Computer.ComputerBuilder("Jean").id(563)
                 .introduceDate(LocalDate.of(2011, 11, 04)).build();
-        ComputerDAO compDAO = mock(ComputerDAO.class);
-        Whitebox.setInternalState(ComputerDAO.class,"INSTANCE", compDAO);        
+        ComputerDAO compDAO = mock(ComputerDAO.class);   
         when(compDAO.update(computer)).thenReturn(true);
         when(compDAO.read(computer.getId())).thenReturn(computer1); 
         boolean update = false;
@@ -562,8 +544,7 @@ public class ClientActionsTest {
     public void updateComputerWithExistingParameters() throws Exception {
         Computer computer = new Computer.ComputerBuilder("jean").id(563).build();
         Computer computer1 = new Computer.ComputerBuilder("jean").id(563).build();
-        ComputerDAO compDAO = mock(ComputerDAO.class);
-        Whitebox.setInternalState(ComputerDAO.class,"INSTANCE", compDAO);        
+        ComputerDAO compDAO = mock(ComputerDAO.class);   
         when(compDAO.update(computer)).thenReturn(true);
         when(compDAO.read(563)).thenReturn(computer1); 
         boolean update = false;
@@ -597,8 +578,7 @@ public class ClientActionsTest {
                .discontinuedDate(LocalDate.of(2016, 12, 28))
                .manufacturer(company1)
                .build();
-       ComputerDAO compDAO = mock(ComputerDAO.class);
-       Whitebox.setInternalState(ComputerDAO.class,"INSTANCE", compDAO);        
+       ComputerDAO compDAO = mock(ComputerDAO.class);  
        when(compDAO.update(computer)).thenReturn(true);
        when(compDAO.read(563)).thenReturn(computer1); 
         boolean update = false;
@@ -627,7 +607,6 @@ public class ClientActionsTest {
         Computer computer = new Computer.ComputerBuilder(null).id(561).build();
         Computer computer1 = new Computer.ComputerBuilder(null).build();
         ComputerDAO compDAO = mock(ComputerDAO.class);
-        Whitebox.setInternalState(ComputerDAO.class,"INSTANCE", compDAO);        
         when(compDAO.delete(computer.getId())).thenReturn(true);
         when(compDAO.read(computer.getId())).thenReturn(computer1); 
         boolean delete = false;
@@ -645,8 +624,7 @@ public class ClientActionsTest {
     public void DeleteUnexistingComputer() throws Exception {
         Computer computer = new Computer.ComputerBuilder(null).id(2000).build();
         Computer computer1 = new Computer.ComputerBuilder(null).build();
-        ComputerDAO compDAO = mock(ComputerDAO.class);
-        Whitebox.setInternalState(ComputerDAO.class,"INSTANCE", compDAO);        
+        ComputerDAO compDAO = mock(ComputerDAO.class);     
         when(compDAO.delete(computer.getId())).thenReturn(false);
         when(compDAO.read(computer.getId())).thenReturn(computer1); 
         boolean delete = false;
@@ -667,7 +645,6 @@ public class ClientActionsTest {
     @Test
     public void TestCountComputers() throws Exception {
         ComputerDAO compDAO = mock(ComputerDAO.class);
-        Whitebox.setInternalState(ComputerDAO.class,"INSTANCE", compDAO);        
         when(compDAO.countComputer("'%'")).thenReturn(15);
         when(compDAO.delete(561)).thenReturn(true);
         int count1 = compDAO.countComputer("'%'");
@@ -687,7 +664,6 @@ public class ClientActionsTest {
     @Test
     public void TestCountCompanies() throws Exception {
         CompanyDAO compDAO = mock(CompanyDAO.class);
-        Whitebox.setInternalState(CompanyDAO.class,"INSTANCE", compDAO);
         when(compDAO.countCompanies()).thenReturn(3);
         int count1 = compDAO.countCompanies();
         assertEquals(count1, 3);
@@ -699,8 +675,7 @@ public class ClientActionsTest {
     
     @Test
     public void TestCountPages() throws Exception {
-        ComputerDAO compDAO = mock(ComputerDAO.class);
-        Whitebox.setInternalState(ComputerDAO.class,"INSTANCE", compDAO);        
+        ComputerDAO compDAO = mock(ComputerDAO.class);  
         when(compDAO.countPages(3, "'%'")).thenReturn(5);
         when(compDAO.countPages(5, "'%'")).thenReturn(3);
         when(compDAO.countPages(0, "'%'")).thenReturn(0);

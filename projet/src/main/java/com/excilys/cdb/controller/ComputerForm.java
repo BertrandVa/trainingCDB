@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.LoggerFactory;
 
+import com.excilys.cdb.dto.ComputerDTO;
+import com.excilys.cdb.mapper.ComputerMapperPojoDTO;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.services.ClientActions;
@@ -128,7 +130,8 @@ public class ComputerForm {
         }
         if (erreurs.isEmpty()) {
             boolean fait = false;
-            fait = ClientActions.createComputer(computer);
+            ComputerDTO compDto = ComputerMapperPojoDTO.Mapper(computer);
+            fait = ClientActions.createComputer(compDto);
             if (fait) {
                 resultat = "Succès de l'ajout.";
             } else {
@@ -186,7 +189,8 @@ public class ComputerForm {
         }
         if (erreurs.isEmpty()) {
             boolean fait = false;
-            fait = ClientActions.updateComputer(computer);
+            ComputerDTO compDto = ComputerMapperPojoDTO.Mapper(computer);
+            fait = ClientActions.updateComputer(compDto);
             if (fait) {
                 resultat = "Succès de la mise à jour";
             } else {

@@ -80,7 +80,7 @@
 							<td><a href="editComputer?id=${elem.getId()}"><c:out value="${elem.getName()}"/></a></td>
 							<td><c:out value="${elem.getIntroduceDate()}"/></td>
 							<td><c:out value="${elem.getDiscontinuedDate()}"/></td>
-							<td><c:out value="${elem.getManufacturer().getName()}"/></td>
+							<td><c:out value="${elem.getManufacturerName()}"/></td>
 						</tr>
 					</c:forEach>
 				</tbody>

@@ -10,7 +10,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverBackedSelenium;
 import org.openqa.selenium.chrome.ChromeDriver;
 
-import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.dto.ComputerDTO;
 import com.excilys.cdb.services.ClientActions;
 
 public class SeleniumTest {
@@ -54,11 +54,11 @@ public class SeleniumTest {
     
     @Test
     private void checkPageEditComputer(long id) {
-        Computer computer = ClientActions.showComputerDetails(id);
+        ComputerDTO computer = ClientActions.showComputerDetails(id);
         checkElement("computerName", computer.getName());
         checkElement("introduce", computer.getIntroduceDate().toString());
         checkElement("discontinued", computer.getDiscontinuedDate().toString());
-        checkElement("company", computer.getManufacturer().getName());        
+        checkElement("company", computer.getManufacturerName());        
     }
     
     @Test
