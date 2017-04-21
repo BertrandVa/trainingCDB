@@ -6,16 +6,8 @@ import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.LoggerFactory;
-
 import com.excilys.cdb.dto.ComputerDTO;
-import com.excilys.cdb.mapper.ComputerMapperPojoDTO;
-import com.excilys.cdb.model.Company;
-import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.services.ClientActions;
 import com.excilys.cdb.services.exceptions.DiscontinuedDateException;
 import com.excilys.cdb.services.exceptions.IntroduceDateException;
@@ -27,53 +19,10 @@ import com.excilys.cdb.services.exceptions.NameException;
  */
 public class ComputerForm {
     /**
-     * le champ nom de notre ordinateur, défini dans la JSP.
-     */
-    public static final String CHAMP_NOM = "computerName";
-
-    /**
-     * le champ id de notre ordinateur, défini dans la JSP.
-     */
-    public static final String CHAMP_ID = "id";
-
-    /**
-     * le champ company de notre ordinateur, défini dans la JSP.
-     */
-    public static final String CHAMP_COMPANY = "companyId";
-    /**
-     * le champ date d'introduction de notre ordinateur, défini dans la JSP.
-     */
-    public static final String CHAMP_INTRODUCE_DATE = "introduce";
-    /**
-     * le champ date de départ de notre ordinateur, défini dans la JSP.
-     */
-    public static final String CHAMP_DISCONTINUED_DATE = "discontinued";
-
-    /**
-     * le résultat de notre requête.
-     * @see ComputerForm#getResultat()
-     */
-    private String resultat;
-    /**
      * Il s'agit d'une hash map avec nos erreurs et les champs touchés.
      * @see ComputerForm#getErreurs()
      */
     private Map<String, String> erreurs = new HashMap<String, String>();
-    /**
-     * logger.
-     */
-    private static final org.slf4j.Logger LOGGER = LoggerFactory
-            .getLogger(ClientActions.class);
-
-    /**
-     * Récupération du résultat de la requête.
-     * @see ComputerForm#resultat
-     * @return resultat
-     *                  le résultat de notre requête.
-     */
-    public String getResultat() {
-        return resultat;
-    }
 
     /**
      * récpération de notre hash map d'erreurs.
@@ -98,49 +47,20 @@ public class ComputerForm {
      * @return computer
      *               l'ordinateur créé en base de données
      */
-    public Computer createComputer(HttpServletRequest request) {
-        String name = request.getParameter(CHAMP_NOM);
-        String company = request.getParameter(CHAMP_COMPANY);
-        Company manufacturer = new Company.CompanyBuilder(null)
-                .id(Long.parseLong(company)).build();
-
-        LocalDate introduceDate = null;
-        LocalDate discontinuedDate = null;
-
-        LOGGER.debug(request.getParameter(CHAMP_INTRODUCE_DATE));
-        LOGGER.debug(request.getParameter(CHAMP_DISCONTINUED_DATE));
-
-        if (StringUtils.isNotEmpty(request.getParameter(CHAMP_INTRODUCE_DATE))) {
-            introduceDate = toDate(request.getParameter(CHAMP_INTRODUCE_DATE));
-        }
-        if (StringUtils.isNotEmpty(request.getParameter(CHAMP_DISCONTINUED_DATE))) {
-            discontinuedDate = toDate(request.getParameter(CHAMP_DISCONTINUED_DATE));
-        }
-
-        Computer computer = new Computer.ComputerBuilder(name)
-                .introduceDate(introduceDate).discontinuedDate(discontinuedDate)
-                .manufacturer(manufacturer).build();
-
+    public boolean createComputer(ComputerDTO computerDto) {
+        String name = computerDto.getName();
+        boolean fait = false;
         try {
             checkName(name);
-            checkIntroduceDate(request.getParameter(CHAMP_INTRODUCE_DATE));
-            checkDiscontinuedDate(request.getParameter(CHAMP_DISCONTINUED_DATE), introduceDate);
+            checkIntroduceDate(computerDto.getIntroduceDate());
+            checkDiscontinuedDate(computerDto.getDiscontinuedDate(), computerDto.getIntroduceDate());
         } catch (NameException | IntroduceDateException | DiscontinuedDateException  e) {
             setErreur(e.getChamp(), e.getMessage());
         }
         if (erreurs.isEmpty()) {
-            boolean fait = false;
-            ComputerDTO compDto = ComputerMapperPojoDTO.Mapper(computer);
-            fait = ClientActions.createComputer(compDto);
-            if (fait) {
-                resultat = "Succès de l'ajout.";
-            } else {
-                resultat = "Echec de l'ajout.";
-            }
-        } else {
-            resultat = "Echec de l'ajout.";
-        }
-        return computer;
+            fait = ClientActions.createComputer(computerDto);
+           }
+        return fait;
     }
 
     /**
@@ -156,50 +76,20 @@ public class ComputerForm {
      * @return computer
      *               l'ordinateur créé en base de données
      */
-    public Computer updateComputer(HttpServletRequest request) {
-        String name = request.getParameter(CHAMP_NOM);
-        String company = request.getParameter(CHAMP_COMPANY);
-        Company manufacturer = new Company.CompanyBuilder(null)
-                .id(Long.parseLong(company)).build();
-
-        LocalDate introduceDate = null;
-        LocalDate discontinuedDate = null;
-
-        LOGGER.debug(request.getParameter(CHAMP_INTRODUCE_DATE));
-        LOGGER.debug(request.getParameter(CHAMP_DISCONTINUED_DATE));
-
-        if (StringUtils.isNotEmpty(request.getParameter(CHAMP_INTRODUCE_DATE))) {
-            introduceDate = toDate(request.getParameter(CHAMP_INTRODUCE_DATE));
-        }
-        if (StringUtils.isNotEmpty(request.getParameter(CHAMP_DISCONTINUED_DATE))) {
-            discontinuedDate = toDate(request.getParameter(CHAMP_DISCONTINUED_DATE));
-        }
-
-        Computer computer = new Computer.ComputerBuilder(name)
-                .id(Long.parseLong(request.getParameter(CHAMP_ID)))
-                .introduceDate(introduceDate).discontinuedDate(discontinuedDate)
-                .manufacturer(manufacturer).build();
-
+    public boolean updateComputer(ComputerDTO computerDto) {
+        String name = computerDto.getName();
+        boolean fait = false;
         try {
             checkName(name);
-            checkIntroduceDate(request.getParameter(CHAMP_INTRODUCE_DATE));
-            checkDiscontinuedDate(request.getParameter(CHAMP_DISCONTINUED_DATE), introduceDate);
+            checkIntroduceDate(computerDto.getIntroduceDate());
+            checkDiscontinuedDate(computerDto.getDiscontinuedDate(), computerDto.getIntroduceDate());
         } catch (NameException | IntroduceDateException | DiscontinuedDateException e) {
             setErreur(e.getChamp(), e.getMessage());
         }
         if (erreurs.isEmpty()) {
-            boolean fait = false;
-            ComputerDTO compDto = ComputerMapperPojoDTO.Mapper(computer);
-            fait = ClientActions.updateComputer(compDto);
-            if (fait) {
-                resultat = "Succès de la mise à jour";
-            } else {
-                resultat = "Echec de la mise à jour";
-            }
-        } else {
-            resultat = "Echec de la mise à jour";
+            fait = ClientActions.updateComputer(computerDto);
         }
-        return computer;
+        return fait;
     }
 
     /**
@@ -246,11 +136,12 @@ public class ComputerForm {
      *              l'erreur à retourner
      */
     private void checkDiscontinuedDate(String discontinuedDate,
-         LocalDate introduceDate) throws DiscontinuedDateException {
+         String introduceDate) throws DiscontinuedDateException {
         if (StringUtils.isNotEmpty(discontinuedDate)) {
             try {
                 toDate(discontinuedDate);
-                if (introduceDate != null && toDate(discontinuedDate).isBefore(introduceDate)) {
+                toDate(introduceDate);
+                if (introduceDate != null && toDate(discontinuedDate).isBefore(toDate(introduceDate))) {
                     throw new DiscontinuedDateException();
                 }
             } catch (DateTimeParseException e) {

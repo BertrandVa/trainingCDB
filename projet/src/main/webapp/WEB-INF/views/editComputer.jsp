@@ -69,7 +69,6 @@
 							<input type="submit" value="Edit" class="btn btn-primary">
 							or <a href="dashboard.html" class="btn btn-default">Cancel</a>
 						</div>
-						<p class="${empty form.erreurs ? 'succes' : 'erreur'}">${form.getResultat()}</p>
 					</form>
 				</div>
 			</div>

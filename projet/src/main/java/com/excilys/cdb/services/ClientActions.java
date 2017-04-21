@@ -23,7 +23,6 @@ import com.excilys.cdb.persistence.ComputerDAO;
  * computer et delete a computer".
  * @author bertrand
  */
-
 public class ClientActions {
 
 

@@ -121,7 +121,6 @@ public class Dashboard extends HttpServlet {
             this.getServletContext().getRequestDispatcher(VUE).forward(request,
                     response);
         } catch (ServletException | IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }

@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
 
 import com.excilys.cdb.controller.ComputerForm;
-import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.dto.ComputerDTO;
 import com.excilys.cdb.services.ClientActions;
 
 @Controller
@@ -73,10 +73,11 @@ public class EditComputer extends HttpServlet {
      */
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        ComputerDTO computerDto = new ComputerDTO(request.getParameter("computerName"), request.getParameter("companyId"), null, request.getParameter("introduce"), request.getParameter("discontinued"), request.getParameter("id"));
         ComputerForm form = new ComputerForm();
-        Computer computer = form.updateComputer(request);
+        form.updateComputer(computerDto);
         request.setAttribute(FORM, form);
-        request.setAttribute(COMPUTER, computer);
+        request.setAttribute(COMPUTER, computerDto);
         this.getServletContext().getRequestDispatcher(VUE).forward(request,
                 response);
     }

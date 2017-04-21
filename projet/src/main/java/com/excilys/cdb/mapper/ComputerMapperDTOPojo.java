@@ -13,6 +13,7 @@ import com.excilys.cdb.model.Computer;
 public class ComputerMapperDTOPojo {
 
     public static Computer mapper(ComputerDTO computerDto) {
+        Long id;
         String name = computerDto.getName();
         String companyName = computerDto.getManufacturerName();
         Long companyId = Long.parseLong(computerDto.getManufacturerId());
@@ -20,7 +21,11 @@ public class ComputerMapperDTOPojo {
                 .build();
         LocalDate introduceDate = toDate(computerDto.getIntroduceDate());
         LocalDate discontinuedDate = toDate(computerDto.getDiscontinuedDate());
-        Long id = Long.parseLong(computerDto.getId());
+        if(computerDto.getId()!=null){
+            id = Long.parseLong(computerDto.getId());
+        }else{
+            id= 0L;
+        }
         Computer computer = new Computer.ComputerBuilder(name)
                 .manufacturer(company).introduceDate(introduceDate)
                 .discontinuedDate(discontinuedDate).id(id).build();
