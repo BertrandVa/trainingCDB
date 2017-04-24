@@ -137,10 +137,10 @@ public class ComputerDAOTest {
         create = computerDAO.create(computer);
         Computer computer2 = computerDAO.read(create);
         assertNull(computer2.getName());
-        assertNull(computer2.getManufacturer());
+        assertNull(computer2.getManufacturer().getName());
+        assertEquals(computer2.getManufacturer().getId(), 0);
         assertNull(computer2.getIntroduceDate());
         assertNull(computer2.getDiscontinuedDate());
-        assertEquals(computer2.getId(), 0);
     }
 
     @Test
@@ -172,26 +172,6 @@ public class ComputerDAOTest {
         assertEquals(computer2.getIntroduceDate(), LocalDate.of(1998, 07, 03));
         assertEquals(computer2.getDiscontinuedDate(),
                 LocalDate.of(2015, 11, 26));
-    }
-
-    @Test
-    public void createComputerWithDiscontinuedDateElderThanIntroduceDate()
-            throws Exception {
-        Computer computer = new Computer.ComputerBuilder("monOrdinateur")
-                .id(540)
-                .introduceDate(LocalDate.of(2015, 11, 26))
-                .discontinuedDate(LocalDate.of(1998, 07, 03))
-                .manufacturer(
-                        new Company.CompanyBuilder("Apple Inc.").id(1).build())
-                .build();
-        long create = computerDAO.create(computer);
-        Computer computer2 = computerDAO.read(create);
-        assertEquals(computer2.getName(), "monOrdinateur");
-        assertEquals(computer2.getManufacturer().getName(), "Apple Inc.");
-        assertEquals(computer2.getManufacturer().getId(), 1);
-        assertEquals(computer2.getIntroduceDate(), LocalDate.of(2015, 11, 26));
-        assertNull(computer2.getDiscontinuedDate());
-
     }
 
     @Test
@@ -356,46 +336,23 @@ public class ComputerDAOTest {
     @Test
     public void updateComputerWithoutName() throws Exception {
         Computer computer = new Computer.ComputerBuilder(null).id(563).build();
-        boolean update = false;
-        update = computerDAO.update(computer);
+        computerDAO.update(computer);
         Computer computer2 = computerDAO.read(computer.getId());
-        assertNotNull(computer2.getName());
+        assertNull(computer2.getName());
         assertNotNull(computer2.getManufacturer());
-        assertNotNull(computer2.getIntroduceDate());
-        assertNotNull(computer2.getDiscontinuedDate());
-        assertEquals(computer2.getId(), 563);
-        assertEquals(update,false);
-    }
-    
-    @Test
-    public void updateComputerWithBadDiscontinuedDate() throws Exception {
-        Computer computer = new Computer.ComputerBuilder("Jean").id(563)
-                .introduceDate(LocalDate.of(2011, 11, 04))
-                .discontinuedDate(LocalDate.of(2010, 12, 03)).build();
-        boolean update = false;
-        update = computerDAO.update(computer);
-        Computer computer2 = computerDAO.read(563);
-        assertEquals(computer2.getName(),"Jean");
-        assertEquals(computer2.getManufacturer().getId(),0);
-        assertEquals(computer2.getIntroduceDate(),LocalDate.of(2011, 11, 04));
+        assertNull(computer2.getIntroduceDate());
         assertNull(computer2.getDiscontinuedDate());
         assertEquals(computer2.getId(), 563);
-        assertEquals(update,true);
     }
     
     @Test
     public void updateComputerWithExistingParameters() throws Exception {
         Computer computer = new Computer.ComputerBuilder("jean").id(563).build();
-        boolean update = false;
-        update = computerDAO.update(computer);
+        computerDAO.update(computer);
         Computer computer2 = computerDAO.read(563);
         assertEquals(computer2.getName(),"jean");
-        assertNull(computer2.getManufacturer().getName());
-        assertEquals(computer2.getManufacturer().getId(), 0);
-        assertNull(computer2.getIntroduceDate());
-        assertNull(computer2.getDiscontinuedDate());
+        assertEquals(computer2.getManufacturer().getId(), 1);
         assertEquals(computer2.getId(), 563);
-        assertEquals(update,true);
     }
 
     @Test
@@ -409,8 +366,7 @@ public class ComputerDAOTest {
                 .discontinuedDate(LocalDate.of(2016, 12, 28))
                 .manufacturer(company)
                 .build();
-        boolean update = false;
-        update = computerDAO.update(computer);
+        computerDAO.update(computer);
         Computer computer2 = computerDAO.read(563);
         assertEquals(computer2.getName(),"jean");
         assertEquals(computer2.getManufacturer().getName(), "Thinking Machines"); //en effet, la compagnie Apple de Terre n'existe pas dans la BDD ;)
@@ -418,7 +374,6 @@ public class ComputerDAOTest {
         assertEquals(computer2.getIntroduceDate(), LocalDate.of(1998, 03, 10));
         assertEquals(computer2.getDiscontinuedDate(), LocalDate.of(2016, 12, 28));
         assertEquals(computer2.getId(), 563);
-        assertEquals(update,true);
     }
 
     /*
@@ -433,15 +388,13 @@ public class ComputerDAOTest {
     @Test
     public void DeleteExistingComputer() throws Exception {
         Computer computer = new Computer.ComputerBuilder(null).id(561).build();
-        boolean delete = false;
-        delete = computerDAO.delete(computer.getId());
+        computerDAO.delete(computer.getId());
         Computer computer2 = computerDAO.read(computer.getId());
         assertNull(computer2.getName());
         assertNull(computer2.getManufacturer());
         assertNull(computer2.getIntroduceDate());
         assertNull(computer2.getDiscontinuedDate());
         assertEquals(computer2.getId(), 0);
-        assertEquals(delete, true);
     }
     
     @Test
@@ -463,11 +416,10 @@ public class ComputerDAOTest {
     @Test
     public void TestCountComputers() throws Exception {
         int count1 = computerDAO.countComputer("'%'");
-        boolean delete = computerDAO.delete(561);
+        computerDAO.delete(561);
         int count2 = computerDAO.countComputer("'%'");
         assertEquals(count1, 15);
         assertEquals(count2, 14);
-        assertTrue(delete);
     }
     
     /*

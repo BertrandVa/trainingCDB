@@ -2,14 +2,15 @@ package com.excilys.cdb.persistence;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import org.springframework.jdbc.core.JdbcTemplate;
+import com.excilys.cdb.mapper.CompanyMapper;
 import com.excilys.cdb.model.Company;
+import com.zaxxer.hikari.HikariDataSource;
 
 /**
  * Cette classe de DAO implémente les méthodes nécessaires à l'accès aux données
@@ -24,7 +25,14 @@ public class CompanyDAO {
      * logger.
      */
     private final Logger logger = LoggerFactory.getLogger(CompanyDAO.class);
+    private HikariDataSource dataSource;
+    private JdbcTemplate jdbcTemplateObject;
 
+    public void setDataSource(HikariDataSource dataSource) {
+        this.dataSource = dataSource;
+        this.jdbcTemplateObject = new JdbcTemplate(dataSource);
+     }
+    
     /**
      * Méthode d'affichage de tous les fabriquants.
      * @return List une arraylist contenant l'ensemble de nos fabriquants
@@ -34,23 +42,10 @@ public class CompanyDAO {
      *            le nombre d'items à afficher
      */
     public List<Company> readAll(long debut, int nbItems) {
-        List<Company> list = new ArrayList<Company>();
-        try (Connection connection = HikariConnectionFactory.getConnection();) {
-            try (ResultSet result = connection.createStatement()
-                    .executeQuery("SELECT * FROM company  LIMIT " + nbItems
-                            + " OFFSET " + debut);) {
-                while (result.next()) {
-                    Company company = new Company.CompanyBuilder(
-                            result.getString("company.name"))
-                                    .id(result.getLong("company.id")).build();
-                    list.add(company);
-                }
-            }
-        } catch (SQLException e) {
-            logger.error(e.getMessage());
-        }
-        logger.debug("liste de fabriquants terminée");
-        return list;
+        String sql = "SELECT * FROM company  LIMIT " + nbItems + " OFFSET " + debut;
+        List <Company> companies = new ArrayList<Company>();
+        companies = jdbcTemplateObject.query(sql, new CompanyMapper());
+        return companies;
     }
 
     /**
@@ -58,18 +53,9 @@ public class CompanyDAO {
      * @return nbEntrees le nombre d'entrées dans la BDD.
      */
     public int countCompanies() {
-        int maxId = 0;
-        try (Connection connection = HikariConnectionFactory.getConnection();) {
-            connection.setReadOnly(true);
-            try (ResultSet result = connection.createStatement()
-                    .executeQuery("SELECT COUNT(*) AS count FROM company");) {
-                result.next();
-                maxId = result.getInt("count");
-            }
-        } catch (SQLException e) {
-            logger.error(e.getMessage());
-        }
-        return maxId;
+        String sql = "SELECT COUNT(*) FROM company"; 
+        int nbCompanies =  jdbcTemplateObject.queryForObject(sql, Integer.class);
+        return nbCompanies;
     }
 
     /**

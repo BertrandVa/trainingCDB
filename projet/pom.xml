@@ -182,6 +182,11 @@
 			<artifactId>jcl-over-slf4j</artifactId>
 			<version>${jclVersion}</version>
 		</dependency>
+		<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-jdbc</artifactId>
+    <version>${springVersion}</version>
+</dependency>		
 	</dependencies>
 	<reporting>
 		<plugins>

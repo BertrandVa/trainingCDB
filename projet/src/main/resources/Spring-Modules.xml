@@ -3,6 +3,4 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
 	http://www.springframework.org/schema/beans/spring-beans-4.3.xsd">
 	<import resource="/persistence/Spring-HikariConnection.xml" />
-	<import resource="/persistence/Spring-Company.xml" />
-	<import resource="/persistence/Spring-Computer.xml" />
 </beans>
