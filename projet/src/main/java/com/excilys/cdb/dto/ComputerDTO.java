@@ -74,8 +74,18 @@ public class ComputerDTO {
      * Constructeur Computer.
      * Crée un nouvel ordinateur avec un nom défini Les autres champs sont
      * facultatifs
-     * @param builder
-     *            Le builder de l'ordinateur
+     * @param name
+     *            Le nom de l'ordinateur
+     * @param manufacturerId
+     *             L'id de la compagnie
+     * @param manufacturerName
+     *             Le nom de la compagnie
+     * @param introduce
+     *             La date d'introduction
+     * @param discontinued
+     *             La date de sortie
+     * @param id
+     *          L'id de l'ordinateur
      * @see ComputerBuilder
      */
     public ComputerDTO(String name, String manufacturerId, String manufacturerName, String introduce, String discontinued, String id) {

@@ -30,7 +30,7 @@ public class CompanyDAO {
     public void setDataSource(HikariDataSource dataSource) {
         this.jdbcTemplateObject = new JdbcTemplate(dataSource);
      }
-    
+
     /**
      * Méthode d'affichage de tous les fabriquants.
      * @return List une arraylist contenant l'ensemble de nos fabriquants
@@ -41,7 +41,7 @@ public class CompanyDAO {
      */
     public List<Company> readAll(long debut, int nbItems) {
         String sql = "SELECT * FROM company  LIMIT " + nbItems + " OFFSET " + debut;
-        List <Company> companies = new ArrayList<Company>();
+        List<Company> companies = new ArrayList<Company>();
         companies = jdbcTemplateObject.query(sql, new CompanyMapper());
         return companies;
     }
@@ -51,7 +51,7 @@ public class CompanyDAO {
      * @return nbEntrees le nombre d'entrées dans la BDD.
      */
     public int countCompanies() {
-        String sql = "SELECT COUNT(*) FROM company"; 
+        String sql = "SELECT COUNT(*) FROM company";
         int nbCompanies =  jdbcTemplateObject.queryForObject(sql, Integer.class);
         return nbCompanies;
     }

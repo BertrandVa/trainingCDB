@@ -42,8 +42,8 @@ public class ComputerForm {
      * @see ComputerForm#checkIntroduceDate(String)
      * @see AddComputer.java
      * @see ComputerDAO.java
-     * @param request
-     *              la requête de notre servlet
+     * @param computerDto
+     *              notre objet DTO
      * @return computer
      *               l'ordinateur créé en base de données
      */
@@ -71,8 +71,8 @@ public class ComputerForm {
      * @see ComputerForm#checkIntroduceDate(String)
      * @see AddComputer.java
      * @see ComputerDAO.java
-     * @param request
-     *              la requête de notre servlet
+     * @param computerDto
+     *              notre objet DTO
      * @return computer
      *               l'ordinateur créé en base de données
      */

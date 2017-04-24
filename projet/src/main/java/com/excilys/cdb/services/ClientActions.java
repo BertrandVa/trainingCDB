@@ -51,8 +51,8 @@ public class ClientActions {
         List<ComputerDTO> liste = new ArrayList<ComputerDTO>();
         List<Computer> list = new ArrayList<Computer>();
         list = computerDAO.readAll(debut, nbItems, search, order);
-        for(Computer computer : list){
-            ComputerDTO comp = ComputerMapperPojoDTO.Mapper(computer);
+        for (Computer computer : list) {
+            ComputerDTO comp = ComputerMapperPojoDTO.mapper(computer);
             liste.add(comp);
         }
         return liste;
@@ -73,7 +73,7 @@ public class ClientActions {
         List<Company> liste = new ArrayList<Company>();
         List<CompanyDTO> list = new ArrayList<CompanyDTO>();
         liste = companyDAO.readAll(debut, nbItems);
-        for(Company company : liste){
+        for (Company company : liste) {
             CompanyDTO comp = CompanyMapperPojoDTO.mapper(company);
             list.add(comp);
         }
@@ -92,7 +92,7 @@ public class ClientActions {
     public static ComputerDTO showComputerDetails(long id) {
         Computer computer = new Computer.ComputerBuilder(null).build();
         computer = computerDAO.read(id);
-        ComputerDTO computerDto = ComputerMapperPojoDTO.Mapper(computer);
+        ComputerDTO computerDto = ComputerMapperPojoDTO.mapper(computer);
         return computerDto;
     }
 
@@ -100,7 +100,7 @@ public class ClientActions {
      * Permet la création d'un nouvel ordinateur dans la BDD.
      * @see ClientActions#menuOrdinateur()
      * @see ComputerDAO#create(Computer)
-     * @param computer
+     * @param computerDto
      *            l'ordinateur à ajouter
      * @return fait
      *              true si la création a eu lieu
@@ -119,7 +119,7 @@ public class ClientActions {
      * Permet la mise à jour d'un ordinateur dans la BDD.
      * @see ClientActions#menuOrdinateur()
      * @see ComputerDAO#update(Computer)
-     * @param computer
+     * @param computerDto
      *            l'ordinateur à mettre à jour
      * @return fait
      *              true si l'update a eu lieu

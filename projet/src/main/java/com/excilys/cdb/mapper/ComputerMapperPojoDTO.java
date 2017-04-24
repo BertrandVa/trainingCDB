@@ -5,7 +5,13 @@ import com.excilys.cdb.model.Computer;
 
 public class ComputerMapperPojoDTO {
 
-    public static ComputerDTO Mapper(Computer computer) {
+    /**
+     * @param computer
+     *                 l'ordinateur à mapper
+     * @return
+     *      l'ordinateur mappé
+     */
+    public static ComputerDTO mapper(Computer computer) {
         String name = computer.getName();
         String manufacturerId = String
                 .valueOf(computer.getManufacturer().getId());

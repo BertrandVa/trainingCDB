@@ -1,7 +1,7 @@
 package com.excilys.cdb.dto;
 
 public class CompanyDTO {
-    
+
     /**
      * L'ID de la compagnie Cet ID n'est pas modifiable par l'utilisateur.
      * @see Company#getId()
@@ -25,8 +25,10 @@ public class CompanyDTO {
 
     /**
      * Constructeur Company. Crée une nouvelle compagnie avec un nom défini.
-     * @param builder
-     *            Le builder de la compagnie
+     * @param name
+     *            Le nom de la compagnie
+     * @param id
+     *            L'id de la compagnie
      * @see CompanyBuilder
      */
     public CompanyDTO(String name, String id) {

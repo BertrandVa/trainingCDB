@@ -19,7 +19,6 @@ import com.zaxxer.hikari.HikariDataSource;
  * Cette classe de DAO implémente les méthodes nécessaires à l'accès aux données
  * de la table computer. Le client demande ici un accès total, toutes les
  * méthodes du CRUD sont donc implémentées
- * 
  * @author bertrand
  */
 
@@ -33,7 +32,6 @@ public class ComputerDAO {
 
     /**
      * Méthode create d'un ordinateur.
-     * 
      * @param computer
      *            l'ordinateur à créer
      * @return boolean create true si tout s'est bien passé, false autrement
@@ -50,7 +48,6 @@ public class ComputerDAO {
 
     /**
      * Méthode d'affichage d'un ordinateur.
-     * 
      * @param id
      *            l'ordinateur à afficher
      * @return computer l'ordinateur sélectionné
@@ -58,17 +55,16 @@ public class ComputerDAO {
     public Computer read(long id) {
         String sql = "SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id  WHERE computer.id = ?";
         Computer computer = null;
-                try { 
-                   computer = jdbcTemplateObject.queryForObject(sql, new Object[] { id }, new ComputerMapper());
-                }catch (EmptyResultDataAccessException e){
+                try {
+                    computer = jdbcTemplateObject.queryForObject(sql, new Object[] {id}, new ComputerMapper());
+                } catch (EmptyResultDataAccessException e) {
                     computer = new Computer.ComputerBuilder(null).build();
-                };
+                }
         return computer;
     }
 
     /**
      * Méthode d'affichage de tous les ordinateurs.
-     * 
      * @return List une arraylist contenant l'ensemble de nos ordinateurs
      * @param debut
      *            le premier id à afficher
@@ -91,17 +87,15 @@ public class ComputerDAO {
 
     /**
      * Méthode de mise à jour d'un ordinateur.
-     * 
      * @param computer
      *            l'ordinateur à mettre à jour
-     * @return boolean update true si tout s'est bien passé, false autrement
      */
     public void update(Computer computer) {
         String sql = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ?  WHERE id = ?";
         long id = 1;
         Date introduce = null;
         Date discontinued = null;
-        if(computer.getManufacturer() != null){
+        if (computer.getManufacturer() != null) {
             id = computer.getManufacturer().getId();
         }
         if (computer.getIntroduceDate() != null) {
@@ -111,16 +105,14 @@ public class ComputerDAO {
            discontinued = java.sql.Date.valueOf(computer.getDiscontinuedDate());
         }
         jdbcTemplateObject.update(sql, computer.getName(),
-                introduce , discontinued,
+                introduce, discontinued,
                 id, computer.getId());
     }
 
     /**
      * Méthode delete d'un ordinateur.
-     * 
      * @param id
      *            l'id de l'ordinateur à supprimer
-     * @return boolean delete true si tout s'est bien passé, false autrement
      */
     public void delete(long id) {
         String sql = "DELETE FROM computer WHERE id = ?";
@@ -129,7 +121,6 @@ public class ComputerDAO {
 
     /**
      * Méthode count pour les ordinateurs.
-     * 
      * @return nbEntrees le nombre d'entrées dans la BDD.
      * @param match
      *            la chaine de caractères à matcher
@@ -142,7 +133,6 @@ public class ComputerDAO {
 
     /**
      * Méthode count pour les pages selon le nombre d'affichages.
-     * 
      * @return nbPages le nombre de pages dans la BDD.
      * @param nbId
      *            le nombre d'ids affichés par pages
@@ -164,6 +154,12 @@ public class ComputerDAO {
         return nbPages;
     }
 
+    /**
+     * @param parameters
+     *              les paramètres
+     * @param computer
+     *                l'ordinateur
+     */
     private void fillMap(Map<String, Object> parameters, Computer computer) {
         if (StringUtils.isNotEmpty(computer.getName())) {
             parameters.put("name", computer.getName());

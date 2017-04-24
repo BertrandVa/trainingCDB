@@ -27,21 +27,18 @@ public class Dashboard extends HttpServlet {
 
     /**
      * L'adresse de notre jsp.
-     * 
      * @see Dashboard.jsp
      * @see Dashboard#doGet(HttpServletRequest, HttpServletResponse)
      */
     public static final String VUE = "/WEB-INF/views/dashboard.jsp";
     /**
      * Le premier id d'ordinateur à afficher.
-     * 
      * @see Dashboard.jsp
      * @see Dashboard#doGet(HttpServletRequest, HttpServletResponse)
      */
     private long debut = 0;
     /**
      * Le nombre d'ordinateurs à afficher.
-     * 
      * @see Dashboard.jsp
      * @see Dashboard#doGet(HttpServletRequest, HttpServletResponse)
      */
@@ -71,7 +68,6 @@ public class Dashboard extends HttpServlet {
 
     /**
      * Récupération de la jsp pour l'affichage.
-     * 
      * @see Dashboard#VUE
      * @param request
      *            La requête de notre servlet
@@ -93,7 +89,6 @@ public class Dashboard extends HttpServlet {
 
     /**
      * Envoi de notre formulaire.
-     * 
      * @see AddComputer#FORM
      * @see AddComputer#COMPUTER
      * @see AddComputer#VUE
@@ -127,7 +122,6 @@ public class Dashboard extends HttpServlet {
 
     /**
      * Récupération des paramètres envoyés.
-     * 
      * @param request
      *            La requête de notre servlet
      */
@@ -176,7 +170,6 @@ public class Dashboard extends HttpServlet {
 
     /**
      * Gestion de la recherche.
-     * 
      * @param request
      *            La requête de notre servlet
      * @return search La séquence recherchée. % par défaut.
@@ -200,7 +193,6 @@ public class Dashboard extends HttpServlet {
 
     /**
      * Récupération des paramètres pour la mise en place de la pagination.
-     * 
      * @param request
      *            La requête de notre servlet
      * @param search

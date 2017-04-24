@@ -10,6 +10,17 @@ import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 
 public class ComputerMapper implements RowMapper<Computer> {
+
+    /**
+     * @param rs
+     *          le resultset
+     * @param rowNum
+     *          le numéro de colonne
+     * @throws SQLException
+     *          L'exception
+     * @return
+     *        l'ordinateur
+     */
     public Computer mapRow(ResultSet rs, int rowNum) throws SQLException {
         String companyName = rs.getString("company.name");
         Long companyId = rs.getLong("company.id");

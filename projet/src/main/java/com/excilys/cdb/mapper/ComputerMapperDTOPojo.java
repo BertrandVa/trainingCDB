@@ -12,6 +12,12 @@ import com.excilys.cdb.model.Computer;
 
 public class ComputerMapperDTOPojo {
 
+    /**
+     * @param computerDto
+     *                  notre dto
+     * @return
+     *         l'ordinateur
+     */
     public static Computer mapper(ComputerDTO computerDto) {
         Long id;
         String name = computerDto.getName();
@@ -21,10 +27,10 @@ public class ComputerMapperDTOPojo {
                 .build();
         LocalDate introduceDate = toDate(computerDto.getIntroduceDate());
         LocalDate discontinuedDate = toDate(computerDto.getDiscontinuedDate());
-        if(computerDto.getId()!=null){
+        if (computerDto.getId() != null) {
             id = Long.parseLong(computerDto.getId());
-        }else{
-            id= 0L;
+        } else {
+            id = 0L;
         }
         Computer computer = new Computer.ComputerBuilder(name)
                 .manufacturer(company).introduceDate(introduceDate)
@@ -32,6 +38,12 @@ public class ComputerMapperDTOPojo {
         return computer;
     }
 
+    /**
+     * @param string
+     *              La date en chaine de caractères
+     * @return
+     *        La date en localdate
+     */
     private static LocalDate toDate(String string) {
         LocalDate date = null;
         if (StringUtils.isNotEmpty(string)) {
