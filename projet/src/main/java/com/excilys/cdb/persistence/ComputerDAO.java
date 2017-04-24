@@ -25,11 +25,9 @@ import com.zaxxer.hikari.HikariDataSource;
 
 public class ComputerDAO {
 
-    private HikariDataSource dataSource;
     private JdbcTemplate jdbcTemplateObject;
 
     public void setDataSource(HikariDataSource dataSource) {
-        this.dataSource = dataSource;
         this.jdbcTemplateObject = new JdbcTemplate(dataSource);
     }
 
@@ -84,7 +82,7 @@ public class ComputerDAO {
     public List<Computer> readAll(long debut, int nbItems, String match,
             String order) {
         List<Computer> list = new ArrayList<Computer>();
-        String sql = "SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.name like %s OR company.name like %s ORDER BY %s LIMIT "
+        String sql = "SELECT computer.name, computer.id, REPLACE(computer.introduced, '0000-00-00 00:00:00', '1970-01-01 00:00:01') AS introduced, REPLACE(computer.discontinued, '0000-00-00 00:00:00', '1970-01-01 00:00:01') AS discontinued, company.id, company.name FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.name like %s OR company.name like %s ORDER BY %s LIMIT "
                 + nbItems + " OFFSET " + debut;
         sql = String.format(sql, match, match, order);
         list = jdbcTemplateObject.query(sql, new ComputerMapper());

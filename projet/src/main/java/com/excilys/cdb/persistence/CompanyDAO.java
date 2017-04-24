@@ -25,11 +25,9 @@ public class CompanyDAO {
      * logger.
      */
     private final Logger logger = LoggerFactory.getLogger(CompanyDAO.class);
-    private HikariDataSource dataSource;
     private JdbcTemplate jdbcTemplateObject;
 
     public void setDataSource(HikariDataSource dataSource) {
-        this.dataSource = dataSource;
         this.jdbcTemplateObject = new JdbcTemplate(dataSource);
      }
     
