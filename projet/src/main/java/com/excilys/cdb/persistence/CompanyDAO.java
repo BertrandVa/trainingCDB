@@ -5,7 +5,10 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-//import org.hibernate.Session;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -52,9 +55,12 @@ public class CompanyDAO {
      * @return nbEntrees le nombre d'entrées dans la BDD.
      */
     public int countCompanies() {
-        String sql = "SELECT COUNT(*) FROM company";
-        int nbCompanies =  jdbcTemplateObject.queryForObject(sql, Integer.class);
-        return nbCompanies;
+        CriteriaBuilder critBuilder = HibernateSessionFactory.getSessionFactory().createEntityManager().getCriteriaBuilder();
+        CriteriaQuery<Long> critQuery = critBuilder.createQuery(Long.class);
+        Root<Company> root = critQuery.from(Company.class);
+        critQuery.select(critBuilder.countDistinct(root));
+        int count = HibernateSessionFactory.getSessionFactory().createEntityManager().createQuery(critQuery).getSingleResult().intValue();
+        return count;
     }
 
     /**

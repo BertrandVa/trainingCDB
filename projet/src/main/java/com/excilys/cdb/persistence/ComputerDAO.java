@@ -3,6 +3,11 @@ package com.excilys.cdb.persistence;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -143,9 +148,12 @@ public class ComputerDAO {
      *            la chaine de caractères à matcher
      */
     public int countComputer(String match) {
-        String sql = "SELECT COUNT(*) FROM computer";
-        int nbComputers = jdbcTemplateObject.queryForObject(sql, Integer.class);
-        return nbComputers;
+        CriteriaBuilder critBuilder = HibernateSessionFactory.getSessionFactory().createEntityManager().getCriteriaBuilder();
+        CriteriaQuery<Long> critQuery = critBuilder.createQuery(Long.class);
+        Root<Computer> root = critQuery.from(Computer.class);
+        critQuery.select(critBuilder.countDistinct(root));
+        int count = HibernateSessionFactory.getSessionFactory().createEntityManager().createQuery(critQuery).getSingleResult().intValue();
+        return count;
     }
 
     /**
