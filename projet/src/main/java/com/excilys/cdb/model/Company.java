@@ -15,6 +15,10 @@ import javax.persistence.Table;
 @Table(name = "company")
 public class Company {
 
+    public Company() {
+        super();
+    }
+
     /**
      * L'ID de la compagnie Cet ID n'est pas modifiable par l'utilisateur.
      * @see Company#getId()

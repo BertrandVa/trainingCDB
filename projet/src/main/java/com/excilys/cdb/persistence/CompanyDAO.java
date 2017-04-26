@@ -3,18 +3,14 @@ package com.excilys.cdb.persistence;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.jdbc.core.JdbcTemplate;
-import com.excilys.cdb.mapper.CompanyMapper;
 import com.excilys.cdb.model.Company;
-import com.zaxxer.hikari.HikariDataSource;
 
 /**
  * Cette classe de DAO implémente les méthodes nécessaires à l'accès aux données
@@ -29,11 +25,6 @@ public class CompanyDAO {
      * logger.
      */
     private final Logger logger = LoggerFactory.getLogger(CompanyDAO.class);
-    private JdbcTemplate jdbcTemplateObject;
-
-    public void setDataSource(HikariDataSource dataSource) {
-        this.jdbcTemplateObject = new JdbcTemplate(dataSource);
-     }
 
     /**
      * Méthode d'affichage de tous les fabriquants.
@@ -43,11 +34,13 @@ public class CompanyDAO {
      * @param nbItems
      *            le nombre d'items à afficher
      */
-    public List<Company> readAll(long debut, int nbItems) {
-        String sql = "SELECT * FROM company  LIMIT " + nbItems + " OFFSET " + debut;
-        List<Company> companies = new ArrayList<Company>();
-        companies = jdbcTemplateObject.query(sql, new CompanyMapper());
-        return companies;
+    public List<Company> readAll(int debut, int nbItems) {
+        CriteriaBuilder cb = HibernateSessionFactory.getSessionFactory().createEntityManager().getCriteriaBuilder();
+        CriteriaQuery<Company> cq = cb.createQuery(Company.class);
+        Root<Company> rootEntry = cq.from(Company.class);
+        CriteriaQuery<Company> all = cq.select(rootEntry);
+        TypedQuery<Company> allQuery = HibernateSessionFactory.getSessionFactory().createEntityManager().createQuery(all).setFirstResult(debut);
+        return allQuery.getResultList();
     }
 
     /**

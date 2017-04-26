@@ -69,7 +69,7 @@ public class ClientActions {
      * @return liste
      *              le nombre d'items à afficher
      */
-    public static List<CompanyDTO> listCompanies(long debut, int nbItems) {
+    public static List<CompanyDTO> listCompanies(int debut, int nbItems) {
         List<Company> liste = new ArrayList<Company>();
         List<CompanyDTO> list = new ArrayList<CompanyDTO>();
         liste = companyDAO.readAll(debut, nbItems);
