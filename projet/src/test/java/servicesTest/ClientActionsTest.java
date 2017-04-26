@@ -345,7 +345,7 @@ public class ClientActionsTest {
         Computer computer = new Computer.ComputerBuilder(null).build();
         Computer computer1 = new Computer.ComputerBuilder(null).build();
         ComputerDAO compDAO = mock(ComputerDAO.class);
-        when(compDAO.create(computer)).thenReturn(30);
+        when(compDAO.create(computer)).thenReturn(30l);
         when(compDAO.read(30)).thenReturn(computer1);        
         long create = 0;
         create = compDAO.create(computer);
@@ -364,7 +364,7 @@ public class ClientActionsTest {
         Computer computer1 = new Computer.ComputerBuilder("monOrdinateur")
                 .build();
         ComputerDAO compDAO = mock(ComputerDAO.class);    
-        when(compDAO.create(computer)).thenReturn(30);
+        when(compDAO.create(computer)).thenReturn(30l);
         when(compDAO.read(30)).thenReturn(computer1);        
         long create = compDAO.create(computer);
         Computer computer2 = compDAO.read(create);
@@ -391,7 +391,7 @@ public class ClientActionsTest {
                         new Company.CompanyBuilder("Apple Inc.").id(1).build())
                 .build();
         ComputerDAO compDAO = mock(ComputerDAO.class);     
-        when(compDAO.create(computer)).thenReturn(30);
+        when(compDAO.create(computer)).thenReturn(30l);
         when(compDAO.read(30)).thenReturn(computer1);   
         long create = compDAO.create(computer);
         Computer computer2 = compDAO.read(create);
@@ -421,7 +421,7 @@ public class ClientActionsTest {
                         new Company.CompanyBuilder("Apple Inc.").id(1).build())
                 .build();
         ComputerDAO compDAO = mock(ComputerDAO.class);   
-        when(compDAO.create(computer)).thenReturn(30);
+        when(compDAO.create(computer)).thenReturn(30l);
         when(compDAO.read(30)).thenReturn(computer1);   
         long create = compDAO.create(computer);
         Computer computer2 = compDAO.read(create);
@@ -449,7 +449,7 @@ public class ClientActionsTest {
                         new Company.CompanyBuilder("Apple Inc.").id(1).build())
                 .build();
         ComputerDAO compDAO = mock(ComputerDAO.class);   
-        when(compDAO.create(computer)).thenReturn(30);
+        when(compDAO.create(computer)).thenReturn(30l);
         when(compDAO.read(30)).thenReturn(computer1);   
         long create = compDAO.create(computer);
         Computer computer2 = compDAO.read(create);

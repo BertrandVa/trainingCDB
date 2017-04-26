@@ -2,19 +2,18 @@ package com.excilys.cdb.persistence;
 
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.lang3.StringUtils;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.query.Query;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import com.excilys.cdb.mapper.ComputerMapper;
 import com.excilys.cdb.model.Computer;
 import com.zaxxer.hikari.HikariDataSource;
-
 /**
  * Cette classe de DAO implémente les méthodes nécessaires à l'accès aux données
  * de la table computer. Le client demande ici un accès total, toutes les
@@ -24,6 +23,11 @@ import com.zaxxer.hikari.HikariDataSource;
 
 public class ComputerDAO {
 
+    /**
+     * Logger.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(ComputerDAO.class);
+    
     private JdbcTemplate jdbcTemplateObject;
 
     public void setDataSource(HikariDataSource dataSource) {
@@ -36,14 +40,16 @@ public class ComputerDAO {
      *            l'ordinateur à créer
      * @return boolean create true si tout s'est bien passé, false autrement
      */
-    public int create(Computer computer) {
-        SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplateObject);
-        jdbcInsert.withTableName("computer").usingGeneratedKeyColumns("id");
-        Map<String, Object> parameters = new HashMap<String, Object>();
-        fillMap(parameters, computer);
-        Number key = jdbcInsert
-                .executeAndReturnKey(new MapSqlParameterSource(parameters));
-        return ((Number) key).intValue();
+    public long create(Computer computer) {
+        Session session = HibernateSessionFactory.getSessionFactory().openSession();
+        session.beginTransaction();
+        if(computer.getName() != null){
+            session.save(computer);
+        }
+        long id = computer.getId();
+        session.getTransaction().commit();
+        LOGGER.debug("" + id);
+        return(computer.getId());
     }
 
     /**
@@ -76,9 +82,9 @@ public class ComputerDAO {
      *            les caractères recherchés.
      */
     public List<Computer> readAll(long debut, int nbItems, String match,
-            String order) {
+            String order) {        
         List<Computer> list = new ArrayList<Computer>();
-        String sql = "SELECT computer.name, computer.id, REPLACE(computer.introduced, '0000-00-00 00:00:00', '1970-01-01 00:00:01') AS introduced, REPLACE(computer.discontinued, '0000-00-00 00:00:00', '1970-01-01 00:00:01') AS discontinued, company.id, company.name FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.name like %s OR company.name like %s ORDER BY %s LIMIT "
+        String sql = "SELECT computer.name, computer.id, REPLACE(computer.introduced, '0000-00-00 00:00:00', null) AS introduced, REPLACE(computer.discontinued, '0000-00-00 00:00:00', null) AS discontinued, company.id, company.name FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.name like %s OR company.name like %s ORDER BY %s LIMIT "
                 + nbItems + " OFFSET " + debut;
         sql = String.format(sql, match, match, order);
         list = jdbcTemplateObject.query(sql, new ComputerMapper());
@@ -115,8 +121,19 @@ public class ComputerDAO {
      *            l'id de l'ordinateur à supprimer
      */
     public void delete(long id) {
-        String sql = "DELETE FROM computer WHERE id = ?";
-        jdbcTemplateObject.update(sql, id);
+        Session session = HibernateSessionFactory.getSessionFactory().openSession();
+        Transaction tx = null;
+        try{
+           tx = session.beginTransaction();
+           Query q = session.createQuery("delete Computer where id = " + id);
+           q.executeUpdate();
+           tx.commit();
+        }catch (HibernateException e) {
+           if (tx!=null) tx.rollback();
+           e.printStackTrace(); 
+        }finally {
+           session.close(); 
+        }
     }
 
     /**
@@ -152,29 +169,5 @@ public class ComputerDAO {
             }
         }
         return nbPages;
-    }
-
-    /**
-     * @param parameters
-     *              les paramètres
-     * @param computer
-     *                l'ordinateur
-     */
-    private void fillMap(Map<String, Object> parameters, Computer computer) {
-        if (StringUtils.isNotEmpty(computer.getName())) {
-            parameters.put("name", computer.getName());
-            if (computer.getIntroduceDate() != null) {
-                parameters.put("introduced",
-                        java.sql.Date.valueOf(computer.getIntroduceDate()));
-            }
-            if (computer.getDiscontinuedDate() != null) {
-                parameters.put("discontinued",
-                        java.sql.Date.valueOf(computer.getDiscontinuedDate()));
-            }
-            if (computer.getManufacturer() != null) {
-                parameters.put("company_id",
-                        computer.getManufacturer().getId());
-            }
-        }
     }
 }

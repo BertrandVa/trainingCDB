@@ -137,8 +137,7 @@ public class ComputerDAOTest {
         create = computerDAO.create(computer);
         Computer computer2 = computerDAO.read(create);
         assertNull(computer2.getName());
-        assertNull(computer2.getManufacturer().getName());
-        assertEquals(computer2.getManufacturer().getId(), 0);
+        assertNull(computer2.getManufacturer());
         assertNull(computer2.getIntroduceDate());
         assertNull(computer2.getDiscontinuedDate());
     }

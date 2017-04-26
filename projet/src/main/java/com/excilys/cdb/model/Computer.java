@@ -1,14 +1,22 @@
 package com.excilys.cdb.model;
-
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.Objects;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 /**
  * On définit ici un simple ordinateur. Celui-ci contient un id, un fournisseur,
  * une date d'arrivée et de départ et un id.
  * @author bertrand
  */
-
+@Entity
+@Table(name="computer")
 public class Computer {
 
     /**
@@ -17,6 +25,7 @@ public class Computer {
      * @see Computer#setName(String)
      * @see Computer#Computer(String, Company, Date, Date)
      */
+    @Column(name="name")
     private String name;
     /**
      * L'id du fabriquant de l'ordinateur Cet ID est modifiable.
@@ -24,27 +33,32 @@ public class Computer {
      * @see Computer#setManufacturer(Company)
      * @see Computer#Computer(String, Company, Date, Date)
      */
-    private Company manufacturer;
+    @ManyToOne
+    private Company company;
     /**
      * La date d'introduction de l'ordinateur Cette date est modifiable.
      * @see Computer#getIntroduceDate()
      * @see Computer#setIntroduceDate(Date)
      * @see Computer#Computer(String, Company, Date, Date)
      */
-    private LocalDate introduceDate;
+    @Column(name="introduced")
+    private Timestamp introduceDate;
     /**
      * La date de départ de l'ordinateur Cette date est modifiable.
      * @see Computer#getDiscontinuedDate()
      * @see Computer#setDiscontinuedDate(Date)
      * @see Computer#Computer(String, Company, Date, Date)
      */
-    private LocalDate discontinuedDate;
+    @Column(name="discontinued")
+    private Timestamp discontinuedDate;
     /**
      * L'ID de l'ordinateur Cet ID n'est pas modifiable directement par
      * l'utilisateur.
      * @see Computer#setId(int)
      * @see Computer#getId()
      */
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     /**
@@ -57,7 +71,7 @@ public class Computer {
      */
     private Computer(ComputerBuilder builder) {
         this.name = builder.name;
-        this.manufacturer = builder.manufacturer;
+        this.company = builder.manufacturer;
         this.introduceDate = builder.introduceDate;
         this.discontinuedDate = builder.discontinuedDate;
         this.id = builder.id;
@@ -73,10 +87,10 @@ public class Computer {
 
     /**
      * Retourne l'id du fabriquant.
-     * @return {@link Computer#manufacturer}
+     * @return {@link Computer#company}
      */
     public Company getManufacturer() {
-        return manufacturer;
+        return company;
     }
 
     /**
@@ -84,7 +98,11 @@ public class Computer {
      * @return {@link Computer#introduceDate}
      */
     public LocalDate getIntroduceDate() {
-        return introduceDate;
+        if(this.introduceDate != null){
+        return introduceDate.toLocalDateTime().toLocalDate();
+        }else{
+            return null;
+        }
     }
 
     /**
@@ -92,7 +110,11 @@ public class Computer {
      * @return {@link Computer#discontinuedDate}
      */
     public LocalDate getDiscontinuedDate() {
-        return discontinuedDate;
+        if(this.discontinuedDate != null){
+            return discontinuedDate.toLocalDateTime().toLocalDate();
+            }else{
+                return null;
+            }
     }
 
     /**
@@ -116,19 +138,19 @@ public class Computer {
         return id == computer.id && Objects.equals(name, computer.name)
                 && Objects.equals(introduceDate, computer.introduceDate)
                 && Objects.equals(discontinuedDate, computer.discontinuedDate)
-                && Objects.equals(manufacturer, computer.manufacturer);
+                && Objects.equals(company, computer.company);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, manufacturer, introduceDate,
+        return Objects.hash(name, company, introduceDate,
                 discontinuedDate, id);
 
     }
 
     @Override
     public String toString() {
-        return "Computer [name=" + name + ", manufacturer=" + manufacturer
+        return "Computer [name=" + name + ", manufacturer=" + company
                 + ", introduceDate=" + introduceDate + ", discontinuedDate="
                 + discontinuedDate + ", id=" + id + "]";
     }
@@ -136,8 +158,8 @@ public class Computer {
     public static class ComputerBuilder {
         private String name;
         private Company manufacturer;
-        private LocalDate introduceDate;
-        private LocalDate discontinuedDate;
+        private Timestamp introduceDate;
+        private Timestamp discontinuedDate;
         private long id;
 
         /**
@@ -181,7 +203,11 @@ public class Computer {
          *              l'ordinateur
          */
         public ComputerBuilder introduceDate(LocalDate introduceDate) {
-            this.introduceDate = introduceDate;
+            if(introduceDate != null){
+            this.introduceDate = Timestamp.valueOf(introduceDate.atStartOfDay());
+            }else{
+                this.introduceDate = null;
+            }
             return this;
         }
 
@@ -193,8 +219,12 @@ public class Computer {
          *              l'ordinateur
          */
         public ComputerBuilder discontinuedDate(LocalDate discontinuedDate) {
-            this.discontinuedDate = discontinuedDate;
-            return this;
+            if(discontinuedDate != null){
+                this.discontinuedDate = Timestamp.valueOf(discontinuedDate.atStartOfDay());
+                }else{
+                    this.discontinuedDate = null;
+                }
+                return this;
         }
 
         /**

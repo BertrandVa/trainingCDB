@@ -1,15 +1,26 @@
 package com.excilys.cdb.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 /**
  * On définit ici un fournisseur, par son id et son nom.
  * @author bertrand
  */
+@Entity
+@Table(name = "company")
 public class Company {
 
     /**
      * L'ID de la compagnie Cet ID n'est pas modifiable par l'utilisateur.
      * @see Company#getId()
      */
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     /**
      * Le nom de la compagnie Ce nom est modifiable par l'utilisateur.
@@ -17,6 +28,7 @@ public class Company {
      * @see Company#Company(String)
      * @see Company#setName(String)
      */
+    @Column(name ="name")
     private String name;
 
     /**
