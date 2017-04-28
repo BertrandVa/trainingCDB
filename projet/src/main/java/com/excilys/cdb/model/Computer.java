@@ -2,7 +2,6 @@ package com.excilys.cdb.model;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.Objects;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,7 +15,7 @@ import javax.persistence.Table;
  * @author bertrand
  */
 @Entity
-@Table(name="computer")
+@Table(name = "computer")
 public class Computer {
 
     /**
@@ -25,7 +24,7 @@ public class Computer {
      * @see Computer#setName(String)
      * @see Computer#Computer(String, Company, Date, Date)
      */
-    @Column(name="name")
+    @Column(name = "name")
     private String name;
     /**
      * L'id du fabriquant de l'ordinateur Cet ID est modifiable.
@@ -41,7 +40,7 @@ public class Computer {
      * @see Computer#setIntroduceDate(Date)
      * @see Computer#Computer(String, Company, Date, Date)
      */
-    @Column(name="introduced")
+    @Column(name = "introduced")
     private Timestamp introduceDate;
     /**
      * La date de départ de l'ordinateur Cette date est modifiable.
@@ -49,7 +48,7 @@ public class Computer {
      * @see Computer#setDiscontinuedDate(Date)
      * @see Computer#Computer(String, Company, Date, Date)
      */
-    @Column(name="discontinued")
+    @Column(name = "discontinued")
     private Timestamp discontinuedDate;
     /**
      * L'ID de l'ordinateur Cet ID n'est pas modifiable directement par
@@ -98,9 +97,9 @@ public class Computer {
      * @return {@link Computer#introduceDate}
      */
     public LocalDate getIntroduceDate() {
-        if(this.introduceDate != null){
+        if (this.introduceDate != null) {
         return introduceDate.toLocalDateTime().toLocalDate();
-        }else{
+        } else {
             return null;
         }
     }
@@ -110,9 +109,9 @@ public class Computer {
      * @return {@link Computer#discontinuedDate}
      */
     public LocalDate getDiscontinuedDate() {
-        if(this.discontinuedDate != null){
+        if (this.discontinuedDate != null) {
             return discontinuedDate.toLocalDateTime().toLocalDate();
-            }else{
+            } else {
                 return null;
             }
     }
@@ -203,9 +202,9 @@ public class Computer {
          *              l'ordinateur
          */
         public ComputerBuilder introduceDate(LocalDate introduceDate) {
-            if(introduceDate != null){
+            if (introduceDate != null) {
             this.introduceDate = Timestamp.valueOf(introduceDate.atStartOfDay());
-            }else{
+            } else {
                 this.introduceDate = null;
             }
             return this;
@@ -219,9 +218,9 @@ public class Computer {
          *              l'ordinateur
          */
         public ComputerBuilder discontinuedDate(LocalDate discontinuedDate) {
-            if(discontinuedDate != null){
+            if (discontinuedDate != null) {
                 this.discontinuedDate = Timestamp.valueOf(discontinuedDate.atStartOfDay());
-                }else{
+                } else {
                     this.discontinuedDate = null;
                 }
                 return this;

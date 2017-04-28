@@ -3,15 +3,15 @@ package com.excilys.cdb.persistence;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
-
+import org.springframework.transaction.annotation.Transactional;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaDelete;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-
-import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -19,22 +19,23 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import com.excilys.cdb.mapper.ComputerMapper;
 import com.excilys.cdb.model.Computer;
 import com.zaxxer.hikari.HikariDataSource;
+
 /**
  * Cette classe de DAO implémente les méthodes nécessaires à l'accès aux données
  * de la table computer. Le client demande ici un accès total, toutes les
  * méthodes du CRUD sont donc implémentées
  * @author bertrand
  */
-
 public class ComputerDAO {
+    
+    @PersistenceContext
+    private EntityManager em = HibernateSessionFactory.getSessionFactory().createEntityManager();
 
     /**
      * Logger.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(ComputerDAO.class);
-    
     private JdbcTemplate jdbcTemplateObject;
-
     public void setDataSource(HikariDataSource dataSource) {
         this.jdbcTemplateObject = new JdbcTemplate(dataSource);
     }
@@ -48,13 +49,13 @@ public class ComputerDAO {
     public long create(Computer computer) {
         Session session = HibernateSessionFactory.getSessionFactory().openSession();
         session.beginTransaction();
-        if(computer.getName() != null){
+        if (computer.getName() != null) {
             session.save(computer);
         }
         long id = computer.getId();
         session.getTransaction().commit();
         LOGGER.debug("" + id);
-        return(computer.getId());
+        return (computer.getId());
     }
 
     /**
@@ -87,10 +88,10 @@ public class ComputerDAO {
      *            les caractères recherchés.
      */
     public List<Computer> readAll(long debut, int nbItems, String match,
-            String order) {        
+            String order) {
         List<Computer> list = new ArrayList<Computer>();
         String sql = "SELECT computer.name, computer.id, REPLACE(computer.introduced, '0000-00-00 00:00:00', null) AS introduced, REPLACE(computer.discontinued, '0000-00-00 00:00:00', null) AS discontinued, company.id, company.name FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.name like %s OR company.name like %s ORDER BY %s LIMIT "
-                + nbItems + " OFFSET " + debut;
+        + nbItems + " OFFSET " + debut;
         sql = String.format(sql, match, match, order);
         list = jdbcTemplateObject.query(sql, new ComputerMapper());
         return list;
@@ -125,22 +126,17 @@ public class ComputerDAO {
      * @param id
      *            l'id de l'ordinateur à supprimer
      */
+    @Transactional
     public void delete(long id) {
-        Session session = HibernateSessionFactory.getSessionFactory().openSession();
-        Transaction tx = null;
-        try{
-           tx = session.beginTransaction();
-           Query q = session.createQuery("delete Computer where id = " + id);
-           q.executeUpdate();
-           tx.commit();
-        }catch (HibernateException e) {
-           if (tx!=null) tx.rollback();
-           e.printStackTrace(); 
-        }finally {
-           session.close(); 
-        }
-    }
-
+        this.em.flush();
+        CriteriaBuilder builder = this.em.getCriteriaBuilder();
+        CriteriaDelete<Computer> deleteCriteria = builder.createCriteriaDelete(Computer.class);
+        Root<Computer> computer = deleteCriteria.from(Computer.class);
+        deleteCriteria.where(builder.equal(computer.get("id"), id));
+        Query q = this.em.createQuery(deleteCriteria);
+        q.executeUpdate();
+        this.em.flush();
+}
     /**
      * Méthode count pour les ordinateurs.
      * @return nbEntrees le nombre d'entrées dans la BDD.

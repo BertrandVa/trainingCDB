@@ -5,8 +5,12 @@ import org.hibernate.cfg.Configuration;
 
 public class HibernateSessionFactory {
 
-    private static final SessionFactory sessionFactory = buildSessionFactory();
+    private static final SessionFactory SESSION_FACTORY = buildSessionFactory();
 
+    /**
+     * @return
+     *          La session Factory.
+     */
     private static SessionFactory buildSessionFactory() {
         try {
             // Create the SessionFactory from hibernate.cfg.xml
@@ -17,10 +21,17 @@ public class HibernateSessionFactory {
         }
     }
 
+    /**
+     * @return
+     *          La session Factory.
+     */
     public static SessionFactory getSessionFactory() {
-        return sessionFactory;
+        return SESSION_FACTORY;
     }
 
+    /**
+     * Void.
+     */
     public static void shutdown() {
         // Close caches and connection pools
         getSessionFactory().close();

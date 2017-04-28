@@ -15,6 +15,9 @@ import javax.persistence.Table;
 @Table(name = "company")
 public class Company {
 
+    /**
+     * Constructeur de notre compagnie.
+     */
     public Company() {
         super();
     }
@@ -32,7 +35,7 @@ public class Company {
      * @see Company#Company(String)
      * @see Company#setName(String)
      */
-    @Column(name ="name")
+    @Column(name = "name")
     private String name;
 
     /**
