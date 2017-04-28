@@ -10,6 +10,7 @@ import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaDelete;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Root;
 import org.hibernate.Session;
 import org.slf4j.Logger;
@@ -102,23 +103,28 @@ public class ComputerDAO {
      * @param computer
      *            l'ordinateur à mettre à jour
      */
+    @Transactional
     public void update(Computer computer) {
-        String sql = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ?  WHERE id = ?";
+        CriteriaBuilder cb = this.em.getCriteriaBuilder();
+        CriteriaUpdate<Computer> update = cb.createCriteriaUpdate(Computer.class);
         long id = 1;
         Date introduce = null;
         Date discontinued = null;
         if (computer.getManufacturer() != null) {
-            id = computer.getManufacturer().getId();
+          id = computer.getManufacturer().getId();
         }
         if (computer.getIntroduceDate() != null) {
-           introduce = java.sql.Date.valueOf(computer.getIntroduceDate());
+         introduce = java.sql.Date.valueOf(computer.getIntroduceDate());
         }
         if (computer.getDiscontinuedDate() != null) {
-           discontinued = java.sql.Date.valueOf(computer.getDiscontinuedDate());
+         discontinued = java.sql.Date.valueOf(computer.getDiscontinuedDate());
         }
-        jdbcTemplateObject.update(sql, computer.getName(),
-                introduce, discontinued,
-                id, computer.getId());
+        update.from(Computer.class);
+        update.set("name", computer.getName());
+        update.set("introduceDate", introduce);
+        update.set("discontinuedDate", discontinued);
+        update.set("company", id);
+        this.em.createQuery(update).executeUpdate();
     }
 
     /**
@@ -128,7 +134,6 @@ public class ComputerDAO {
      */
     @Transactional
     public void delete(long id) {
-        this.em.flush();
         CriteriaBuilder builder = this.em.getCriteriaBuilder();
         CriteriaDelete<Computer> deleteCriteria = builder.createCriteriaDelete(Computer.class);
         Root<Computer> computer = deleteCriteria.from(Computer.class);
