@@ -11,7 +11,7 @@ import org.openqa.selenium.WebDriverBackedSelenium;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 import com.excilys.cdb.core.dto.ComputerDTO;
-import com.excilys.cdb.services.ClientActions;
+import com.excilys.cdb.services.controller.ClientActions;
 
 public class SeleniumTest {
 

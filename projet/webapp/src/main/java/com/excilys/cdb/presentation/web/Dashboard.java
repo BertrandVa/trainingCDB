@@ -3,19 +3,16 @@ package com.excilys.cdb.presentation.web;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-
 import com.excilys.cdb.core.dto.ComputerDTO;
-import com.excilys.cdb.services.ClientActions;
+import com.excilys.cdb.services.controller.ClientActions;
 
 @Controller
 public class Dashboard extends HttpServlet {
@@ -48,7 +45,7 @@ public class Dashboard extends HttpServlet {
      * logger.
      */
     private static final Logger LOGGER = LoggerFactory
-            .getLogger(ClientActions.class);
+            .getLogger(Dashboard.class);
 
     public long getDebut() {
         return debut;

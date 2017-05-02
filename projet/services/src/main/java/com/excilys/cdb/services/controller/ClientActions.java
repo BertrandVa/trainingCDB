@@ -1,12 +1,10 @@
-package com.excilys.cdb.services;
+package com.excilys.cdb.services.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-
 import com.excilys.cdb.core.dto.CompanyDTO;
 import com.excilys.cdb.core.dto.ComputerDTO;
 import com.excilys.cdb.core.mapper.CompanyMapperPojoDTO;
@@ -24,7 +22,6 @@ import com.excilys.cdb.persistence.ComputerDAO;
  * @author bertrand
  */
 public class ClientActions {
-
 
     private static ApplicationContext context =
             new ClassPathXmlApplicationContext("Spring-Modules.xml");

@@ -1,7 +1,7 @@
 package com.excilys.cdb.presentation.application;
 
 import java.util.Scanner;
-import com.excilys.cdb.services.ClientActions;
+import com.excilys.cdb.services.controller.ClientActions;
 
 /**
  * Cette classe est notre application à proprement parler, qui gère l'interface

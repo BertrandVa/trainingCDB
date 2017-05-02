@@ -10,7 +10,7 @@ import org.springframework.stereotype.Controller;
 
 import com.excilys.cdb.services.controller.ComputerForm;
 import com.excilys.cdb.core.dto.ComputerDTO;
-import com.excilys.cdb.services.ClientActions;
+import com.excilys.cdb.services.controller.ClientActions;
 
 /**
  * Cette classe est notre servlet pour l'ajout d'un ordinateur.
