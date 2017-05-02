@@ -1,0 +1,63 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+	http://www.springframework.org/schema/context 
+    http://www.springframework.org/schema/context/spring-context-4.3.xsd
+	http://www.springframework.org/schema/tx
+    http://www.springframework.org/schema/tx/spring-tx.xsd
+	http://www.springframework.org/schema/mvc
+	http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:tx="http://www.springframework.org/schema/tx">
+	<context:property-placeholder location="classpath:hikari.properties" />
+	<context:annotation-config transaction-manager="txManager"/>
+
+	<bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
+		<property name="poolName" value="springHikariCP" />
+		<property name="dataSourceClassName" value="${driverClass}" />
+		<property name="maximumPoolSize" value="${maximumPoolSize}" />
+		<property name="connectionTestQuery" value="SHOW TABLES" />
+		<property name="dataSourceProperties">
+			<props>
+				<prop key="url">${jdbcUrl}</prop>
+				<prop key="user">${user1}</prop>
+				<prop key="password">${password}</prop>
+			</props>
+		</property>
+	</bean>
+	<!-- HikariCP configuration -->
+	<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource"
+		destroy-method="close">
+		<constructor-arg ref="hikariConfig" />
+	</bean>
+	<bean id="computerDAO" class="com.excilys.cdb.persistence.ComputerDAO">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<bean id="companyDAO" class="com.excilys.cdb.persistence.CompanyDAO">
+	</bean>
+	<!--trransaction manager -->
+	<bean id="txManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
+	</bean>
+
+	<bean id="jpaAdapter"
+		class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+		<property name="database" value="MYSQL"></property>
+		<property name="showSql" value="true"></property>
+	</bean>
+
+	<bean id="entityManagerFactory"
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<!-- <property name="persistenceUnitName" ref="myPU"/> -->
+		<property name="dataSource" ref="dataSource" />
+		<property name="jpaVendorAdapter" ref="jpaAdapter" />
+		<property name="packagesToScan" value="com.excilys.cdb.model" />
+		<property name="loadTimeWeaver">
+			<bean
+				class="org.springframework.instrument.classloading.InstrumentationLoadTimeWeaver" />
+		</property>
+	</bean>
+
+	<tx:annotation-driven transaction-manager="txManager" />
+</beans>
