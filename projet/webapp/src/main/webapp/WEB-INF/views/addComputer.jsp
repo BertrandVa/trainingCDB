@@ -7,13 +7,13 @@
 <title>Computer Database</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Bootstrap -->
-<link href="/computer-database/css/bootstrap.min.css" rel="stylesheet"
+<link href="/webapp/css/bootstrap.min.css" rel="stylesheet"
 	media="screen">
-<link href="/computer-database/css/font-awesome.css" rel="stylesheet"
+<link href="/webapp/css/font-awesome.css" rel="stylesheet"
 	media="screen">
-<link href="/computer-database/css/main.css" rel="stylesheet"
+<link href="/webapp/css/main.css" rel="stylesheet"
 	media="screen">
-<script src="/computer-database/js/script.js"></script>
+<script src="/webapp/js/script.js"></script>
 </head>
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">

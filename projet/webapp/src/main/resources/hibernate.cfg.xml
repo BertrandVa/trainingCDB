@@ -18,8 +18,8 @@
     <property name="connection.pool_size">1</property>
     <property name="current_session_context_class">thread</property>
  
-     <mapping class="com.excilys.cdb.model.Computer" />
-     <mapping class="com.excilys.cdb.model.Company" />
+     <mapping class="com.excilys.cdb.core.model.Computer" />
+     <mapping class="com.excilys.cdb.core.model.Company" />
  
 </session-factory>
 </hibernate-configuration>

@@ -8,8 +8,8 @@
 	<persistence-unit name="Eclipselink_JPA"
 		transaction-type="RESOURCE_LOCAL">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
-		<class>com.excilys.cdb.model.Computer</class>
-		<class>com.excilys.cdb.model.Company</class>
+		<class>com.excilys.cdb.core.model.Computer</class>
+		<class>com.excilys.cdb.core.model.Company</class>
 		<exclude-unlisted-classes>false</exclude-unlisted-classes>
 		<properties>
 			<property name="javax.persistence.jdbc.url"
